@@ -37,10 +37,10 @@ int main(int argc, char *argv[])
     // initialize each of the players in the array
 
     // Perform an infinite loop getting command input from users until game ends
+    initialize_game();
     while (fgets(buffer, BUFFER_LEN, stdin) != NULL)
     {
         // Call functions from the questions and players source files
-        initialize_game();
 
         // Execute the game until all questions are answered
        
