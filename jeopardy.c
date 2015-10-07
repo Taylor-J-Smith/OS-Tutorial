@@ -22,6 +22,15 @@
 // Processes the answer from the user containing what is or who is and tokenizes it to retrieve the answer.
 void tokenize(char *input, char **tokens);
 
+// void testfunction(player *players){
+//     players[0].score = 10;
+//     players[1].score = 40;
+//     players[2].score = 1;
+//     players[3].score = 80;
+
+//     show_results(players);
+// }
+
 // Displays the game results for each player, their name and final score, ranked from first to last place
 void show_results(player *players){
     //Sort
@@ -38,7 +47,7 @@ void show_results(player *players){
     }
 
     //Display
-    for (int x = 0; x < 3; x++){
+    for (int x = 0; x < NUM_PLAYERS; x++){
         printf("%d:%s - Score: %d\n",x, rankedplayers[x].name,rankedplayers[x].score);
     }
 }
@@ -54,7 +63,7 @@ int main(int argc, char *argv[])
   char buffer[BUFFER_LEN] = { 0 };
 
   // Display the game introduction and prompt for players names
-  printf("Welcome to KATJ Jeopardy!!\n")
+  printf("Welcome to KATJ Jeopardy!!\n");
   printf("Please enter the 4 players' names (delimited by space):\n");
   // initialize each of the players in the array
   printf(">> ");
@@ -68,7 +77,7 @@ int main(int argc, char *argv[])
   display_categories();
   while (fgets(buffer, BUFFER_LEN, stdin) != NULL)
     {
-
+        // testfunction(players);
       // Call functions from the questions and players source files
 
       // Execute the game until all questions are answered
@@ -101,3 +110,5 @@ void tokenize(char *input, char **tokens){
   tokens[1] = strtok(NULL, " ");
   tokens[2] = strtok(NULL, " ");*/
 }
+
+
