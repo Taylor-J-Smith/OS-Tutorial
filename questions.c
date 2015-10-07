@@ -59,6 +59,22 @@ void initialize_game(void)
 void display_categories(void)
 {
     // print categories and dollar values for each unanswered question in questions array
+  printf("Remaining Categories:\n");
+  for (int i = 0; i < 3; i++){                   //iterate through all the categories
+    char curr_category[MAX_LEN];
+    strcpy(curr_category,categories[i]); //store current category
+    printf("%s: ", curr_category);               //print the current category
+    for (int j = 0; j < sizeof(questions)/sizeof(question); j++){
+      question curr_struct = questions[i];       //store current question
+      if(strcmp(curr_category,curr_struct.category) == 0){
+	//belongs in the current category
+	if (!curr_struct.answered){
+	  //question has not been answered
+	  printf("%d ", curr_struct.value );
+	}
+      }
+    }
+  }
 }
 
 // Displays the question for the category and dollar value
