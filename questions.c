@@ -17,38 +17,6 @@ void initialize_game(void)
 {
 
  //    // initialize each question struct and assign it to the questions array
- //    for (int x = 0; x < sizeof(questions)/sizeof(question) ; x++){
-	//     questions[x].answered = false;
- //    }
- 	
- // 	for (int y = 0; y < 3; y++){
-	//  	for (int x = 0; x < (sizeof(questions)/sizeof(question))/3 ; x++){
-	//         	strncpy(questions[x+y*4].category, "test cat", MAX_LEN);
-	//     }	
- // 	}
-
-
-	// strncpy(questions[0].question, "test question", MAX_LEN);
-	// questions[0].value = 100;
-	// questions[0].answered = false;
-
-	// strncpy(questions[0].category, "numbers", MAX_LEN);
-	// strncpy(questions[0].question, "2+2", MAX_LEN);
-	// strncpy(questions[0].answer, "4", MAX_LEN);
-	// questions[0].value = 200;
-	// questions[0].answered = false;
-
-	// strncpy(questions[0].category, "numbers", MAX_LEN);
-	// strncpy(questions[0].question, "3+3", MAX_LEN);
-	// strncpy(questions[0].answer, "6", MAX_LEN);
-	// questions[0].value = 300;
-	// questions[0].answered = false;
-
-	// strncpy(questions[0].category, "numbers", MAX_LEN);
-	// strncpy(questions[0].question, "1+2", MAX_LEN);
-	// strncpy(questions[0].answer, "3", MAX_LEN);
-	// questions[0].value = 400;
-	// questions[0].answered = false;
 
 	srand(time(NULL));
 	int catselector[3];
@@ -95,17 +63,17 @@ void initialize_game(void)
 		for (int y = 0; y < 4; y++){
 			fscanf(f, "%s %s %s %d", &questions[y+x*4].category, &questions[y+x*4].question, &questions[y+x*4].answer, &questions[y+x*4].value);
 			//printf("Cat:%s Q:%s A:%s Val:%d \n",questions[y].category, questions[y].question, questions[y].answer, questions[y].value );
-			printf("%s\n",questions[y+x*4].category );
+			// printf("%s\n",questions[y+x*4].category );
 		}
 	}	
 
 	for (int y = 0; y < 3; y++){
 		strncpy(categories[y], questions[y*4].category,MAX_LEN);
 	}	
-	printf("categories\n" );
+	/*printf("categories\n" );
 	printf("%s\n", categories[0]);
 	printf("%s\n", categories[1]);
-	printf("%s\n", categories[2]);
+	printf("%s\n", categories[2]);*/
 
 
     // initialize each question struct and assign it to the questions array
