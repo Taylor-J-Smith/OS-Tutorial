@@ -184,12 +184,17 @@ bool valid_answer(char *category, int value, char *answer)
 bool already_answered(char *category, int value)
 {
   // lookup the question and see if it's already been marked as answered
-  for (int i = 0; i < sizeof(questions)/sizeof(*questions); i++){
-    question curr_question = questions[i];
-    if (strcmp(category,curr_question.category) && (value == curr_question.value)){
-      //found the right question
-      return curr_question.answered;
-    }
+  for (int j = 0; j < sizeof(questions)/sizeof(*questions); j++){
+    question curr_struct = questions[j];               //store current question
+    printf("%s\n",curr_struct.question);
+    if (strcmp(category,curr_struct.category) == 0){
+
+      if(value == curr_struct.value){
+	//found the right question
+	return curr_struct.answered;
+      }
+    } 
+   
   }
   printf("[already_answered]question was not found!\n");
   return false;
