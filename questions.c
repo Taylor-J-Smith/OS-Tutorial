@@ -10,10 +10,49 @@
 #include <string.h>
 #include "questions.h"
 
+
 // Initializes the array of questions for the game
 void initialize_game(void)
 {
-    // initialize each question struct and assign it to the questions array
+
+	strncpy(questions[0].category, "numbers", MAX_LEN);
+	strncpy(questions[0].question, "1+1", MAX_LEN);
+	strncpy(questions[0].answer, "2", MAX_LEN);
+	questions[0].value = 100;
+	questions[0].answered = false;
+
+	strncpy(questions[0].category, "numbers", MAX_LEN);
+	strncpy(questions[0].question, "2+2", MAX_LEN);
+	strncpy(questions[0].answer, "4", MAX_LEN);
+	questions[0].value = 200;
+	questions[0].answered = false;
+
+	strncpy(questions[0].category, "numbers", MAX_LEN);
+	strncpy(questions[0].question, "3+3", MAX_LEN);
+	strncpy(questions[0].answer, "6", MAX_LEN);
+	questions[0].value = 300;
+	questions[0].answered = false;
+
+	strncpy(questions[0].category, "numbers", MAX_LEN);
+	strncpy(questions[0].question, "1+2", MAX_LEN);
+	strncpy(questions[0].answer, "3", MAX_LEN);
+	questions[0].value = 400;
+	questions[0].answered = false;
+
+ //    // initialize each question struct and assign it to the questions array
+ //    for (int x = 0; x < sizeof(questions)/sizeof(question) ; x++){
+	//     questions[x].answered = false;
+ //    }
+ 	
+ // 	for (int y = 0; y < 3; y++){
+	//  	for (int x = 0; x < (sizeof(questions)/sizeof(question))/3 ; x++){
+	//         	strncpy(questions[x+y*4].category, "test cat", MAX_LEN);
+	//     }	
+ // 	}
+
+
+	// strncpy(questions[0].question, "test question", MAX_LEN);
+	// questions[0].value = 100;
 }
 
 // Displays each of the remaining categories and question dollar values that have not been answered
