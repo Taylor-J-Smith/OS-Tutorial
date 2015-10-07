@@ -11,15 +11,11 @@
 #include "players.h"
 
 // Returns true if the player name matches one of the existing players
-bool player_exists(player *players, char *name)
+bool player_exists(player *players, int num_players, char *name)
 {
-	for(int i=0; i<(int) (sizeof(players)/sizeof(player)); i++){
-		for(int j=0; j<MAX_LEN; j++){
-			if(players[i].name[j]!=name[j]){
-				j=MAX_LEN;
-			} else if(j==MAX_LEN-1){
-				return true;
-			}
+	for(int i=0; i<num_players; i++){
+		if(strcmp(players.name, name)==0){
+			return true;
 		}
 	}
 
@@ -27,15 +23,11 @@ bool player_exists(player *players, char *name)
 }
 
 // Updates the score for that player given their name
-void update_score(player *players, char *name, int score)
+void update_score(player *players, int num_players, char *name, int score)
 {
-    for(int i=0; i<(int) (sizeof(players)/sizeof(player)); i++){
-		for(int j=0; j<MAX_LEN; j++){
-			if(players[i].name[j]!=name[j]){
-				j=MAX_LEN;
-			} else if(j==MAX_LEN-1){
-				players[i].score += score;
-			}
+    for(int i=0; i<num_players; i++){
+		if(strcmp(players.name, name)==0){
+			players[i].score += score;
 		}
 	}
 }

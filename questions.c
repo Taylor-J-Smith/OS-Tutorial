@@ -81,6 +81,16 @@ void display_question(char *category, int value)
 // Returns true if the answer is correct for the question for that category and dollar value
 bool valid_answer(char *category, int value, char *answer)
 {
+	for(int i=0; i<3; i++){
+		if(strcmp(category, categories[i])==0){
+			for(int j=0; j<4; j++){
+				if((value/100 == j) && (strcmp(answer, question[(i-1)*4+j].answer)==0)){
+					return true;
+				}
+			}
+		}
+	}
+
     // Look into string comparison functions
     return false;
 }
