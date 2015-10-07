@@ -162,9 +162,13 @@ void display_question(char *category, int value)
 // Returns true if the answer is correct for the question for that category and dollar value
 bool valid_answer(char *category, int value, char *answer)
 {
+	// loop through categories
 	for(int i=0; i<3; i++){
+		// find category of question
 		if(strcmp(category, categories[i])==0){
+			// loop through questions in category
 			for(int j=0; j<4; j++){
+				// check question of value if answer matches
 				if((value/100 == j) && (strcmp(answer, questions[(i-1)*4+j].answer)==0)){
 					return true;
 				}
