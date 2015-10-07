@@ -27,32 +27,50 @@ void show_results(player *players);
 
 int main(int argc, char *argv[])
 {
-    // An array of 4 players, may need to be a pointer if you want it set dynamically
-    player players[4];
+  // An array of 4 players, may need to be a pointer if you want it set dynamically
+  player players[4];
     
-    // Input buffer and and commands
-    char buffer[BUFFER_LEN] = { 0 };
+  // Input buffer and and commands
+  char buffer[BUFFER_LEN] = { 0 };
 
-    // Display the game introduction and prompt for players names
+  // Display the game introduction and prompt for players names
+  printf("Welcome to Jeopardy!\n Please Enter the 4 players");
     // initialize each of the players in the array
 
     // Perform an infinite loop getting command input from users until game ends
     initialize_game();
-    display_categories();
-    while (fgets(buffer, BUFFER_LEN, stdin) != NULL)
+  display_categories();
+  while (fgets(buffer, BUFFER_LEN, stdin) != NULL)
     {
-        // Call functions from the questions and players source files
+      // Call functions from the questions and players source files
 
-        // Execute the game until all questions are answered
+      // Execute the game until all questions are answered
        
-        // Display the final results and exit
+      // Display the final results and exit
     }
-    return EXIT_SUCCESS;
+  return EXIT_SUCCESS;
 }
 
 void tokenize(char *input, char **tokens){
-	// retrieve tokens 1-3 and place in tokens array
-	tokens[0] = strtok(input, " ");
-	tokens[1] = strtok(NULL, " ");
-	tokens[2] = strtok(NULL, " ");
+  
+  const char delim[2] = ",";
+  char *token;
+  int i = 0;
+   
+  /* get the first token */
+  token = strtok(input, delim);
+   
+  /* walk through other tokens */
+  while( token != NULL ) 
+    {
+      tokens[i] = token;//store current token in array
+      
+      token = strtok(NULL, delim);//read next token
+      i++;
+    }
+  /*
+  // retrieve tokens 1-3 and place in tokens array
+  tokens[0] = strtok(input, " ");
+  tokens[1] = strtok(NULL, " ");
+  tokens[2] = strtok(NULL, " ");*/
 }
