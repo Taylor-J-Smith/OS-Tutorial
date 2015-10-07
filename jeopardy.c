@@ -43,6 +43,9 @@ void show_results(player *players){
     }
 }
 
+// Clears the buffer since there is issues when using scanf and fgets
+void clearBuffer();
+
 
 int main(int argc, char *argv[])
 {
@@ -54,18 +57,23 @@ int main(int argc, char *argv[])
   char buffer[BUFFER_LEN] = { 0 };
 
   // Display the game introduction and prompt for players names
-  printf("Welcome to KATJ Jeopardy!!\n")
+  printf("Welcome to KATJ Jeopardy!!\n");
   printf("Please enter the 4 players' names (delimited by space):\n");
   // initialize each of the players in the array
   printf(">> ");
   scanf("%s %s %s %s", players[0].name,players[1].name,players[2].name,players[3].name);  //set the names 
+  printf("Welcome ");
   for (int i = 0; i < 4; i++){
+    printf("%s ", players[i].name);
     players[i].score = 0;      //init all the players' scores to 0
   }
+  printf("\n");
 
     // Perform an infinite loop getting command input from users until game ends
-    initialize_game();
-  display_categories();
+  //    initialize_game();
+  //display_categories();
+  clearBuffer();
+  printf(">> ");//game Promp
   while (fgets(buffer, BUFFER_LEN, stdin) != NULL)
     {
 
@@ -74,6 +82,8 @@ int main(int argc, char *argv[])
       // Execute the game until all questions are answered
        
       // Display the final results and exit
+      
+      printf(">> ");//game Promp
     }
   return EXIT_SUCCESS;
 }
@@ -100,4 +110,9 @@ void tokenize(char *input, char **tokens){
   tokens[0] = strtok(input, " ");
   tokens[1] = strtok(NULL, " ");
   tokens[2] = strtok(NULL, " ");*/
+}
+
+void clearBuffer(){
+  int c;
+  while ((c = getchar()) != EOF && c != '\n') ;  
 }
