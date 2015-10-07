@@ -115,6 +115,14 @@ bool valid_answer(char *category, int value, char *answer)
 // Returns true if the question has already been answered
 bool already_answered(char *category, int value)
 {
-    // lookup the question and see if it's already been marked as answered
-    return false;
+  // lookup the question and see if it's already been marked as answered
+  for (int i = 0; i < sizeof(questions)/sizeof(*questions); i++){
+    question curr_question = questions[i];
+    if (strcmp(category,curr_question.category) && (value == curr_category.value)){
+      //found the right question
+      return curr_question.answered;
+    }
+  }
+  printf("[already_answered]question was not found!\n");
+  return false;
 }
