@@ -15,6 +15,7 @@
 
 // Put macros or constants here using #define
 #define BUFFER_LEN 256
+#define NUM_PLAYERS 4
 
 // Put global environment variables here
 
@@ -22,13 +23,32 @@
 void tokenize(char *input, char **tokens);
 
 // Displays the game results for each player, their name and final score, ranked from first to last place
-void show_results(player *players);
+void show_results(player *players){
+    //Sort
+    player rankedplayers[NUM_PLAYERS] = {players[0],players[1],players[2],players[3]};
+
+    for (int x = 0; x < 3; x++){
+        for (int y = x; y < 4; y++){
+            if (rankedplayers[x].score < rankedplayers[y].score){
+                player tempplayer = rankedplayers[x];
+                rankedplayers[x] = rankedplayers[y];
+                rankedplayers[y] = tempplayer;
+            }
+        }
+    }
+
+    //Display
+    for (int x = 0; x < 3; x++){
+        printf("%d:%s - Score: %d\n",x, rankedplayers[x].name,rankedplayers[x].score);
+    }
+}
 
 
 int main(int argc, char *argv[])
 {
+
     // An array of 4 players, may need to be a pointer if you want it set dynamically
-    player players[4];
+    player players[NUM_PLAYERS];
     
     // Input buffer and and commands
     char buffer[BUFFER_LEN] = { 0 };
@@ -42,7 +62,7 @@ int main(int argc, char *argv[])
     while (fgets(buffer, BUFFER_LEN, stdin) != NULL)
     {
         // Call functions from the questions and players source files
-
+        
         // Execute the game until all questions are answered
        
         // Display the final results and exit
