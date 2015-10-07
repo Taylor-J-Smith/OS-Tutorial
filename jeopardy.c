@@ -34,8 +34,14 @@ int main(int argc, char *argv[])
   char buffer[BUFFER_LEN] = { 0 };
 
   // Display the game introduction and prompt for players names
-  printf("Welcome to Jeopardy!\n Please Enter the 4 players");
-    // initialize each of the players in the array
+  printf("Welcome to KATJ Jeopardy!!\n")
+  printf("Please enter the 4 players' names (delimited by space):\n");
+  // initialize each of the players in the array
+  printf(">> ");
+  scanf("%s %s %s %s", players[0].name,players[1].name,players[2].name,players[3].name);  //set the names 
+  for (int i = 0; i < 4; i++){
+    players[i].score = 0;      //init all the players' scores to 0
+  }
 
     // Perform an infinite loop getting command input from users until game ends
     initialize_game();
