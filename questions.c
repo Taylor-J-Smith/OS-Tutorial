@@ -21,23 +21,23 @@ void initialize_game(void)
 	questions[0].value = 100;
 	questions[0].answered = false;
 
-	strncpy(questions[0].category, "numbers", MAX_LEN);
-	strncpy(questions[0].question, "2+2", MAX_LEN);
-	strncpy(questions[0].answer, "4", MAX_LEN);
-	questions[0].value = 200;
-	questions[0].answered = false;
+	strncpy(questions[1].category, "numbers", MAX_LEN);
+	strncpy(questions[1].question, "2+2", MAX_LEN);
+	strncpy(questions[1].answer, "4", MAX_LEN);
+	questions[1].value = 200;
+	questions[1].answered = false;
 
-	strncpy(questions[0].category, "numbers", MAX_LEN);
-	strncpy(questions[0].question, "3+3", MAX_LEN);
-	strncpy(questions[0].answer, "6", MAX_LEN);
-	questions[0].value = 300;
-	questions[0].answered = false;
+	strncpy(questions[2].category, "numbers", MAX_LEN);
+	strncpy(questions[2].question, "3+3", MAX_LEN);
+	strncpy(questions[2].answer, "6", MAX_LEN);
+	questions[2].value = 300;
+	questions[2].answered = false;
 
-	strncpy(questions[0].category, "numbers", MAX_LEN);
-	strncpy(questions[0].question, "1+2", MAX_LEN);
-	strncpy(questions[0].answer, "3", MAX_LEN);
-	questions[0].value = 400;
-	questions[0].answered = false;
+	strncpy(questions[3].category, "numbers", MAX_LEN);
+	strncpy(questions[3].question, "1+2", MAX_LEN);
+	strncpy(questions[3].answer, "3", MAX_LEN);
+	questions[3].value = 400;
+	questions[3].answered = false;
 
  //    // initialize each question struct and assign it to the questions array
  //    for (int x = 0; x < sizeof(questions)/sizeof(question) ; x++){
@@ -66,11 +66,16 @@ void display_question(char *category, int value)
 {
 	for(int i = 0; i < sizeof(questions)/sizeof(*questions); i++)
 	{
-		if(questions[i].category == category && questions[i].value == value && questions[i].answered == 0)
+		//printf("%d, %s, %s, %d, ", i, questions[i].category, category, strcmp(questions[i].category,category));
+		//printf("%d, %d, %d ", questions[i].value, value, value == questions[i].value);
+		//printf("\n");
+		if(strcmp(questions[i].category, category) == 0 && questions[i].value == value && questions[i].answered == 0)
 		{
 			printf("%s", questions[i].question);
 		}
 	}
+
+	//puts("end of function");
 }
 
 // Returns true if the answer is correct for the question for that category and dollar value
