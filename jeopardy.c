@@ -51,6 +51,7 @@ int main(int argc, char *argv[])
 }
 
 void tokenize(char *input, char **tokens){
+	// retrieve tokens 1-3 and place in tokens array
 	tokens[0] = strtok(input, " ");
 	tokens[1] = strtok(NULL, " ");
 	tokens[2] = strtok(NULL, " ");
