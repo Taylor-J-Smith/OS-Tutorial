@@ -154,9 +154,7 @@ bool already_answered(char *category, int value)
   // lookup the question and see if it's already been marked as answered
   for (int j = 0; j < sizeof(questions)/sizeof(*questions); j++){
     question curr_struct = questions[j];               //store current question
-    printf("%s\n",curr_struct.question);
     if (strcmp(category,curr_struct.category) == 0){
-
       if(value == curr_struct.value){
 	//found the right question
 	return curr_struct.answered;
