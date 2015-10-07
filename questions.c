@@ -16,35 +16,6 @@
 void initialize_game(void)
 {
 
-<<<<<<< HEAD
-	// strncpy(questions[0].category, "numbers", MAX_LEN);
-	// strncpy(questions[0].question, "1+1", MAX_LEN);
-	// strncpy(questions[0].answer, "2", MAX_LEN);
-=======
-	strncpy(questions[0].category, "numbers", MAX_LEN);
-	strncpy(questions[0].question, "1+1", MAX_LEN);
-	strncpy(questions[0].answer, "2", MAX_LEN);
-	questions[0].value = 100;
-	questions[0].answered = false;
-
-	strncpy(questions[1].category, "numbers", MAX_LEN);
-	strncpy(questions[1].question, "2+2", MAX_LEN);
-	strncpy(questions[1].answer, "4", MAX_LEN);
-	questions[1].value = 200;
-	questions[1].answered = false;
-
-	strncpy(questions[2].category, "numbers", MAX_LEN);
-	strncpy(questions[2].question, "3+3", MAX_LEN);
-	strncpy(questions[2].answer, "6", MAX_LEN);
-	questions[2].value = 300;
-	questions[2].answered = false;
-
-	strncpy(questions[3].category, "numbers", MAX_LEN);
-	strncpy(questions[3].question, "1+2", MAX_LEN);
-	strncpy(questions[3].answer, "3", MAX_LEN);
-	questions[3].value = 400;
-	questions[3].answered = false;
-
  //    // initialize each question struct and assign it to the questions array
  //    for (int x = 0; x < sizeof(questions)/sizeof(question) ; x++){
 	//     questions[x].answered = false;
@@ -58,7 +29,6 @@ void initialize_game(void)
 
 
 	// strncpy(questions[0].question, "test question", MAX_LEN);
->>>>>>> dacc124cb874d4fafdec1747f580f3da297fbb81
 	// questions[0].value = 100;
 	// questions[0].answered = false;
 
@@ -79,9 +49,6 @@ void initialize_game(void)
 	// strncpy(questions[0].answer, "3", MAX_LEN);
 	// questions[0].value = 400;
 	// questions[0].answered = false;
-
-	printf("test \n" );
-
 
 	srand(time(NULL));
 	int catselector[4];
