@@ -13,11 +13,29 @@
 // Returns true if the player name matches one of the existing players
 bool player_exists(player *players, char *name)
 {
+	for(int i=0; i<(int) (sizeof(players)/sizeof(player)); i++){
+		for(int j=0; j<MAX_LEN; j++){
+			if(players[i].name[j]!=name[j]){
+				j=MAX_LEN;
+			} else if(j==MAX_LEN-1){
+				return true;
+			}
+		}
+	}
+
     return false;
 }
 
 // Updates the score for that player given their name
 void update_score(player *players, char *name, int score)
 {
-    
+    for(int i=0; i<(int) (sizeof(players)/sizeof(player)); i++){
+		for(int j=0; j<MAX_LEN; j++){
+			if(players[i].name[j]!=name[j]){
+				j=MAX_LEN;
+			} else if(j==MAX_LEN-1){
+				players[i].score += score;
+			}
+		}
+	}
 }
