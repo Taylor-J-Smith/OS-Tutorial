@@ -51,18 +51,18 @@ void initialize_game(void)
 	// questions[0].answered = false;
 
 	srand(time(NULL));
-	int catselector[4];
+	int catselector[3];
 	int currselect;
 	FILE *f = fopen("bank.txt", "r");
 	if (f != NULL){
-	for (int x = 0; x < 4; x++){
+	for (int x = 0; x < 3; x++){
 		bool repeat;
 		do
 		{
 			repeat = true;
 			currselect = rand() % 5;// 5 is number of categories in the file
 			//check if the random number exists in catselector
-			for (int y = 0; y < 4; y++){
+			for (int y = 0; y < 3; y++){
 				if (currselect == catselector[y]){
 					repeat = false;
 				}
@@ -72,7 +72,7 @@ void initialize_game(void)
 	}
 
 	// //iterate over entries in catselector
-	for (int x = 0; x < 4; x++){
+	for (int x = 0; x < 3; x++){
 		// printf("%d \n",catselector[x]); 	
 		//get to the line we want
 		//reset pointer to start
@@ -92,10 +92,10 @@ void initialize_game(void)
 
 
 		//iterate over questions in categories
-		for (int y = 0; y < 4; y++){
+		for (int y = 0; y < 3; y++){
 			fscanf(f, "%s %s %s %d", &questions[y].category, &questions[y].question, &questions[y].answer, &questions[y].value);
-			// printf("Cat:%s Q:%s A:%s Val:%d \n",questions[y].category, questions[y].question, questions[y].answer, questions[y].value );
-			// strncpy(categories[y], *questions[y].category,MAX_LEN);
+			//printf("Cat:%s Q:%s A:%s Val:%d \n",questions[y].category, questions[y].question, questions[y].answer, questions[y].value );
+			strncpy(categories[y], questions[y].category,MAX_LEN);
 		}
 	}	
 
@@ -174,7 +174,7 @@ bool already_answered(char *category, int value)
   // lookup the question and see if it's already been marked as answered
   for (int i = 0; i < sizeof(questions)/sizeof(*questions); i++){
     question curr_question = questions[i];
-    if (strcmp(category,curr_question.category) && (value == curr_category.value)){
+    if (strcmp(category,curr_question.category) && (value == curr_question.value)){
       //found the right question
       return curr_question.answered;
     }
