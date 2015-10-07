@@ -67,7 +67,7 @@ void initialize_game(int round)
 		//iterate over questions in categories
 		for (int y = 0; y < 4; y++){
 			fscanf(f, "%[^:]:%[^:]:%[^:]:%d\n", &questions[y+x*4].category, &questions[y+x*4].question, &questions[y+x*4].answer, &questions[y+x*4].value);
-			printf("Cat:%s Q:%s A:%s Val:%d \n",questions[y].category, questions[y].question, questions[y].answer, questions[y].value );
+			// printf("%d,%d Cat:%s Q:%s A:%s Val:%d \n",x,y,questions[y+x*4].category, questions[y+x*4].question, questions[y+x*4].answer, questions[y+x*4].value );
 			// printf("%s\n",questions[y+x*4].category );
 		}
 	}	

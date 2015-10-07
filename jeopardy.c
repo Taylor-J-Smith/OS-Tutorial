@@ -79,10 +79,10 @@ int main(int argc, char *argv[])
   printf("\n");
 
     // Perform an infinite loop getting command input from users until game ends
-     initialize_game(1);
-  display_categories();
-  clearBuffer();
-  printf(">> ");//game Promp
+    initialize_game(1);
+    display_categories();
+    clearBuffer();
+    printf(">> ");//game Prompt
   while (fgets(buffer, BUFFER_LEN, stdin) != NULL)
     {
         // testfunction(players);
@@ -92,7 +92,7 @@ int main(int argc, char *argv[])
        
       // Display the final results and exit
       
-      printf(">> ");//game Promp
+      printf(">> ");//game Prompt
     }
   return EXIT_SUCCESS;
 }
