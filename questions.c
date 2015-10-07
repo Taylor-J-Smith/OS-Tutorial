@@ -13,15 +13,20 @@
 
 
 // Initializes the array of questions for the game
-void initialize_game(void)
+void initialize_game(int round)
 {
 
- //    // initialize each question struct and assign it to the questions array
+     // initialize each question struct and assign it to the questions array
 
 	srand(time(NULL));
 	int catselector[3];
 	int currselect;
-	FILE *f = fopen("bank.txt", "r");
+	FILE *f;
+	if (round == 1){
+		f = fopen("bank.txt", "r");
+	}else{
+		f = fopen("djqs.txt", "r");
+	}
 	if (f != NULL){
 	for (int x = 0; x < 3; x++){
 		bool repeat;
@@ -61,8 +66,8 @@ void initialize_game(void)
 
 		//iterate over questions in categories
 		for (int y = 0; y < 4; y++){
-			fscanf(f, "%s %s %s %d", &questions[y+x*4].category, &questions[y+x*4].question, &questions[y+x*4].answer, &questions[y+x*4].value);
-			//printf("Cat:%s Q:%s A:%s Val:%d \n",questions[y].category, questions[y].question, questions[y].answer, questions[y].value );
+			fscanf(f, "%[^:]:%[^:]:%[^:]:%d\n", &questions[y+x*4].category, &questions[y+x*4].question, &questions[y+x*4].answer, &questions[y+x*4].value);
+			printf("Cat:%s Q:%s A:%s Val:%d \n",questions[y].category, questions[y].question, questions[y].answer, questions[y].value );
 			// printf("%s\n",questions[y+x*4].category );
 		}
 	}	
@@ -81,7 +86,7 @@ void initialize_game(void)
 	    questions[x].answered = false;
     }
 
-	strncpy(questions[0].question, "test question", MAX_LEN);
+	// strncpy(questions[0].question, "test question", MAX_LEN);
 
 	fclose(f);
 	}
