@@ -13,7 +13,7 @@
 #define MAX_LEN 256
 
 // List of 3 categories as array of strings
-static char categories[3][MAX_LEN] = {"programming", "algorithms", "databases"};
+static char categories[3][MAX_LEN] = {"number0", "number1", "number2"};
 
 // Questions struct for each question
 typedef struct {

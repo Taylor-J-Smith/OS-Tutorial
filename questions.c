@@ -8,6 +8,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 #include "questions.h"
 
 
@@ -15,44 +16,92 @@
 void initialize_game(void)
 {
 
-	strncpy(questions[0].category, "numbers", MAX_LEN);
-	strncpy(questions[0].question, "1+1", MAX_LEN);
-	strncpy(questions[0].answer, "2", MAX_LEN);
-	questions[0].value = 100;
-	questions[0].answered = false;
-
-	strncpy(questions[0].category, "numbers", MAX_LEN);
-	strncpy(questions[0].question, "2+2", MAX_LEN);
-	strncpy(questions[0].answer, "4", MAX_LEN);
-	questions[0].value = 200;
-	questions[0].answered = false;
-
-	strncpy(questions[0].category, "numbers", MAX_LEN);
-	strncpy(questions[0].question, "3+3", MAX_LEN);
-	strncpy(questions[0].answer, "6", MAX_LEN);
-	questions[0].value = 300;
-	questions[0].answered = false;
-
-	strncpy(questions[0].category, "numbers", MAX_LEN);
-	strncpy(questions[0].question, "1+2", MAX_LEN);
-	strncpy(questions[0].answer, "3", MAX_LEN);
-	questions[0].value = 400;
-	questions[0].answered = false;
-
- //    // initialize each question struct and assign it to the questions array
- //    for (int x = 0; x < sizeof(questions)/sizeof(question) ; x++){
-	//     questions[x].answered = false;
- //    }
- 	
- // 	for (int y = 0; y < 3; y++){
-	//  	for (int x = 0; x < (sizeof(questions)/sizeof(question))/3 ; x++){
-	//         	strncpy(questions[x+y*4].category, "test cat", MAX_LEN);
-	//     }	
- // 	}
-
-
-	// strncpy(questions[0].question, "test question", MAX_LEN);
+	// strncpy(questions[0].category, "numbers", MAX_LEN);
+	// strncpy(questions[0].question, "1+1", MAX_LEN);
+	// strncpy(questions[0].answer, "2", MAX_LEN);
 	// questions[0].value = 100;
+	// questions[0].answered = false;
+
+	// strncpy(questions[0].category, "numbers", MAX_LEN);
+	// strncpy(questions[0].question, "2+2", MAX_LEN);
+	// strncpy(questions[0].answer, "4", MAX_LEN);
+	// questions[0].value = 200;
+	// questions[0].answered = false;
+
+	// strncpy(questions[0].category, "numbers", MAX_LEN);
+	// strncpy(questions[0].question, "3+3", MAX_LEN);
+	// strncpy(questions[0].answer, "6", MAX_LEN);
+	// questions[0].value = 300;
+	// questions[0].answered = false;
+
+	// strncpy(questions[0].category, "numbers", MAX_LEN);
+	// strncpy(questions[0].question, "1+2", MAX_LEN);
+	// strncpy(questions[0].answer, "3", MAX_LEN);
+	// questions[0].value = 400;
+	// questions[0].answered = false;
+
+	printf("test \n" );
+
+
+	srand(time(NULL));
+	int catselector[4];
+	int currselect;
+	FILE *f = fopen("bank.txt", "r");
+	if (f != NULL){
+	for (int x = 0; x < 4; x++){
+		bool repeat;
+		do
+		{
+			repeat = true;
+			currselect = rand() % 5;// 5 is number of categories in the file
+			//check if the random number exists in catselector
+			for (int y = 0; y < 4; y++){
+				if (currselect == catselector[y]){
+					repeat = false;
+				}
+			}
+		}while (repeat == false);
+		catselector[x] = currselect;
+	}
+
+	// //iterate over entries in catselector
+	for (int x = 0; x < 4; x++){
+		// printf("%d \n",catselector[x]); 	
+		//get to the line we want
+		//reset pointer to start
+		fseek(f, 0, SEEK_SET);
+		char templine[MAX_LEN];
+
+		for (int z = 0; z < catselector[x];z++){
+					fgets(templine, MAX_LEN*3+10, f);
+					// printf("%s", templine);
+					fgets(templine, MAX_LEN*3+10, f);
+					// printf("%s", templine);				
+					fgets(templine, MAX_LEN*3+10, f);
+					// printf("%s", templine);
+					fgets(templine, MAX_LEN*3+10, f);
+					// printf("%s", templine);					
+		}
+
+
+		//iterate over questions in categories
+		for (int y = 0; y < 4; y++){
+			fscanf(f, "%s %s %s %d", &questions[y].category, &questions[y].question, &questions[y].answer, &questions[y].value);
+			// printf("Cat:%s Q:%s A:%s Val:%d \n",questions[y].category, questions[y].question, questions[y].answer, questions[y].value );
+			// strncpy(categories[y], *questions[y].category,MAX_LEN);
+		}
+	}	
+
+
+    // initialize each question struct and assign it to the questions array
+    for (int x = 0; x < sizeof(questions)/sizeof(question) ; x++){
+	    questions[x].answered = false;
+    }
+
+	strncpy(questions[0].question, "test question", MAX_LEN);
+
+	fclose(f);
+	}
 }
 
 // Displays each of the remaining categories and question dollar values that have not been answered
