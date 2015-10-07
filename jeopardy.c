@@ -48,3 +48,9 @@ int main(int argc, char *argv[])
     }
     return EXIT_SUCCESS;
 }
+
+void tokenize(char *input, char **tokens){
+	tokens[0] = strtok(input, " ");
+	tokens[1] = strtok(NULL, " ");
+	tokens[2] = strtok(NULL, " ");
+}
