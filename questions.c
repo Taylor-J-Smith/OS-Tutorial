@@ -92,12 +92,20 @@ void initialize_game(void)
 
 
 		//iterate over questions in categories
-		for (int y = 0; y < 3; y++){
-			fscanf(f, "%s %s %s %d", &questions[y].category, &questions[y].question, &questions[y].answer, &questions[y].value);
+		for (int y = 0; y < 4; y++){
+			fscanf(f, "%s %s %s %d", &questions[y+x*4].category, &questions[y+x*4].question, &questions[y+x*4].answer, &questions[y+x*4].value);
 			//printf("Cat:%s Q:%s A:%s Val:%d \n",questions[y].category, questions[y].question, questions[y].answer, questions[y].value );
-			strncpy(categories[y], questions[y].category,MAX_LEN);
+			printf("%s\n",questions[y+x*4].category );
 		}
 	}	
+
+	for (int y = 0; y < 3; y++){
+		strncpy(categories[y], questions[y*4].category,MAX_LEN);
+	}	
+	printf("categories\n" );
+	printf("%s\n", categories[0]);
+	printf("%s\n", categories[1]);
+	printf("%s\n", categories[2]);
 
 
     // initialize each question struct and assign it to the questions array
