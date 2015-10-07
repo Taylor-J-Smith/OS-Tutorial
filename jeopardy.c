@@ -37,14 +37,20 @@ int main(int argc, char *argv[])
     // initialize each of the players in the array
 
     // Perform an infinite loop getting command input from users until game ends
+    initialize_game();
     while (fgets(buffer, BUFFER_LEN, stdin) != NULL)
     {
         // Call functions from the questions and players source files
-        initialize_game();
 
         // Execute the game until all questions are answered
        
         // Display the final results and exit
     }
     return EXIT_SUCCESS;
+}
+
+void tokenize(char *input, char **tokens){
+	tokens[0] = strtok(input, " ");
+	tokens[1] = strtok(NULL, " ");
+	tokens[2] = strtok(NULL, " ");
 }
