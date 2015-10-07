@@ -38,6 +38,7 @@ int main(int argc, char *argv[])
 
     // Perform an infinite loop getting command input from users until game ends
     initialize_game();
+    display_categories();
     while (fgets(buffer, BUFFER_LEN, stdin) != NULL)
     {
         // Call functions from the questions and players source files

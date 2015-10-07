@@ -94,7 +94,7 @@ void initialize_game(void)
 		//iterate over questions in categories
 		for (int y = 0; y < 3; y++){
 			fscanf(f, "%s %s %s %d", &questions[y].category, &questions[y].question, &questions[y].answer, &questions[y].value);
-			printf("Cat:%s Q:%s A:%s Val:%d \n",questions[y].category, questions[y].question, questions[y].answer, questions[y].value );
+			//printf("Cat:%s Q:%s A:%s Val:%d \n",questions[y].category, questions[y].question, questions[y].answer, questions[y].value );
 			strncpy(categories[y], questions[y].category,MAX_LEN);
 		}
 	}	
@@ -171,6 +171,14 @@ bool valid_answer(char *category, int value, char *answer)
 // Returns true if the question has already been answered
 bool already_answered(char *category, int value)
 {
-    // lookup the question and see if it's already been marked as answered
-    return false;
+  // lookup the question and see if it's already been marked as answered
+  for (int i = 0; i < sizeof(questions)/sizeof(*questions); i++){
+    question curr_question = questions[i];
+    if (strcmp(category,curr_question.category) && (value == curr_question.value)){
+      //found the right question
+      return curr_question.answered;
+    }
+  }
+  printf("[already_answered]question was not found!\n");
+  return false;
 }
