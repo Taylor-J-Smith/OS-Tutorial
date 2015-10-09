@@ -33,23 +33,23 @@ void tokenize(char *input, char **tokens);
 
 // Displays the game results for each player, their name and final score, ranked from first to last place
 void show_results(player *players){
-    //Sort
-    player rankedplayers[NUM_PLAYERS] = {players[0],players[1],players[2],players[3]};
+  //Sort
+  player rankedplayers[NUM_PLAYERS] = {players[0],players[1],players[2],players[3]};
 
-    for (int x = 0; x < 3; x++){
-        for (int y = x; y < 4; y++){
-            if (rankedplayers[x].score < rankedplayers[y].score){
-                player tempplayer = rankedplayers[x];
-                rankedplayers[x] = rankedplayers[y];
-                rankedplayers[y] = tempplayer;
-            }
-        }
+  for (int x = 0; x < 3; x++){
+    for (int y = x; y < 4; y++){
+      if (rankedplayers[x].score < rankedplayers[y].score){
+	player tempplayer = rankedplayers[x];
+	rankedplayers[x] = rankedplayers[y];
+	rankedplayers[y] = tempplayer;
+      }
     }
+  }
 
-    //Display
-    for (int x = 0; x < NUM_PLAYERS; x++){
-        printf("%d:%s - Score: %d\n",x, rankedplayers[x].name,rankedplayers[x].score);
-    }
+  //Display
+  for (int x = 0; x < NUM_PLAYERS; x++){
+    printf("%d:%s - Score: %d\n",x, rankedplayers[x].name,rankedplayers[x].score);
+  }
 }
 
 // Clears the buffer since there is issues when using scanf and fgets
@@ -58,7 +58,8 @@ void clearBuffer();
 // Used to print an array of strings given the size of the array
 void printStringArray(char **array,int size);
 
-void storePlayers(int num_players, char *list_of_players[],player *players);
+//Used to promp user to enter player names, store those names into a player array, and display a welcome message.
+void storePlayers(char buffer[],char *user_output[], int num_players, player players[]);
 
 int main(int argc, char *argv[])
 {
@@ -72,39 +73,25 @@ int main(int argc, char *argv[])
   //Array of Strings used to store the user Input
   char *user_output[BUFFER_LEN];
   
-  // Display the game introduction and prompt for players names
+  // Display the game introduction 
   printf("Welcome to KATJ Jeopardy!!\n");
-  printf("Please enter the 4 players' names (delimited by space):\n");
-  // initialize each of the players in the array
-  printf(">> ");
-  fgets(buffer, BUFFER_LEN, stdin);//read in the user input
-  buffer[strlen(buffer)-1] = 0;    //remove the newline from last char
-  tokenize(buffer,user_output);
 
-  //store players
-  for(int i = 0; i < NUM_PLAYERS; i++){
-    strcpy(players[i].name,user_output[i]);
-    players[i].score = 0;
-  }
+  //Promp for player names, store them in players array, and display a welcome message
+  storePlayers(buffer,user_output, NUM_PLAYERS, players);
 
-  //printStringArray(user_output,4);
-
+  //Initialize game and display the available categories
+  initialize_game(1);
+  display_categories();
   
-  //scanf("%s %s %s %s\n", players[0].name,players[1].name,players[2].name,players[3].name);  //set the names 
-  printf("Welcome ");
-  for (int i = 0; i < 4; i++){
-    printf("%s ", players[i].name);
-    players[i].score = 0;      //init all the players' scores to 0
-  }
-  printf("\n");
-  return 0;//temp
-
-    // Perform an infinite loop getting command input from users until game ends
-    initialize_game(1);
+  // Perform an infinite loop getting command input from users until game ends
+  printf(">> ");//game Prompt
   while (fgets(buffer, BUFFER_LEN, stdin) != NULL)
     {
-      display_categories();
-        // testfunction(players);
+      buffer[strlen(buffer)-1] = 0;      //remove the newline from last char
+      printf("%s\n",buffer);             //temp
+
+      
+      // testfunction(players);
       // Call functions from the questions and players source files
 
       // Execute the game until all questions are answered
@@ -118,41 +105,56 @@ int main(int argc, char *argv[])
 
 void tokenize(char *input, char **tokens){
   
-  const char delim[2] = " ";
-  char *token;
-  int i = 0;
+  const char delim[2] = " ";       //set delimiter
+  char *token;                     //placeholder for token
+  int i = 0;                       //keep track of array index
    
-  /* get the first token */
-  token = strtok(input, delim);
-   
-  /* walk through other tokens */
-  while( token != NULL ) 
-    {
-      tokens[i] = token;//store current token in array
-      
-      token = strtok(NULL, delim);//read next token
-      i++;
-    }
-  /*
-  // retrieve tokens 1-3 and place in tokens array
-  tokens[0] = strtok(input, " ");
-  tokens[1] = strtok(NULL, " ");
-  tokens[2] = strtok(NULL, " ");*/
+  token = strtok(input, delim);    //get the first token
+
+  while( token != NULL ){          //walk through other tokens */
+    tokens[i] = token;             //store current token in array      
+    token = strtok(NULL, delim);   //read next token
+    i++;
+  }
 }
 
 void clearBuffer(){
+  //reference @ http://stackoverflow.com/
   int c;
   while ((c = getchar()) != EOF && c != '\n') ;  
 }
 
 void printStringArray(char **array,int size){
+  //Prints an array of Strings(*char) given param size
   for (int i = 0; i < size; i++){
     printf("%s\n",array[i]);
   }
 }
 
-void storePlayers(int num_players, char *list_of_players[],player *players){
-  
+void storePlayers(char buffer[],char *user_output[], int num_players, player *players){
+  //@param buffer       - A string used to store user Input
+  //@param user_output  - An array of strings used to store the tokenized strings
+  //@param num_players  - The number of players currently in the game
+  //@param players      - An array of player structs
+  printf("Please enter the 4 players' names (delimited by space):\n");
+  // initialize each of the players in the array
+  printf(">> ");                             //input prompt
+  fgets(buffer, BUFFER_LEN, stdin);          //read in the user input
+  buffer[strlen(buffer)-1] = 0;              //remove the newline from last char
+  tokenize(buffer,user_output);              //store all the strings delimited by a space into an array
+
+  //store players into the players array
+  for(int i = 0; i < num_players; i++){      //iterate through the # of players
+    strcpy(players[i].name,user_output[i]);  //copy from array of tokens into the person name
+    players[i].score = 0;                    //init all scores to 0
+  }
+
+  //Print a friendly welcome message once all the players have been set
+  printf("Welcome ");                        //Welcome message
+  for (int i = 0; i < num_players; i++){     //iterate through all the players
+    printf("%s ", players[i].name);          //print the player's name
+  }
+  printf("\n");                     
 }
 
 
