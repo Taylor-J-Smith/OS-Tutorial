@@ -55,36 +55,55 @@ void show_results(player *players){
 // Clears the buffer since there is issues when using scanf and fgets
 void clearBuffer();
 
+// Used to print an array of strings given the size of the array
+void printStringArray(char **array,int size);
+
+void storePlayers(int num_players, char *list_of_players[],player *players);
 
 int main(int argc, char *argv[])
 {
 
-    // An array of 4 players, may need to be a pointer if you want it set dynamically
-    player players[NUM_PLAYERS];
+  // An array of 4 players, may need to be a pointer if you want it set dynamically
+  player players[NUM_PLAYERS];
     
-  // Input buffer and and commands
+  //Input buffer and and commands
   char buffer[BUFFER_LEN] = { 0 };
 
+  //Array of Strings used to store the user Input
+  char *user_output[BUFFER_LEN];
+  
   // Display the game introduction and prompt for players names
   printf("Welcome to KATJ Jeopardy!!\n");
   printf("Please enter the 4 players' names (delimited by space):\n");
   // initialize each of the players in the array
   printf(">> ");
-  scanf("%s %s %s %s", players[0].name,players[1].name,players[2].name,players[3].name);  //set the names 
+  fgets(buffer, BUFFER_LEN, stdin);//read in the user input
+  buffer[strlen(buffer)-1] = 0;    //remove the newline from last char
+  tokenize(buffer,user_output);
+
+  //store players
+  for(int i = 0; i < NUM_PLAYERS; i++){
+    strcpy(players[i].name,user_output[i]);
+    players[i].score = 0;
+  }
+
+  //printStringArray(user_output,4);
+
+  
+  //scanf("%s %s %s %s\n", players[0].name,players[1].name,players[2].name,players[3].name);  //set the names 
   printf("Welcome ");
   for (int i = 0; i < 4; i++){
     printf("%s ", players[i].name);
     players[i].score = 0;      //init all the players' scores to 0
   }
   printf("\n");
+  return 0;//temp
 
     // Perform an infinite loop getting command input from users until game ends
     initialize_game(1);
-    display_categories();
-    clearBuffer();
-    printf(">> ");//game Prompt
   while (fgets(buffer, BUFFER_LEN, stdin) != NULL)
     {
+      display_categories();
         // testfunction(players);
       // Call functions from the questions and players source files
 
@@ -99,7 +118,7 @@ int main(int argc, char *argv[])
 
 void tokenize(char *input, char **tokens){
   
-  const char delim[2] = ",";
+  const char delim[2] = " ";
   char *token;
   int i = 0;
    
@@ -125,3 +144,41 @@ void clearBuffer(){
   int c;
   while ((c = getchar()) != EOF && c != '\n') ;  
 }
+
+void printStringArray(char **array,int size){
+  for (int i = 0; i < size; i++){
+    printf("%s\n",array[i]);
+  }
+}
+
+void storePlayers(int num_players, char *list_of_players[],player *players){
+  
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
