@@ -124,13 +124,16 @@ void display_question(char *category, int value)
 {
 	for(int i = 0; i < sizeof(questions)/sizeof(*questions); i++)
 	{
-		// printf("%d, %s, %s, %d, ", i, questions[i].category, category, strcmp(questions[i].category,category));
-		// printf("%d, %d, %d ", questions[i].value, value, value == questions[i].value);
-		// printf("\n");
+		//printf("%d, %s, %s, %d, ", i, questions[i].category, category, strcmp(questions[i].category,category));
+		//printf("%d, %d, %d ", questions[i].value, value, value == questions[i].value);
+		//printf(" | %s", questions[i].question);
+		//printf("\n");
 		if(strcmp(questions[i].category, category) == 0 && questions[i].value == value && questions[i].answered == 0)
 		{
-			printf("In the category %s, For %d:\n",category,value );
-			printf("%s", questions[i].question);
+			printf("In the category %s, For %d:",category,value);
+			printf("\n");
+			printf("%s",questions[i].question);
+			printf("\n");
 		}
 	}
 

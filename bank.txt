@@ -1,7 +1,7 @@
-numbers0:1 + 1:2:100
-numbers0:2 + 2:4:200
-numbers0:5 + 5:10:300
-numbers0:4 + 3:7:400
+Lakes & Rivers:The river mentioned most in The Bible:the Jordan:100
+Lakes & Rivers:Scotish word for lake:Loch:200
+Lakes & Rivers:The longest river in the US:the Missouri:300
+Lakes & Rivers:The largest of the great lakes:Superior:400
 numbers1:1 +1:2:100
 numbers1:2+ 2:4:200
 numbers1:5 +5:10:300
