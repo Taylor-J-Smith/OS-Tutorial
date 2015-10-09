@@ -73,6 +73,8 @@ int main(int argc, char *argv[])
   //Array of Strings used to store the user Input
   char *user_output[BUFFER_LEN];
   
+  //
+  system("clear");
   // Display the game introduction 
   printf("Welcome to KATJ Jeopardy!! Hit ENTER to Begin!");
   
@@ -153,6 +155,7 @@ void storePlayers(char buffer[],char *user_output[], int num_players, player *pl
     players[i].score = 0;                    //init all scores to 0
   }
 
+  system("clear");
   //Print a friendly welcome message once all the players have been set
   printf("Welcome! ");                        //Welcome message
   for (int i = 0; i < num_players; i++){     //iterate through all the players
