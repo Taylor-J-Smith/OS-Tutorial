@@ -2,19 +2,19 @@ Lakes & Rivers:The river mentioned most in The Bible:the Jordan:100
 Lakes & Rivers:Scotish word for lake:Loch:200
 Lakes & Rivers:The longest river in the US:the Missouri:300
 Lakes & Rivers:The largest of the great lakes:Superior:400
-numbers1:1 +1:2:100
-numbers1:2+ 2:4:200
-numbers1:5 +5:10:300
-numbers1:4+ 3:7:400
-numbers2:1 +1:2:100
-numbers2:2+ 2:4:200
-numbers2:5 +5:10:300
-numbers2:4+ 3:7:400
-numbers3:1 +1:2:100
-numbers3:2 +2:4:200
-numbers3:5 +5:10:300
-numbers3:4 +3:7:400
-numbers4:1+ 1:2:100
-numbers4:2+ 2:4:200
-numbers4:5+ 5:10:300
-numbers4:4+ 3:7:400
+n1:1+1:2:100
+n1:2+2:4:200
+n1:3+3:6:300
+n1:4+4:8:400
+n2:21+21:42:100
+n2:22+22:44:200
+n2:23+23:46:300
+n2:24+24:48:400
+n3:31+31:62:100
+n3:32+32:64:200
+n3:33+33:66:300
+n3:34+34:68:400
+n4:41+41:82:100
+n4:42+42:84:200
+n4:43+43:86:300
+n4:44+44:88:400
