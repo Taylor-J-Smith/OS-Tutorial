@@ -74,31 +74,35 @@ int main(int argc, char *argv[])
   char *user_output[BUFFER_LEN];
   
   // Display the game introduction 
-  printf("Welcome to KATJ Jeopardy!!\n");
-
-  //Promp for player names, store them in players array, and display a welcome message
-  storePlayers(buffer,user_output, NUM_PLAYERS, players);
-
-  //Initialize game and display the available categories
-  initialize_game(1);
-  display_categories();
+  printf("Welcome to KATJ Jeopardy!! Hit ENTER to Begin!");
   
   // Perform an infinite loop getting command input from users until game ends
-  printf(">> ");//game Prompt
   while (fgets(buffer, BUFFER_LEN, stdin) != NULL)
     {
-      buffer[strlen(buffer)-1] = 0;      //remove the newline from last char
-      printf("%s\n",buffer);             //temp
+      //Promp for player names, store them in players array, and display a welcome message
+      storePlayers(buffer,user_output, NUM_PLAYERS, players);
 
+      //Initialize game and display the available categories
+      initialize_game(1);
+      display_categories();
       
-      // testfunction(players);
-      // Call functions from the questions and players source files
+      //loop Until the user enters a valid player name
+      while(1){
+	printf("Enter player to go first:");           //User Message
+	fgets(buffer, BUFFER_LEN, stdin);              //read in the user input
+	buffer[strlen(buffer)-1] = 0;                  //remove the newline from last char
 
-      // Execute the game until all questions are answered
-       
-      // Display the final results and exit
+	if(player_exists(players,NUM_PLAYERS,buffer)){ //check if player exists
+	  break;                                       //A valid player name was entered
+	}else{
+	  printf("Invalid Name \"%s\"! ",buffer);       //Invalid player name, keep looping
+	}
+      }
+      printf("Hi %s\n",buffer);                        //Found name! Welcome message
+
+      //continue here
       
-      printf(">> ");//game Prompt
+      printf("----------END OF GAME----------\n");     //game Prompt
     }
   return EXIT_SUCCESS;
 }
@@ -150,7 +154,7 @@ void storePlayers(char buffer[],char *user_output[], int num_players, player *pl
   }
 
   //Print a friendly welcome message once all the players have been set
-  printf("Welcome ");                        //Welcome message
+  printf("Welcome! ");                        //Welcome message
   for (int i = 0; i < num_players; i++){     //iterate through all the players
     printf("%s ", players[i].name);          //print the player's name
   }
