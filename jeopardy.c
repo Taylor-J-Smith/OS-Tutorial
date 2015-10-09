@@ -33,6 +33,9 @@ int main(int argc, char *argv[])
     // Input buffer and and commands
     char buffer[BUFFER_LEN] = { 0 };
 
+    initialize_game();
+    display_question("numbers", 100);
+
     // Display the game introduction and prompt for players names
     // initialize each of the players in the array
 
@@ -40,8 +43,9 @@ int main(int argc, char *argv[])
     while (fgets(buffer, BUFFER_LEN, stdin) != NULL)
     {
         // Call functions from the questions and players source files
-        initialize_game();
+        
 
+        
         // Execute the game until all questions are answered
        
         // Display the final results and exit
