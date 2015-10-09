@@ -65,6 +65,8 @@ void storePlayers(char buffer[],char *user_output[], int num_players, player pla
 
 void pickQuestion(char *user_output[], char buffer[], char currPlayer[]);
 
+void trim(char padded_string[]);
+
 int main(int argc, char *argv[])
 {
 
@@ -227,4 +229,41 @@ void pickQuestion(char *user_output[], char buffer[], char currPlayer[]){
   tokenize(buffer, user_output, ",");
   // user_output[0]; //category
   // user_output[1]; //value
+}
+
+void trim(char padded_string[]){
+  char trimmed_string[strlen(padded_string)];
+  int j = 0; //keeps track of the new trimmed string
+  int a = 0; //start of trimmed string
+  int z = 0; //end of trimmed string
+  
+  //remove leading whitespace
+  for (int i = 0; i < strlen(padded_string); i++){
+    if (padded_string[i] == ' '){
+      //      printf("a++; i is %d\n",i);
+      a++;
+    }else{
+      break;
+    }    
+  }
+  for (int i = strlen(padded_string) - 1; i >=0; i--){
+    if (padded_string[i] == ' '){
+      //      printf("z++; i is %d\n",i);
+      z++;
+    }else{
+      break;
+    }
+  }
+
+  //  printf("%lu\n",strlen(padded_string));
+  //  printf("a:%d,z:%d\n", a,z);
+  z = strlen(padded_string) - z;
+  //copy only the string without whitespace
+  for (int i = a; i < z; i++){
+    trimmed_string[j] = padded_string[i];
+    j++;  
+  }
+
+  trimmed_string[j] = 0;
+  strcpy(padded_string,trimmed_string);
 }
