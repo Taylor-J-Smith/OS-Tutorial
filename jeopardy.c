@@ -20,7 +20,7 @@
 // Put global environment variables here
 
 // Processes the answer from the user containing what is or who is and tokenizes it to retrieve the answer.
-void tokenize(char *input, char **tokens);
+void tokenize(char *input, char **tokens, char *delim);
 
 // void testfunction(player *players){
 //     players[0].score = 10;
@@ -61,6 +61,8 @@ void printStringArray(char **array,int size);
 //Used to promp user to enter player names, store those names into a player array, and display a welcome message.
 void storePlayers(char buffer[],char *user_output[], int num_players, player players[]);
 
+void pickQuestion(char *user_output[], char buffer[], char currPlayer[]);
+
 int main(int argc, char *argv[])
 {
 
@@ -72,6 +74,9 @@ int main(int argc, char *argv[])
 
   //Array of Strings used to store the user Input
   char *user_output[BUFFER_LEN];
+
+  //current player
+  char currPlayer[BUFFER_LEN];
   
   //
   system("clear");
@@ -86,32 +91,48 @@ int main(int argc, char *argv[])
 
       //Initialize game and display the available categories
       initialize_game(1);
-      display_categories();
+      // display_categories();
       
       //loop Until the user enters a valid player name
       while(1){
 	printf("Enter player to go first:");           //User Message
 	fgets(buffer, BUFFER_LEN, stdin);              //read in the user input
 	buffer[strlen(buffer)-1] = 0;                  //remove the newline from last char
+  strcpy(currPlayer, buffer);
 
-	if(player_exists(players,NUM_PLAYERS,buffer)){ //check if player exists
+	if(player_exists(players,NUM_PLAYERS,currPlayer)){ //check if player exists
 	  break;                                       //A valid player name was entered
 	}else{
 	  printf("Invalid Name \"%s\"! ",buffer);       //Invalid player name, keep looping
 	}
       }
-      printf("Hi %s\n",buffer);                        //Found name! Welcome message
+      
+      pickQuestion(user_output, buffer, currPlayer);
+
+      do{
+        int t = atoi(user_output[1]); //not sure why this is needed but it is.
+        if(already_answered(user_output[0],t) == true){
+          system("clear");
+          printf("Invalid Question, pick again.\n \n \n");
+          pickQuestion(user_output,buffer,currPlayer);
+        }else{
+          break;
+        }
+      }while(true);
+
 
       //continue here
+
       
       printf("----------END OF GAME----------\n");     //game Prompt
+      return EXIT_SUCCESS;
     }
   return EXIT_SUCCESS;
 }
 
-void tokenize(char *input, char **tokens){
+void tokenize(char *input, char **tokens, char *delim){
   
-  const char delim[2] = " ";       //set delimiter
+  // const char delim[2] = " ";       //set delimiter
   char *token;                     //placeholder for token
   int i = 0;                       //keep track of array index
    
@@ -147,7 +168,7 @@ void storePlayers(char buffer[],char *user_output[], int num_players, player *pl
   printf(">> ");                             //input prompt
   fgets(buffer, BUFFER_LEN, stdin);          //read in the user input
   buffer[strlen(buffer)-1] = 0;              //remove the newline from last char
-  tokenize(buffer,user_output);              //store all the strings delimited by a space into an array
+  tokenize(buffer,user_output," ");              //store all the strings delimited by a space into an array
 
   //store players into the players array
   for(int i = 0; i < num_players; i++){      //iterate through the # of players
@@ -164,30 +185,16 @@ void storePlayers(char buffer[],char *user_output[], int num_players, player *pl
   printf("\n");                     
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+void pickQuestion(char *user_output[], char buffer[], char currPlayer[]){
+  display_categories();
+  printf("Hi %s, you have control of the board\n",currPlayer);                        //Found name! Welcome message
+  printf("Please enter the category name, followed by a comma, and then the dollar amount (no spaces) \n");
+  //get the player to select a question
+  printf(">> ");
+  fgets(buffer, BUFFER_LEN, stdin);              //read in the user input
+  buffer[strlen(buffer)-1] = 0;                  //remove the newline from last char
+  //All categories are 2 words long
+  tokenize(buffer, user_output, ",");
+  // user_output[0]; //category
+  // user_output[1]; //value
+}

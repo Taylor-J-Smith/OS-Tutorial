@@ -108,7 +108,10 @@ void display_categories(void)
 	if (!curr_struct.answered){
 	  //question has not been answered
 	  printf("%d ", curr_struct.value );             //category is un-answered + in right cat
+	}else{
+		printf("%s ", "XXX"); 	//question has already been answered;
 	}
+
       }
     }
     printf("\n");
@@ -165,8 +168,7 @@ bool already_answered(char *category, int value)
 	return curr_struct.answered;
       }
     } 
-   
   }
-  printf("[already_answered]question was not found!\n");
-  return false;
+  // printf("[already_answered]question was not found!\n");
+  return true;
 }
