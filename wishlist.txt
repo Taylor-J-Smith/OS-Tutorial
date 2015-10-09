@@ -1,0 +1,8 @@
+FEATURE WISHLIST:
+-coloured text
+-flavoured text (alex trebek)
+-make display more interesting
+-double jeopardy
+-Daily Double
+-Final Jeopardy
+-Winner display

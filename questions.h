@@ -13,7 +13,7 @@
 #define MAX_LEN 256
 
 // List of 3 categories as array of strings
-static char categories[3][MAX_LEN] = {"programming", "algorithms", "databases"};
+static char categories[3][MAX_LEN] = {"nothing", "nothing", "nothing"};
 
 // Questions struct for each question
 typedef struct {
@@ -29,7 +29,7 @@ typedef struct {
 question questions[12];
 
 // Initializes the array of questions for the game
-extern void initialize_game(void);
+extern void initialize_game(int round);
 
 // Displays each of the remaining categories and question dollar values that have not been answered
 extern void display_categories(void);
