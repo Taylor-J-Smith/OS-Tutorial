@@ -147,7 +147,7 @@ bool valid_answer(char *category, int value, char *answer)
 			// loop through questions in category
 			for(int j=0; j<4; j++){
 				// check question of value if answer matches
-				if((value/100 == j) && (strcmp(answer, questions[(i-1)*4+j].answer)==0)){
+				if(((value/100)-1 == j) && (strcmp(answer, questions[(i-1)*4+j].answer)==0)){
 					return true;
 				}
 			}
@@ -158,7 +158,7 @@ bool valid_answer(char *category, int value, char *answer)
     return false;
 }
 
-// Returns true if the question has already been answered
+// Returns true if the question has already been answered or not found
 bool already_answered(char *category, int value)
 {
   // lookup the question and see if it's already been marked as answered

@@ -80,6 +80,10 @@ int main(int argc, char *argv[])
   //current player
   char currPlayer[BUFFER_LEN];
   
+  int t;
+
+  char *currCat[BUFFER_LEN];
+
   //
   system("clear");
   // Display the game introduction 
@@ -113,8 +117,9 @@ int main(int argc, char *argv[])
       pickQuestion(user_output, buffer, currPlayer);
 
       do{
-        int t = atoi(user_output[1]); //not sure why this is needed but it is.
-        if(already_answered(user_output[0],t) == true){
+        t = atoi(user_output[1]); //not sure why this is needed but it is.
+        strcpy(currCat,user_output[0]);
+        if(already_answered(currCat,t) == true){
           system("clear");
           printf("Invalid Question, pick again.\n \n \n");
 
@@ -126,12 +131,23 @@ int main(int argc, char *argv[])
       }while(true);
 
       //display question
-      int t = atoi(user_output[1]);
-      display_question(user_output[0],t);
+      t = atoi(user_output[1]);
+      strcpy(currCat,user_output[0]);
+      display_question(currCat,t);
 
       //ask for answer:
       do{
-
+        printf("Enter player name followed by a comma, and their response\n");
+        fgets(buffer, BUFFER_LEN, stdin);              //read in the user input
+        buffer[strlen(buffer)-1] = 0;
+        tokenize(buffer, user_output, ",");
+        //0:player 1:answer
+        if (valid_answer(currCat,t,user_output[1]) == true){
+          printf("Correct!\n");
+          break;
+        } else{
+          printf("Incorrect!\n");
+        }
       }while(true);
 
       //continue here
