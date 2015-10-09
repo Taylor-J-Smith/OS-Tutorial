@@ -36,6 +36,7 @@ void show_results(player *players){
   //Sort
   player rankedplayers[NUM_PLAYERS] = {players[0],players[1],players[2],players[3]};
 
+  printf("Current Standings:\n");
   for (int x = 0; x < 3; x++){
     for (int y = x; y < 4; y++){
       if (rankedplayers[x].score < rankedplayers[y].score){
@@ -48,8 +49,9 @@ void show_results(player *players){
 
   //Display
   for (int x = 0; x < NUM_PLAYERS; x++){
-    printf("%d:%s - Score: %d\n",x, rankedplayers[x].name,rankedplayers[x].score);
+    printf("%d:%s - Score: %d\n",x+1, rankedplayers[x].name,rankedplayers[x].score);
   }
+  printf("\n");
 }
 
 // Clears the buffer since there is issues when using scanf and fgets
@@ -106,7 +108,8 @@ int main(int argc, char *argv[])
 	  printf("Invalid Name \"%s\"! ",buffer);       //Invalid player name, keep looping
 	}
       }
-      
+      system("clear");
+      show_results(players);
       pickQuestion(user_output, buffer, currPlayer);
 
       do{
@@ -114,12 +117,22 @@ int main(int argc, char *argv[])
         if(already_answered(user_output[0],t) == true){
           system("clear");
           printf("Invalid Question, pick again.\n \n \n");
+
+          show_results(players);
           pickQuestion(user_output,buffer,currPlayer);
         }else{
           break;
         }
       }while(true);
 
+      //display question
+      int t = atoi(user_output[1]);
+      display_question(user_output[0],t);
+
+      //ask for answer:
+      do{
+
+      }while(true);
 
       //continue here
 
