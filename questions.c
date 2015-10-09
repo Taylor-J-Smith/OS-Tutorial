@@ -108,11 +108,15 @@ void display_categories(void)
 	if (!curr_struct.answered){
 	  //question has not been answered
 	  printf("%d ", curr_struct.value );             //category is un-answered + in right cat
+	}else{
+		printf("%s ", "XXX"); 	//question has already been answered;
 	}
+
       }
     }
     printf("\n");
   }
+  printf("\n");
 }
 
 // Displays the question for the category and dollar value
@@ -120,11 +124,12 @@ void display_question(char *category, int value)
 {
 	for(int i = 0; i < sizeof(questions)/sizeof(*questions); i++)
 	{
-		//printf("%d, %s, %s, %d, ", i, questions[i].category, category, strcmp(questions[i].category,category));
-		//printf("%d, %d, %d ", questions[i].value, value, value == questions[i].value);
-		//printf("\n");
+		// printf("%d, %s, %s, %d, ", i, questions[i].category, category, strcmp(questions[i].category,category));
+		// printf("%d, %d, %d ", questions[i].value, value, value == questions[i].value);
+		// printf("\n");
 		if(strcmp(questions[i].category, category) == 0 && questions[i].value == value && questions[i].answered == 0)
 		{
+			printf("In the category %s, For %d:\n",category,value );
 			printf("%s", questions[i].question);
 		}
 	}
@@ -165,8 +170,7 @@ bool already_answered(char *category, int value)
 	return curr_struct.answered;
       }
     } 
-   
   }
-  printf("[already_answered]question was not found!\n");
-  return false;
+  // printf("[already_answered]question was not found!\n");
+  return true;
 }
