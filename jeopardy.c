@@ -17,6 +17,17 @@
 #define BUFFER_LEN 256
 #define NUM_PLAYERS 4
 
+//Macros for colors
+//USE: ANSI_COLOR_RED"This text is RED!"ANSI_COLOR_RESET "this is not\n"
+//@reference stackoverflow.com
+#define ANSI_COLOR_RED     "\x1b[31m"
+#define ANSI_COLOR_GREEN   "\x1b[32m"
+#define ANSI_COLOR_YELLOW  "\x1b[33m"
+#define ANSI_COLOR_BLUE    "\x1b[34m"
+#define ANSI_COLOR_MAGENTA "\x1b[35m"
+#define ANSI_COLOR_CYAN    "\x1b[36m"
+#define ANSI_COLOR_RESET   "\x1b[0m"
+
 // Put global environment variables here
 
 // Processes the answer from the user containing what is or who is and tokenizes it to retrieve the answer.
@@ -40,9 +51,9 @@ void show_results(player *players){
   for (int x = 0; x < 3; x++){
     for (int y = x; y < 4; y++){
       if (rankedplayers[x].score < rankedplayers[y].score){
-  player tempplayer = rankedplayers[x];
-  rankedplayers[x] = rankedplayers[y];
-  rankedplayers[y] = tempplayer;
+	player tempplayer = rankedplayers[x];
+	rankedplayers[x] = rankedplayers[y];
+	rankedplayers[y] = tempplayer;
       }
     }
   }
@@ -103,27 +114,34 @@ int main(int argc, char *argv[])
       
       //loop Until the user enters a valid player name
       while(1){
-  printf("Enter player to go first:");           //User Message
-  fgets(buffer, BUFFER_LEN, stdin);              //read in the user input
-  buffer[strlen(buffer)-1] = 0;                  //remove the newline from last char
-  strcpy(currPlayer, buffer);
-
-  if(player_exists(players,NUM_PLAYERS,currPlayer)){ //check if player exists
-    break;                                       //A valid player name was entered
-  }else{
-    printf("Invalid Name \"%s\"! ",buffer);       //Invalid player name, keep looping
-  }
+	printf("Enter player to go first:");               //User Message
+	fgets(buffer, BUFFER_LEN, stdin);                  //read in the user input
+	buffer[strlen(buffer)-1] = 0;                      //remove the newline from last char
+	trim(buffer);                                      //Trim any whitespace around the name
+	strcpy(currPlayer, buffer);                        //store the current player
+	if(player_exists(players,NUM_PLAYERS,currPlayer)){ //check if player exists
+	  break;                                           //A valid player name was entered
+	}else{
+	  system("clear");
+	  printf("Current Players: " ANSI_COLOR_CYAN);    //Welcome message
+	  for (int i = 0; i < NUM_PLAYERS; i++){          //iterate through all the players
+	    printf("%s ", players[i].name);               //print the player's name
+	  }
+	  printf(ANSI_COLOR_RESET"\n");                     
+	  printf("Invalid Name \"%s\"! ",buffer);         //Invalid player name, keep looping
+	}
       }
+      
+
       system("clear");
       show_results(players);
       pickQuestion(user_output, buffer, currPlayer);
-
       do{
         currVal = atoi(user_output[1]); //not sure why this is needed but it is.
         strcpy(currCat,user_output[0]);
         if(already_answered(currCat,currVal) == true){
           system("clear");
-          printf("Invalid Question, pick again.\n \n \n");
+          printf(ANSI_COLOR_RED "Invalid Question, pick again.\n \n \n"ANSI_COLOR_RESET);
 
           show_results(players);
           pickQuestion(user_output,buffer,currPlayer);
@@ -139,13 +157,14 @@ int main(int argc, char *argv[])
 
       //ask for answer:
       do{
-        printf("Enter player name followed by a comma, and their response\n");
-        printf(">> ");
-        fgets(buffer, BUFFER_LEN, stdin);              //read in the user input
-        buffer[strlen(buffer)-1] = 0;
-        tokenize(buffer, user_output, ",");
-        //0:player 1:answer
-        if (valid_answer(currCat,currVal,user_output[1]) == true){
+	//promp user for answer
+        printf(ANSI_COLOR_CYAN "%s" ANSI_COLOR_RESET " enter your response:", currPlayer);
+        fgets(buffer, BUFFER_LEN, stdin);                      //read in the user input
+        buffer[strlen(buffer)-1] = 0;                          //remove the nelinw
+	trim(buffer);                                          //remove any pre/post whitespace
+	
+	//buffer now contains the user's answer
+        if (valid_answer(currCat,currVal,buffer) == true){
           printf("Correct!\n");
           break;
         } else{
@@ -171,6 +190,7 @@ void tokenize(char *input, char **tokens, char *delim){
   token = strtok(input, delim);    //get the first token
 
   while( token != NULL ){          //walk through other tokens */
+    trim(token);
     tokens[i] = token;             //store current token in array      
     token = strtok(NULL, delim);   //read next token
     i++;
@@ -210,16 +230,16 @@ void storePlayers(char buffer[],char *user_output[], int num_players, player *pl
 
   system("clear");
   //Print a friendly welcome message once all the players have been set
-  printf("Welcome! ");                        //Welcome message
+  printf("Welcome! "ANSI_COLOR_CYAN);        //Welcome message
   for (int i = 0; i < num_players; i++){     //iterate through all the players
     printf("%s ", players[i].name);          //print the player's name
   }
-  printf("\n");                     
+  printf(ANSI_COLOR_RESET"\n");                     
 }
 
 void pickQuestion(char *user_output[], char buffer[], char currPlayer[]){
   display_categories();
-  printf("Hi %s, you have control of the board\n",currPlayer);                        //Found name! Welcome message
+  printf("Hi " ANSI_COLOR_CYAN "%s" ANSI_COLOR_RESET ", you have control of the board\n",currPlayer);                        //Found name! Welcome message
   printf("Please enter the category name, followed by a comma, and then the dollar amount (no spaces) \n");
   //get the player to select a question
   printf(">> ");
@@ -232,38 +252,43 @@ void pickQuestion(char *user_output[], char buffer[], char currPlayer[]){
 }
 
 void trim(char padded_string[]){
-  char trimmed_string[strlen(padded_string)];
-  int j = 0; //keeps track of the new trimmed string
-  int a = 0; //start of trimmed string
-  int z = 0; //end of trimmed string
+  //Takes a string and removes any existing whitespace before or after the string
+  //@param padded_string A string with whitespace before and/or after it
+  char trimmed_string[strlen(padded_string)];  //The original string with the 
+  int j = 0;                                   //keeps track of the new trimmed string
+  int a = 0;                                   //start of trimmed string
+  int z = 0;                                   //end of trimmed string
   
-  //remove leading whitespace
+  //find the index for the first nonwhitespace character
   for (int i = 0; i < strlen(padded_string); i++){
     if (padded_string[i] == ' '){
-      //      printf("a++; i is %d\n",i);
-      a++;
+      a++;                                    //only increment a when a whitespace is found
     }else{
-      break;
+      break;                                  //exit for loop once we reach the actual string
     }    
   }
+  //a no contains the index for where the string actually begins
+
+  //Find the index for the last ninwhitespace character
   for (int i = strlen(padded_string) - 1; i >=0; i--){
     if (padded_string[i] == ' '){
-      //      printf("z++; i is %d\n",i);
-      z++;
+      z++;                                  //only increment z when a whitespace is found
     }else{
-      break;
+      break;                                //exit the for loop once the actual string is found
     }
   }
-
-  //  printf("%lu\n",strlen(padded_string));
-  //  printf("a:%d,z:%d\n", a,z);
+  //z no contains the number of whitespaces from right to left
+  //get the index of where the actual string ends  
   z = strlen(padded_string) - z;
+
+  //Now that we have the indicies of where the actual string begins and ends we can copy it
   //copy only the string without whitespace
-  for (int i = a; i < z; i++){
+  //i is used to iterate through original string, j is used as index for the trimmed string
+  for (int i = a; i < z; i++){             
     trimmed_string[j] = padded_string[i];
     j++;  
   }
 
-  trimmed_string[j] = 0;
-  strcpy(padded_string,trimmed_string);
+  trimmed_string[j] = 0;                  //indicate where the string should end
+  strcpy(padded_string,trimmed_string);   //copy the actual string into the trimmed one
 }
