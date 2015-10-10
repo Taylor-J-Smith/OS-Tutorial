@@ -163,6 +163,26 @@ int main(int argc, char *argv[])
 	//ask for answer:
 	do{
     do{
+
+      areAnyLocked = false;
+      //display locked players if there are any
+      for (int i = 0; i < NUM_PLAYERS; i++){
+        if (lockedPlayers[i] == 1){
+          areAnyLocked = true;
+        }
+      }
+      
+      if(areAnyLocked){
+        printf("\nLocked Players:");
+
+        for (int i = 0; i < NUM_PLAYERS; i++){
+          if (lockedPlayers[i] == 1){
+            printf("%s ",players[i].name);
+          }
+        }
+        printf("\n\n");
+      }
+
       //prompt user for player to answer:
       printf("Enter player that buzzed:");
       fgets(buffer, BUFFER_LEN, stdin);                      //read in the user input
@@ -171,8 +191,7 @@ int main(int argc, char *argv[])
 
       //check if the player is locked out 
       bool lockedOut = true;
-      for (int i = 0; i < NUM_PLAYERS; i++)
-      {
+      for (int i = 0; i < NUM_PLAYERS; i++){
         if(strcmp(players[i].name, buffer)==0){
           if(lockedPlayers[i] == 1){
             printf("That player is locked!\n");
@@ -219,8 +238,7 @@ int main(int argc, char *argv[])
 	    //even is person gets it wrong, mark the category as completed
 	    // break;
 
-      for (int i = 0; i < NUM_PLAYERS; i++)
-      {
+      for (int i = 0; i < NUM_PLAYERS; i++){
         if(strcmp(players[i].name, currPlayer)==0){
           lockedPlayers[i] = 1;
         }

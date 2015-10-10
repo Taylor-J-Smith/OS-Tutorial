@@ -156,9 +156,9 @@ void display_question(char *category, int value)
       if(strcmp(questions[i].category, category) == 0 && questions[i].value == value && questions[i].answered == 0)
 	{
 	  printf("In the category %s, For %d:",category,value);
-	  printf("\n");
+	  printf("\n\n");
 	  printf(ANSI_COLOR_RED "%s" ANSI_COLOR_RESET,questions[i].question);
-	  printf("\n");
+	  printf("\n\n");
 	}
     }
 
