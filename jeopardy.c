@@ -54,6 +54,7 @@ void printStringArray(char **array,int size);
 //Used to promp user to enter player names, store those names into a player array, and display a welcome message.
 void storePlayers(char buffer[],char *user_output[], int num_players, player players[]);
 
+//picks a question
 void pickQuestion(char *user_output[], char buffer[], char currPlayer[]);
 
 //trim Removes any post/prepended whitespace from a string(char[])
@@ -64,7 +65,6 @@ bool validJeopardyFormat(char *user_input, char *delim);
 
 //Prints the player with the current
 void print_winner(player *players, int num_players);
-
 
 int main(int argc, char *argv[])
 {
@@ -81,184 +81,181 @@ int main(int argc, char *argv[])
   //current player
   char currPlayer[BUFFER_LEN];
   
+  //current category and value
   int currVal;
-
   char *currCat[BUFFER_LEN];
 
+  //variables for locking players
   int *lockedPlayers[NUM_PLAYERS];
   bool areAnyLocked;
 
-  //
+  //clear out the console at the start of the game
   system("clear");
  
   // Perform an infinite loop getting command input from users until game ends
   //while (fgets(buffer, BUFFER_LEN, stdin) != NULL)
   do
-    {
-
-      // Display the game introduction 
-      printf(ANSI_COLOR_GREEN "Welcome to JATJ Jeopardy!! Hit" ANSI_COLOR_RESET
-	     ANSI_COLOR_RED" ENTER " ANSI_COLOR_RESET
-	     ANSI_COLOR_GREEN "to Begin!" ANSI_COLOR_RESET);
-      fgets(buffer, BUFFER_LEN, stdin);
-      
-      //Promp for player names, store them in players array, and display a welcome message
-      storePlayers(buffer,user_output, NUM_PLAYERS, players);
-
-      //Initialize game and display the available categories
-      initialize_game(1);
-
-      //Loops while there are questions unanswered
-	//loop Until the user enters a valid player name
-	while(1){
-	  printf("Enter player to go:");               //User Message
-	  fgets(buffer, BUFFER_LEN, stdin);                  //read in the user input
-	  buffer[strlen(buffer)-1] = 0;                      //remove the newline from last char
-	  trim(buffer);                                      //Trim any whitespace around the name
-	  strcpy(currPlayer, buffer);                        //store the current player
-	  if(player_exists(players,NUM_PLAYERS,currPlayer)){ //check if player exists
-	    break;                                           //A valid player name was entered
-	  }else{
-	    system("clear");
-	    printf("Current Players: " ANSI_COLOR_CYAN);    //Welcome message
-	    for (int i = 0; i < NUM_PLAYERS; i++){          //iterate through all the players
-	      printf("%s ", players[i].name);               //print the player's name
-	    }
-	    printf(ANSI_COLOR_RESET"\n");                     
-	    printf("Invalid Name \"%s\"! ",buffer);         //Invalid player name, keep looping
-	  }
-	}
-  
-  while(questions_left()){
-      
-
-	system("clear");
-	show_results(players);
-	pickQuestion(user_output, buffer, currPlayer);              
-	do{
-	  currVal = atoi(user_output[1]); //not sure why this is needed but it is.
-	  strcpy(currCat,user_output[0]);
-	  if(already_answered(currCat,currVal)){
-	    system("clear");
-	    printf(ANSI_COLOR_RED "Invalid Question, pick again.\n \n \n"ANSI_COLOR_RESET);
-
-	    show_results(players);
-	    pickQuestion(user_output,buffer,currPlayer);
-	  }else{
-	    break;
-	  }
-	}while(true);
-
-  system("clear");
-	//display question
-	currVal = atoi(user_output[1]);
-	strcpy(currCat,user_output[0]);
-	display_question(currCat,currVal);
-
-  //nobody is locked out at the start
-  for (int i = 0; i < NUM_PLAYERS; i++)
   {
-    lockedPlayers[i] = 0;
-  }
+    // Display the game introduction 
+    printf(ANSI_COLOR_GREEN "Welcome to JATJ Jeopardy!! Hit" ANSI_COLOR_RESET
+	  ANSI_COLOR_RED" ENTER " ANSI_COLOR_RESET
+	  ANSI_COLOR_GREEN "to Begin!" ANSI_COLOR_RESET);
+    fgets(buffer, BUFFER_LEN, stdin);
+      
+    //Promp for player names, store them in players array, and display a welcome message
+    storePlayers(buffer,user_output, NUM_PLAYERS, players);
 
-	//ask for answer:
-	do{
-    do{
+    //Initialize game and display the available categories
+    initialize_game(1);
 
-      areAnyLocked = false;
-      //display locked players if there are any
-      for (int i = 0; i < NUM_PLAYERS; i++){
-        if (lockedPlayers[i] == 1){
-          areAnyLocked = true;
-        }
-      }
-
-      if(areAnyLocked){
-        printf("\nLocked Players:");
-
-        for (int i = 0; i < NUM_PLAYERS; i++){
-          if (lockedPlayers[i] == 1){
-            printf("%s ",players[i].name);
-          }
-        }
-        printf("\n\n");
-      }
-
-      //prompt user for player to answer:
-      printf("Enter player that buzzed:");
-      fgets(buffer, BUFFER_LEN, stdin);                      //read in the user input
-      buffer[strlen(buffer)-1] = 0;                          //remove the newline
-      trim(buffer);                                          //remove any pre/post whitespace
-
-      //check if the player is locked out 
-      bool lockedOut = true;
-      for (int i = 0; i < NUM_PLAYERS; i++){
-        if(strcmp(players[i].name, buffer)==0){
-          if(lockedPlayers[i] == 1){
-            printf("That player is locked!\n");
-          }else{
-            //player is not locked out, they are now curr player
-            strcpy(currPlayer, players[i].name);
-            lockedOut = false;
-          }
-        }
-      }
-
-      if (lockedOut == false){
-        break;
-      }
-    }while(true);
-
-	  //promp user for answer
-	  printf(ANSI_COLOR_CYAN "%s" ANSI_COLOR_RESET " enter your response:", currPlayer);
-	  fgets(buffer, BUFFER_LEN, stdin);                      //read in the user input
-	  buffer[strlen(buffer)-1] = 0;                          //remove the nelinw
-	  trim(buffer);                                          //remove any pre/post whitespace
-
-	  //must check if the answer begins with "what is" or "who is"
-	  //Check if the user 1. used the right format(what is/who is) AND 2. has the right answer
-	  //***validJeopardyFormat MUST be called first since it modifies buffer (remove the what if)
-	  if (validJeopardyFormat(buffer," ") && valid_answer(currCat,currVal,buffer)){
-	    system("clear");
-	    printf(ANSI_COLOR_RED "Correct! " ANSI_COLOR_RESET
-		   ANSI_COLOR_CYAN "%s" ANSI_COLOR_RESET
-		   " you get "
-		   ANSI_COLOR_GREEN "%d" ANSI_COLOR_RESET
-		   " points!\n", currPlayer,currVal);
-	    update_score(players, NUM_PLAYERS, currPlayer, currVal);     //update the player's score
-	    mark_completed(currCat,currVal);                             //mark category/val complete
-	    show_results(players);                                       //display current standings
-	    display_categories();
-	    break;
-	  } else{
-	    // system("clear");
-	    printf(ANSI_COLOR_RED "Incorrect!\n" ANSI_COLOR_RESET);
-	    // mark_completed(currCat,currVal);                             //mark cat/val completed
-	    // show_results(players);                                       //display current standings
-	    // display_categories();                                        //display remaining cat
-	    //even is person gets it wrong, mark the category as completed
-	    // break;
-
-      for (int i = 0; i < NUM_PLAYERS; i++){
-        if(strcmp(players[i].name, currPlayer)==0){
-          lockedPlayers[i] = 1;
-        }
-      }
+    //Loops while there are questions unanswered
+	  //loop Until the user enters a valid player name
+    while(1){
+      printf("Enter player to go:");               //User Message
+	    fgets(buffer, BUFFER_LEN, stdin);                  //read in the user input
+	    buffer[strlen(buffer)-1] = 0;                      //remove the newline from last char
+	    trim(buffer);                                      //Trim any whitespace around the name
+	    strcpy(currPlayer, buffer);                        //store the current player
+	    if(player_exists(players,NUM_PLAYERS,currPlayer)){ //check if player exists
+	      break;                                           //A valid player name was entered
+	    }else{
+	      system("clear");
+	      printf("Current Players: " ANSI_COLOR_CYAN);    //Welcome message
+	      
+        for (int i = 0; i < NUM_PLAYERS; i++){          //iterate through all the players
+	        printf("%s ", players[i].name);               //print the player's name
+	      }
+	      printf(ANSI_COLOR_RESET"\n");                     
+	      printf("Invalid Name \"%s\"! ",buffer);         //Invalid player name, keep looping
+	    }
 	  }
-	}while(true);
+  
+    while(questions_left()){
+      
+    	system("clear");
+    	show_results(players);
+    	pickQuestion(user_output, buffer, currPlayer);              
+    	do{
+    	  currVal = atoi(user_output[1]); //not sure why this is needed but it is.
+    	  strcpy(currCat,user_output[0]);
+    	  if(already_answered(currCat,currVal)){
+    	    system("clear");
+    	    printf(ANSI_COLOR_RED "Invalid Question, pick again.\n \n \n"ANSI_COLOR_RESET);
 
-      }
+    	    show_results(players);
+    	    pickQuestion(user_output,buffer,currPlayer);
+    	  }else{
+    	    break;
+    	  }
+    	}while(true);
 
       system("clear");
-      printf("The final Standings are:\n");
-      show_results(players);
-      print_winner(players, NUM_PLAYERS);
-      printf("----------END OF GAME----------\n");     //game Prompt
-      printf("Type " ANSI_COLOR_RED "exit" ANSI_COLOR_RESET " to stop playing"
-	     " or press " ANSI_COLOR_GREEN "ENTER" ANSI_COLOR_RESET " to play again!\n");
-      fgets(buffer, BUFFER_LEN, stdin);          //read in the user input
-      buffer[strlen(buffer)-1] = 0;              //remove the newline from last char
-    }while(strcmp(buffer,"exit") == 0);
+    	//display question
+    	currVal = atoi(user_output[1]);
+    	strcpy(currCat,user_output[0]);
+    	display_question(currCat,currVal);
+
+      //nobody is locked out at the start
+      for (int i = 0; i < NUM_PLAYERS; i++){
+        lockedPlayers[i] = 0;
+      }
+
+    	//ask for answer:
+    	do{
+        do{
+          areAnyLocked = false;
+          //display locked players if there are any
+          for (int i = 0; i < NUM_PLAYERS; i++){
+            if (lockedPlayers[i] == 1){
+              areAnyLocked = true;
+            }
+          }
+
+          if(areAnyLocked){
+            printf("\nLocked Players:");
+
+            for (int i = 0; i < NUM_PLAYERS; i++){
+              if (lockedPlayers[i] == 1){
+                printf("%s ",players[i].name);
+              }
+            }
+            printf("\n\n");
+          }
+
+          //prompt user for player to answer:
+          printf("Enter player that buzzed:");
+          fgets(buffer, BUFFER_LEN, stdin);                      //read in the user input
+          buffer[strlen(buffer)-1] = 0;                          //remove the newline
+          trim(buffer);                                          //remove any pre/post whitespace
+
+          //check if the player is locked out 
+          bool lockedOut = true;
+          for (int i = 0; i < NUM_PLAYERS; i++){
+            if(strcmp(players[i].name, buffer)==0){
+              if(lockedPlayers[i] == 1){
+                printf("That player is locked!\n");
+              }else{
+                //player is not locked out, they are now curr player
+                strcpy(currPlayer, players[i].name);
+                lockedOut = false;
+              }
+            }
+          }
+
+          if (lockedOut == false){
+            break;
+          }
+        }while(true);
+
+    	  //promp user for answer
+    	  printf(ANSI_COLOR_CYAN "%s" ANSI_COLOR_RESET " enter your response:", currPlayer);
+    	  fgets(buffer, BUFFER_LEN, stdin);                      //read in the user input
+    	  buffer[strlen(buffer)-1] = 0;                          //remove the nelinw
+    	  trim(buffer);                                          //remove any pre/post whitespace
+
+    	  //must check if the answer begins with "what is" or "who is"
+    	  //Check if the user 1. used the right format(what is/who is) AND 2. has the right answer
+    	  //***validJeopardyFormat MUST be called first since it modifies buffer (remove the what if)
+    	  if (validJeopardyFormat(buffer," ") && valid_answer(currCat,currVal,buffer)){
+    	    system("clear");
+    	    printf(ANSI_COLOR_RED "Correct! " ANSI_COLOR_RESET
+    		   ANSI_COLOR_CYAN "%s" ANSI_COLOR_RESET
+    		   " you get "
+    		   ANSI_COLOR_GREEN "%d" ANSI_COLOR_RESET
+    		   " points!\n", currPlayer,currVal);
+    	    update_score(players, NUM_PLAYERS, currPlayer, currVal);     //update the player's score
+    	    mark_completed(currCat,currVal);                             //mark category/val complete
+    	    show_results(players);                                       //display current standings
+    	    display_categories();
+    	    break;
+    	  } else{
+    	    // system("clear");
+    	    printf(ANSI_COLOR_RED "Incorrect!\n" ANSI_COLOR_RESET);
+    	    // mark_completed(currCat,currVal);                             //mark cat/val completed
+    	    // show_results(players);                                       //display current standings
+    	    // display_categories();                                        //display remaining cat
+    	    //even is person gets it wrong, mark the category as completed
+    	    // break;
+
+          for (int i = 0; i < NUM_PLAYERS; i++){
+            if(strcmp(players[i].name, currPlayer)==0){
+              lockedPlayers[i] = 1;
+            }
+          }
+    	  }
+    	}while(true);
+    }
+
+    system("clear");
+    printf("The final Standings are:\n");
+    show_results(players);
+    print_winner(players, NUM_PLAYERS);
+    printf("----------END OF GAME----------\n");     //game Prompt
+    printf("Type " ANSI_COLOR_RED "exit" ANSI_COLOR_RESET " to stop playing"
+     " or press " ANSI_COLOR_GREEN "ENTER" ANSI_COLOR_RESET " to play again!\n");
+    fgets(buffer, BUFFER_LEN, stdin);          //read in the user input
+    buffer[strlen(buffer)-1] = 0;              //remove the newline from last char
+  }while(strcmp(buffer,"exit") == 0);
   return EXIT_SUCCESS;
 }
 
