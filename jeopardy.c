@@ -105,7 +105,6 @@ int main(int argc, char *argv[])
       //Initialize game and display the available categories
       initialize_game(1);
 
-      //print_winner(players, NUM_PLAYERS);
       //Loops while there are questions unanswered
       while(questions_left()){
 	//loop Until the user enters a valid player name
@@ -167,7 +166,7 @@ int main(int argc, char *argv[])
 	    printf(ANSI_COLOR_RED "Correct! " ANSI_COLOR_RESET
 		   ANSI_COLOR_CYAN "%s" ANSI_COLOR_RESET
 		   " you get "
-		   ANSI_COLOR_RED "%d" ANSI_COLOR_RESET
+		   ANSI_COLOR_GREEN "%d" ANSI_COLOR_RESET
 		   " points!\n", currPlayer,currVal);
 	    update_score(players, NUM_PLAYERS, currPlayer, currVal);     //update the player's score
 	    mark_completed(currCat,currVal);                             //mark category/val complete
@@ -177,20 +176,25 @@ int main(int argc, char *argv[])
 	  } else{
 	    system("clear");
 	    printf(ANSI_COLOR_RED "Incorrect!\n" ANSI_COLOR_RESET);
+	    mark_completed(currCat,currVal);                             //mark cat/val completed
 	    show_results(players);                                       //display current standings
 	    display_categories();                                        //display remaining cat
 	    //even is person gets it wrong, mark the category as completed
-	    mark_completed(currCat,currVal);                             //mark cat/val completed
 	    break;
 	  }
 	}while(true);
 
       }
-      
+
+      system("clear");
+      printf("The final Standings are:\n");
+      show_results(players);
+      print_winner(players, NUM_PLAYERS);
       printf("----------END OF GAME----------\n");     //game Prompt
       printf("Type " ANSI_COLOR_RED "exit" ANSI_COLOR_RESET " to stop playing"
 	     " or press " ANSI_COLOR_GREEN "ENTER" ANSI_COLOR_RESET " to play again!\n");
-      return EXIT_SUCCESS;
+      fgets(buffer, BUFFER_LEN, stdin);          //read in the user input
+      buffer[strlen(buffer)-1] = 0;              //remove the newline from last char
     }while(strcmp(buffer,"exit") == 0);
   return EXIT_SUCCESS;
 }
@@ -358,31 +362,30 @@ void show_results(player *players){
 
 //Prints the player with the current
 void print_winner(player *players, int num_players){
-  /*  char *winners[num_players];                //array of winners (possible 4 way tie)
+  player winners[num_players];                //array of winners (possible 4 way tie)
   int num_winners = 1;                           //keeps track of how many ties (winners)
   winners[0]= players[0];                     //set first player as winner
   for (int i = 1; i < num_players; i++){      //iterate through the players
     if (players[i].score > winners[0].score){ //if current player has higher score
       if (num_winners > 1){
 	//if there was an existing tie
-	strcpy(winners[0], players[i].name);
+	winners[0] = players[i];
 	num_winners = 1;
       }else{
 	//no ties, can just add player as new winner
-	strcpy(winners[0], players[i].name);
+	winners[0] = players[i];
       }
     }else if(players[i].score == winners[0].score){
       //there is a tie
-      strcpy(winners[num_winners], players[i].name);
+      winners[num_winners] = players[i];
       num_winners++;
     }
   }
 
-  printf("THE WINNERS FOR THIS MATCH : ");
+  printf("THE WINNERS FOR THIS MATCH: ");
   //Print the winners
   for(int i = 0; i < num_winners; i++){
-    printf(ANSI_COLOR_RED "%s " ANSI_COLOR_RESET, winners[i]);
+    printf(ANSI_COLOR_RED "%s " ANSI_COLOR_RESET, winners[i].name);
   }
-  printf("\n");*/
-  
+  printf("\nWITH A SCORE OF: " ANSI_COLOR_GREEN " %d " ANSI_COLOR_RESET "!!!\n",winners[0].score);  
 }
