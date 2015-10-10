@@ -211,13 +211,20 @@ int main(int argc, char *argv[])
 	    display_categories();
 	    break;
 	  } else{
-	    system("clear");
+	    // system("clear");
 	    printf(ANSI_COLOR_RED "Incorrect!\n" ANSI_COLOR_RESET);
-	    mark_completed(currCat,currVal);                             //mark cat/val completed
-	    show_results(players);                                       //display current standings
-	    display_categories();                                        //display remaining cat
+	    // mark_completed(currCat,currVal);                             //mark cat/val completed
+	    // show_results(players);                                       //display current standings
+	    // display_categories();                                        //display remaining cat
 	    //even is person gets it wrong, mark the category as completed
-	    break;
+	    // break;
+
+      for (int i = 0; i < NUM_PLAYERS; i++)
+      {
+        if(strcmp(players[i].name, currPlayer)==0){
+          lockedPlayers[i] = 1;
+        }
+      }
 	  }
 	}while(true);
 
