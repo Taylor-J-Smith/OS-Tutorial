@@ -76,7 +76,11 @@ void storePlayers(char buffer[],char *user_output[], int num_players, player pla
 
 void pickQuestion(char *user_output[], char buffer[], char currPlayer[]);
 
+//trim Removes any post/prepended whitespace from a string(char[])
 void trim(char padded_string[]);
+
+bool validJeopardyFormat(char *user_input, char *delim);
+
 
 int main(int argc, char *argv[])
 {
@@ -162,11 +166,13 @@ int main(int argc, char *argv[])
         fgets(buffer, BUFFER_LEN, stdin);                      //read in the user input
         buffer[strlen(buffer)-1] = 0;                          //remove the nelinw
 	trim(buffer);                                          //remove any pre/post whitespace
-	
-	//buffer now contains the user's answer
-        if (valid_answer(currCat,currVal,buffer) == true){
+
+	//must check if the answer begins with "what is" or "who is"
+	//Check if the user 1. used the right format(what is/who is) AND 2. has the right answer
+	//***validJeopardyFormat MUST be called first since it modifies buffer (remove the what if)
+        if (validJeopardyFormat(buffer," ") && valid_answer(currCat,currVal,buffer)){
           printf("Correct!\n");
-          break;
+          //break;
         } else{
           printf("Incorrect!\n");
         }
@@ -195,6 +201,7 @@ void tokenize(char *input, char **tokens, char *delim){
     token = strtok(NULL, delim);   //read next token
     i++;
   }
+  tokens[i] = NULL;                //to indicate where the tokens end
 }
 
 void clearBuffer(){
@@ -291,4 +298,30 @@ void trim(char padded_string[]){
 
   trimmed_string[j] = 0;                  //indicate where the string should end
   strcpy(padded_string,trimmed_string);   //copy the actual string into the trimmed one
+}
+bool validJeopardyFormat(char *user_input, char *delim){
+  char bankAnswer[BUFFER_LEN] = {0};
+  char *tokens[BUFFER_LEN];
+
+  tokenize(user_input, tokens,delim);              //split the user input into tokens
+
+  //Must check if user prepended answer with "who is" OR "what is"
+  if (((strcmp(tokens[0],"what") == 0) || (strcmp(tokens[0],"who") == 0)) &&
+      (strcmp(tokens[1],"is") ==0)){
+    //TRUE Users included "who is" OR "what is"
+    for (int i = 2; i < BUFFER_LEN; i++){
+      if (tokens[i] == NULL){                     //check if end of tokens has been reached
+	break;                                    //if so, break from Loop to stop appending
+      }
+      strcat(bankAnswer,tokens[i]);               //append answer to the bankAnswer
+      strcat(bankAnswer,delim);                   //append the delimter to the string
+    }
+  }else{
+    //User did not prepend their answer
+    return false;
+  }
+  
+  trim(bankAnswer);                               //trim the final bankAnswer
+  strcpy(user_input,bankAnswer);                  //copy the answer into user_input
+  return true;
 }
