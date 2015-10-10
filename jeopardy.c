@@ -149,6 +149,7 @@ int main(int argc, char *argv[])
 	  }
 	}while(true);
 
+  system("clear");
 	//display question
 	currVal = atoi(user_output[1]);
 	strcpy(currCat,user_output[0]);
@@ -171,7 +172,7 @@ int main(int argc, char *argv[])
           areAnyLocked = true;
         }
       }
-      
+
       if(areAnyLocked){
         printf("\nLocked Players:");
 
