@@ -117,9 +117,9 @@ void display_categories(void)
 	//belongs in the current category
 	if (!curr_struct.answered){
 	  //question has not been answered
-	  printf("%d ", curr_struct.value );             //category is un-answered + in right cat
+	  printf(ANSI_COLOR_GREEN "%d " ANSI_COLOR_RESET, curr_struct.value );             //category is un-answered + in right cat
 	}else{
-	  printf("%s ", "XXX"); 	//question has already been answered;
+	  printf(ANSI_COLOR_RED "XXX " ANSI_COLOR_RESET); 	                 //question has already been answered;
 	}
 
       }
@@ -127,6 +127,21 @@ void display_categories(void)
     printf("\n");
   }
   printf("\n");
+}
+
+//checks to see if there are still atleast one available question that have not been answered
+bool questions_left(void)
+{
+  for (int i = 0; i < 3; i++){                           //iterate through all the categories
+    for (int j = 0; j < sizeof(questions)/sizeof(*questions); j++){
+      if(!questions[j].answered){                       //check to see if the question is answered
+	//question has not been answered
+	return true;
+      }
+    }
+  }
+  //all the questions have been answered
+  return false;
 }
 
 // Displays the question for the category and dollar value
@@ -171,6 +186,26 @@ bool valid_answer(char *category, int value, char *answer)
   return false;
 }
 
+//marks the category and value as completed
+void mark_completed(char *category, int value)
+{	
+  // loop through categories
+  for(int i=0; i<3; i++){
+    // find category of question
+    if(strcmp(category, categories[i])==0){
+      // loop through questions in category
+      for(int j=0; j<4; j++){
+	// check question of value if answer matches
+	if((questions[(i)*4+j].value == value)){
+	  //update the question for the category as answered
+	  questions[(i)*4+j].answered = true;
+	  return;
+	}
+      }
+    }
+  }
+}
+
 // Returns true if the question has already been answered or not found
 bool already_answered(char *category, int value)
 {
@@ -186,4 +221,15 @@ bool already_answered(char *category, int value)
   }
   // printf("[already_answered]question was not found!\n");
   return true;
+}
+
+//marks all the questions as answered
+void test_answer_all(void){
+  // loop through categories
+  for(int i=0; i<3; i++){
+    // loop through questions in category
+    for(int j=0; j<4; j++){
+      questions[(i)*4+j].answered = true;
+    }
+  }  
 }

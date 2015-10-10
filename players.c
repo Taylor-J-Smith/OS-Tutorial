@@ -16,12 +16,11 @@ bool player_exists(player *players, int num_players, char *name)
   // loop through players
   for(int i=0; i<num_players; i++){
     // check for name match
-    //    printf("comparing \"%s\" vs \"%s\"\n",players[i].name,name);
+    // printf("comparing \"%s\" vs \"%s\"\n",players[i].name,name);
     if(strcmp(players[i].name, name)==0){
       return true;
     }
   }
-
   return false;
 }
 
@@ -31,9 +30,11 @@ void update_score(player *players, int num_players, char *name, int score)
   // loop through players
   for(int i=0; i<num_players; i++){
     // check for name match
-    if(strcmp(players->name, name)==0){
+    if(strcmp(players[i].name, name)==0){
       // add score to player's score
       players[i].score += score;
     }
   }
 }
+
+

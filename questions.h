@@ -43,4 +43,12 @@ extern bool valid_answer(char *category, int value, char *answer);
 // Returns true if the question has already been answered
 extern bool already_answered(char *category, int value);
 
+//marks the category and value as completed
+void mark_completed(char *category, int value);
+
+//checks to see if there are still atleast one available question that have not been answered
+bool questions_left(void);
+
+//marks all the questions as answered
+void test_answer_all(void);
 #endif /* QUESTIONS_H_ */
