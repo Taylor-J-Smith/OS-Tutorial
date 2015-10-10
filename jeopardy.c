@@ -85,6 +85,9 @@ int main(int argc, char *argv[])
 
   char *currCat[BUFFER_LEN];
 
+  int *lockedPlayers[NUM_PLAYERS];
+  bool areAnyLocked;
+
   //
   system("clear");
  
@@ -106,7 +109,6 @@ int main(int argc, char *argv[])
       initialize_game(1);
 
       //Loops while there are questions unanswered
-      while(questions_left()){
 	//loop Until the user enters a valid player name
 	while(1){
 	  printf("Enter player to go:");               //User Message
@@ -126,6 +128,8 @@ int main(int argc, char *argv[])
 	    printf("Invalid Name \"%s\"! ",buffer);         //Invalid player name, keep looping
 	  }
 	}
+  
+  while(questions_left()){
       
 
 	system("clear");
@@ -150,8 +154,41 @@ int main(int argc, char *argv[])
 	strcpy(currCat,user_output[0]);
 	display_question(currCat,currVal);
 
+  //nobody is locked out at the start
+  for (int i = 0; i < NUM_PLAYERS; i++)
+  {
+    lockedPlayers[i] = 0;
+  }
+
 	//ask for answer:
 	do{
+    do{
+      //prompt user for player to answer:
+      printf("Enter player that buzzed:");
+      fgets(buffer, BUFFER_LEN, stdin);                      //read in the user input
+      buffer[strlen(buffer)-1] = 0;                          //remove the newline
+      trim(buffer);                                          //remove any pre/post whitespace
+
+      //check if the player is locked out 
+      bool lockedOut = true;
+      for (int i = 0; i < NUM_PLAYERS; i++)
+      {
+        if(strcmp(players[i].name, buffer)==0){
+          if(lockedPlayers[i] == 1){
+            printf("That player is locked!\n");
+          }else{
+            //player is not locked out, they are now curr player
+            strcpy(currPlayer, players[i].name);
+            lockedOut = false;
+          }
+        }
+      }
+
+      if (lockedOut == false){
+        break;
+      }
+    }while(true);
+
 	  //promp user for answer
 	  printf(ANSI_COLOR_CYAN "%s" ANSI_COLOR_RESET " enter your response:", currPlayer);
 	  fgets(buffer, BUFFER_LEN, stdin);                      //read in the user input
