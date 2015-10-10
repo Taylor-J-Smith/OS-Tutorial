@@ -22,6 +22,8 @@
 #define ANSI_COLOR_CYAN    "\x1b[36m"
 #define ANSI_COLOR_RESET   "\x1b[0m"
 
+#define FILE_CATEGORIES 6 //categories in the file
+
 // Initializes the array of questions for the game
 void initialize_game(int round)
 {
@@ -43,7 +45,7 @@ void initialize_game(int round)
       do
 	{
 	  repeat = true;
-	  currselect = rand() % 5;// 5 is number of categories in the file
+	  currselect = rand() % FILE_CATEGORIES;// 5 is number of categories in the file
 	  //check if the random number exists in catselector
 	  for (int y = 0; y < 3; y++){
 	    if (currselect == catselector[y]){

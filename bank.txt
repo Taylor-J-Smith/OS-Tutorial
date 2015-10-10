@@ -18,3 +18,7 @@ n4:41+41:82:100
 n4:42+42:84:200
 n4:43+43:86:300
 n4:44+44:88:400
+Potent Potables:This drink is made by mixing Orange Juice and Vodka:Screwdriver:100
+Potent Potables:This ingredient in beer gives beer its flavour:Hops:200
+Potent Potables:This spirit is also known as "The Green Fairy":Absinthe:300
+Potent Potables:The name of this honey-whiskey liqueur comes from a phrase that means "the drink that satisfies":Drambuie:400
