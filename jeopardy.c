@@ -43,7 +43,7 @@ void tokenize(char *input, char **tokens, char *delim);
 // }
 
 // Displays the game results for each player, their name and final score, ranked from first to last place
-void show_results(player *players);
+void show_results(player *players,bool final);
 
 // Clears the buffer since there is issues when using scanf and fgets
 void clearBuffer();
@@ -75,6 +75,8 @@ void showArt(char *filename[]){
   while(fgets(templine, MAX_LEN, f) != NULL){
     printf("%s",templine);
   }   
+
+  fclose(f);
 }
 
 int main(int argc, char *argv[])
@@ -109,9 +111,11 @@ int main(int argc, char *argv[])
   {
     // Display the game introduction 
     // printf(ANSI_COLOR_GREEN "Welcome to JATJ Jeopardy!! Hit" ANSI_COLOR_RESET
-    showArt("ascii.txt");
-	  // ANSI_COLOR_RED" ENTER " ANSI_COLOR_RESET
-	  // ANSI_COLOR_GREEN "to Begin!" ANSI_COLOR_RESET);
+    // ANSI_COLOR_RED" ENTER " ANSI_COLOR_RESET
+    // ANSI_COLOR_GREEN "to Begin!" ANSI_COLOR_RESET);
+    showArt("welcome.txt");
+    printf(ANSI_COLOR_GREEN "\n\n    \t\tHit" ANSI_COLOR_RESET ANSI_COLOR_RED " ENTER " ANSI_COLOR_RESET
+    ANSI_COLOR_GREEN "to Begin!\n" ANSI_COLOR_RESET);
     fgets(buffer, BUFFER_LEN, stdin);
       
     //Promp for player names, store them in players array, and display a welcome message
@@ -123,7 +127,7 @@ int main(int argc, char *argv[])
     //Loops while there are questions unanswered
 	  //loop Until the user enters a valid player name
     while(1){
-      printf("Enter player to go:");               //User Message
+      printf("Enter the name of the first player:");               //User Message
 	    fgets(buffer, BUFFER_LEN, stdin);                  //read in the user input
 	    buffer[strlen(buffer)-1] = 0;                      //remove the newline from last char
 	    trim(buffer);                                      //Trim any whitespace around the name
@@ -145,7 +149,7 @@ int main(int argc, char *argv[])
     while(questions_left()){
       
     	system("clear");
-    	show_results(players);
+    	show_results(players,false);
     	pickQuestion(user_output, buffer, currPlayer);              
     	do{
     	  currVal = atoi(user_output[1]); //not sure why this is needed but it is.
@@ -154,7 +158,7 @@ int main(int argc, char *argv[])
     	    system("clear");
     	    printf(ANSI_COLOR_RED "Invalid Question, pick again.\n \n \n"ANSI_COLOR_RESET);
 
-    	    show_results(players);
+    	    show_results(players,false);
     	    pickQuestion(user_output,buffer,currPlayer);
     	  }else{
     	    break;
@@ -237,7 +241,7 @@ int main(int argc, char *argv[])
     		   " points!\n", currPlayer,currVal);
     	    update_score(players, NUM_PLAYERS, currPlayer, currVal);     //update the player's score
     	    mark_completed(currCat,currVal);                             //mark category/val complete
-    	    show_results(players);                                       //display current standings
+    	    show_results(players,false);                                       //display current standings
     	    display_categories();
     	    break;
     	  } else{
@@ -259,10 +263,8 @@ int main(int argc, char *argv[])
     }
 
     system("clear");
-    printf("The final Standings are:\n");
-    show_results(players);
+    show_results(players,true);
     print_winner(players, NUM_PLAYERS);
-    printf("----------END OF GAME----------\n");     //game Prompt
     printf("Type " ANSI_COLOR_RED "exit" ANSI_COLOR_RESET " to stop playing"
      " or press " ANSI_COLOR_GREEN "ENTER" ANSI_COLOR_RESET " to play again!\n");
     fgets(buffer, BUFFER_LEN, stdin);          //read in the user input
@@ -321,7 +323,7 @@ void storePlayers(char buffer[],char *user_output[], int num_players, player *pl
 
   system("clear");
   //Print a friendly welcome message once all the players have been set
-  printf("Welcome! "ANSI_COLOR_CYAN);        //Welcome message
+  printf("Welcome: "ANSI_COLOR_CYAN);        //Welcome message
   for (int i = 0; i < num_players; i++){     //iterate through all the players
     printf("%s ", players[i].name);          //print the player's name
   }
@@ -410,17 +412,23 @@ bool validJeopardyFormat(char *user_input, char *delim){
   return true;
 }
 
-void show_results(player *players){
+void show_results(player *players,bool final){
   //Sort
   player rankedplayers[NUM_PLAYERS] = {players[0],players[1],players[2],players[3]};
 
-  printf("Current Standings:\n");
+  printf("==================\n");
+  if (final){
+    printf("Final Standings:\n");    
+  }else{
+    printf("Current Standings:\n");
+  }
+  printf("==================\n");
   for (int x = 0; x < 3; x++){
     for (int y = x; y < 4; y++){
       if (rankedplayers[x].score < rankedplayers[y].score){
-	player tempplayer = rankedplayers[x];
-	rankedplayers[x] = rankedplayers[y];
-	rankedplayers[y] = tempplayer;
+      	player tempplayer = rankedplayers[x];
+      	rankedplayers[x] = rankedplayers[y];
+      	rankedplayers[y] = tempplayer;
       }
     }
   }
@@ -454,7 +462,8 @@ void print_winner(player *players, int num_players){
     }
   }
 
-  printf("THE WINNERS FOR THIS MATCH: ");
+  showArt("winner.txt");
+  printf("\nTHE WINNERS FOR THIS MATCH: ");
   //Print the winners
   for(int i = 0; i < num_winners; i++){
     printf(ANSI_COLOR_RED "%s " ANSI_COLOR_RESET, winners[i].name);
