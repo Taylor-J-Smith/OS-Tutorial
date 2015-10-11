@@ -5,5 +5,4 @@ FEATURE WISHLIST:
 -flavoured text (alex trebek)
 -make display more interesting
 -Daily Double
--Final Jeopardy
 -Winner display
