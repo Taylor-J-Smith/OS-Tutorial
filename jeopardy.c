@@ -102,8 +102,6 @@ int main(int argc, char *argv[])
   int *lockedPlayers[NUM_PLAYERS];
   bool areAnyLocked;
 
-  //clear out the console at the start of the game
-  system("clear");
  
   // Perform an infinite loop getting command input from users until game ends
   //while (fgets(buffer, BUFFER_LEN, stdin) != NULL)
@@ -113,6 +111,8 @@ int main(int argc, char *argv[])
     // printf(ANSI_COLOR_GREEN "Welcome to JATJ Jeopardy!! Hit" ANSI_COLOR_RESET
     // ANSI_COLOR_RED" ENTER " ANSI_COLOR_RESET
     // ANSI_COLOR_GREEN "to Begin!" ANSI_COLOR_RESET);
+    //clear out the console at the start of the game
+    system("clear");
     showArt("welcome.txt");
     printf(ANSI_COLOR_GREEN "\n\n    \t\tHit" ANSI_COLOR_RESET ANSI_COLOR_RED " ENTER " ANSI_COLOR_RESET
     ANSI_COLOR_GREEN "to Begin!\n" ANSI_COLOR_RESET);
@@ -270,6 +270,7 @@ int main(int argc, char *argv[])
     fgets(buffer, BUFFER_LEN, stdin);          //read in the user input
     buffer[strlen(buffer)-1] = 0;              //remove the newline from last char
   }while(strcmp(buffer,"exit") == 0);
+  
   return EXIT_SUCCESS;
 }
 
@@ -397,7 +398,7 @@ bool validJeopardyFormat(char *user_input, char *delim){
     //TRUE Users included "who is" OR "what is"
     for (int i = 2; i < BUFFER_LEN; i++){
       if (tokens[i] == NULL){                     //check if end of tokens has been reached
-	break;                                    //if so, break from Loop to stop appending
+      	break;                                    //if so, break from Loop to stop appending
       }
       strcat(bankAnswer,tokens[i]);               //append answer to the bankAnswer
       strcat(bankAnswer,delim);                   //append the delimter to the string
@@ -416,13 +417,13 @@ void show_results(player *players,bool final){
   //Sort
   player rankedplayers[NUM_PLAYERS] = {players[0],players[1],players[2],players[3]};
 
-  printf("==================\n");
+  printf("==========================\n");
   if (final){
     printf("Final Standings:\n");    
   }else{
     printf("Current Standings:\n");
   }
-  printf("==================\n");
+  printf("==========================\n");
   for (int x = 0; x < 3; x++){
     for (int y = x; y < 4; y++){
       if (rankedplayers[x].score < rankedplayers[y].score){
@@ -435,7 +436,7 @@ void show_results(player *players,bool final){
 
   //Display
   for (int x = 0; x < NUM_PLAYERS; x++){
-    printf("%d:%s - Score: %d\n",x+1, rankedplayers[x].name,rankedplayers[x].score);
+    printf("%d:%10s - Score: %d\n",x+1, rankedplayers[x].name,rankedplayers[x].score);
   }
   printf("\n");
 }

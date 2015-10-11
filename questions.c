@@ -65,22 +65,21 @@ void initialize_game(int round)
       char templine[MAX_LEN];
 
       for (int z = 0; z < catselector[x];z++){
-			fgets(templine, MAX_LEN*3+10, f);
-			// printf("%s", templine);
-			fgets(templine, MAX_LEN*3+10, f);
-			// printf("%s", templine);				
-			fgets(templine, MAX_LEN*3+10, f);
-			// printf("%s", templine);
-			fgets(templine, MAX_LEN*3+10, f);
-			// printf("%s", templine);					
+		fgets(templine, MAX_LEN*3+10, f);
+		// printf("%s", templine);
+		fgets(templine, MAX_LEN*3+10, f);
+		// printf("%s", templine);				
+		fgets(templine, MAX_LEN*3+10, f);
+		// printf("%s", templine);
+		fgets(templine, MAX_LEN*3+10, f);
+		// printf("%s", templine);					
       }
-
 
       //iterate over questions in categories
       for (int y = 0; y < 4; y++){
-	fscanf(f, "%[^:]:%[^:]:%[^:]:%d\n", &questions[y+x*4].category, &questions[y+x*4].question, &questions[y+x*4].answer, &questions[y+x*4].value);
-	// printf("%d,%d Cat:%s Q:%s A:%s Val:%d \n",x,y,questions[y+x*4].category, questions[y+x*4].question, questions[y+x*4].answer, questions[y+x*4].value );
-	// printf("%s\n",questions[y+x*4].category );
+		fscanf(f, "%[^:]:%[^:]:%[^:]:%d\n", &questions[y+x*4].category, &questions[y+x*4].question, &questions[y+x*4].answer, &questions[y+x*4].value);
+		// printf("%d,%d Cat:%s Q:%s A:%s Val:%d \n",x,y,questions[y+x*4].category, questions[y+x*4].question, questions[y+x*4].answer, questions[y+x*4].value );
+		// printf("%s\n",questions[y+x*4].category );
       }
     }	
 
@@ -125,18 +124,17 @@ void display_categories(void)
   for (int i = 0; i < 3; i++){                           //iterate through all the categories
     char curr_category[MAX_LEN];
     strcpy(curr_category,categories[i]);                 //store current category
-    printf("%s: ", curr_category);                       //print the current category
+    printf("%15s: ", curr_category);                       //print the current category
     for (int j = 0; j < sizeof(questions)/sizeof(*questions); j++){
       question curr_struct = questions[j];               //store current question
       if(strcmp(curr_category,curr_struct.category) == 0){
-	//belongs in the current category
-	if (!curr_struct.answered){
-	  //question has not been answered
-	  printf(ANSI_COLOR_GREEN "%d " ANSI_COLOR_RESET, curr_struct.value );             //category is un-answered + in right cat
-	}else{
-	  printf(ANSI_COLOR_RED "XXX " ANSI_COLOR_RESET); 	                 //question has already been answered;
-	}
-
+		//belongs in the current category
+		if (!curr_struct.answered){
+		  //question has not been answered
+		  printf(ANSI_COLOR_GREEN "%d " ANSI_COLOR_RESET, curr_struct.value );             //category is un-answered + in right cat
+		}else{
+		  printf(ANSI_COLOR_RED "XXX " ANSI_COLOR_RESET); 	                 //question has already been answered;
+		}
       }
     }
     printf("\n");
@@ -150,8 +148,8 @@ bool questions_left(void)
   for (int i = 0; i < 3; i++){                           //iterate through all the categories
     for (int j = 0; j < sizeof(questions)/sizeof(*questions); j++){
       if(!questions[j].answered){                       //check to see if the question is answered
-	//question has not been answered
-	return true;
+		//question has not been answered
+		return true;
       }
     }
   }
@@ -169,12 +167,12 @@ void display_question(char *category, int value)
       //printf(" | %s", questions[i].question);
       //printf("\n");
       if(strcmp(questions[i].category, category) == 0 && questions[i].value == value && questions[i].answered == 0)
-	{
-	  printf("In the category %s, For %d:",category,value);
-	  printf("\n\n");
-	  printf(ANSI_COLOR_RED "%s" ANSI_COLOR_RESET,questions[i].question);
-	  printf("\n\n");
-	}
+		{
+		  printf("In the category %s, For %d:",category,value);
+		  printf("\n\n");
+		  printf(ANSI_COLOR_RED "%s" ANSI_COLOR_RESET,questions[i].question);
+		  printf("\n\n");
+		}
     }
 
   //puts("end of function");
@@ -189,10 +187,10 @@ bool valid_answer(char *category, int value, char *answer)
     if(strcmp(category, categories[i])==0){
       // loop through questions in category
       for(int j=0; j<4; j++){
-	// check question of value if answer matches
-	if((questions[(i)*4+j].value == value) && (strcmp(answer, questions[(i)*4+j].answer)==0)){
-	  return true;
-	}
+		// check question of value if answer matches
+		if((questions[(i)*4+j].value == value) && (strcmp(answer, questions[(i)*4+j].answer)==0)){
+		  return true;
+		}
       }
     }
   }
