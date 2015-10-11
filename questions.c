@@ -65,14 +65,14 @@ void initialize_game(int round)
       char templine[MAX_LEN];
 
       for (int z = 0; z < catselector[x];z++){
-	fgets(templine, MAX_LEN*3+10, f);
-	// printf("%s", templine);
-	fgets(templine, MAX_LEN*3+10, f);
-	// printf("%s", templine);				
-	fgets(templine, MAX_LEN*3+10, f);
-	// printf("%s", templine);
-	fgets(templine, MAX_LEN*3+10, f);
-	// printf("%s", templine);					
+			fgets(templine, MAX_LEN*3+10, f);
+			// printf("%s", templine);
+			fgets(templine, MAX_LEN*3+10, f);
+			// printf("%s", templine);				
+			fgets(templine, MAX_LEN*3+10, f);
+			// printf("%s", templine);
+			fgets(templine, MAX_LEN*3+10, f);
+			// printf("%s", templine);					
       }
 
 

@@ -66,6 +66,17 @@ bool validJeopardyFormat(char *user_input, char *delim);
 //Prints the player with the current
 void print_winner(player *players, int num_players);
 
+void showArt(char *filename[]){
+  FILE *f;
+
+  f = fopen(filename,"r");
+  char templine[MAX_LEN];
+    
+  while(fgets(templine, MAX_LEN, f) != NULL){
+    printf("%s",templine);
+  }   
+}
+
 int main(int argc, char *argv[])
 {
 
@@ -97,9 +108,10 @@ int main(int argc, char *argv[])
   do
   {
     // Display the game introduction 
-    printf(ANSI_COLOR_GREEN "Welcome to JATJ Jeopardy!! Hit" ANSI_COLOR_RESET
-	  ANSI_COLOR_RED" ENTER " ANSI_COLOR_RESET
-	  ANSI_COLOR_GREEN "to Begin!" ANSI_COLOR_RESET);
+    // printf(ANSI_COLOR_GREEN "Welcome to JATJ Jeopardy!! Hit" ANSI_COLOR_RESET
+    showArt("ascii.txt");
+	  // ANSI_COLOR_RED" ENTER " ANSI_COLOR_RESET
+	  // ANSI_COLOR_GREEN "to Begin!" ANSI_COLOR_RESET);
     fgets(buffer, BUFFER_LEN, stdin);
       
     //Promp for player names, store them in players array, and display a welcome message
