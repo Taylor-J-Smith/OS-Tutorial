@@ -263,6 +263,7 @@ int main(int argc, char *argv[])
 
             for (int i = 0; i < NUM_PLAYERS; i++){
               if(strcmp(players[i].name, currPlayer)==0){
+                players[i].score -= currVal;
                 lockedPlayers[i] = 1;
               }
             }
