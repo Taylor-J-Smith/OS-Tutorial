@@ -105,7 +105,7 @@ int main(int argc, char *argv[])
   bool areAnyLocked;
 
   int round;
-
+  bool skip;
  
   // Perform an infinite loop getting command input from users until game ends
   //while (fgets(buffer, BUFFER_LEN, stdin) != NULL)
@@ -188,6 +188,7 @@ int main(int argc, char *argv[])
       	do{
           do{
             areAnyLocked = false;
+            skip = false;
             //display locked players if there are any
             for (int i = 0; i < NUM_PLAYERS; i++){
               if (lockedPlayers[i] == 1){
@@ -207,10 +208,15 @@ int main(int argc, char *argv[])
             }
 
             //prompt user for player to answer:
-            printf("Enter player that buzzed:");
+            printf("Enter player that buzzed: (or \"none\" to move on)");
             fgets(buffer, BUFFER_LEN, stdin);                      //read in the user input
             buffer[strlen(buffer)-1] = 0;                          //remove the newline
             trim(buffer);                                          //remove any pre/post whitespace
+
+            if (strcmp(buffer,"none")==0){
+              skip = true;
+              break;
+            }
 
             //check if the player is locked out 
             bool lockedOut = true;
@@ -230,6 +236,11 @@ int main(int argc, char *argv[])
               break;
             }
           }while(true);
+
+          if(skip){
+            mark_completed(currCat,currVal);
+            break;
+          }
 
       	  //promp user for answer
       	  printf(ANSI_COLOR_CYAN "%s" ANSI_COLOR_RESET " enter your response:", currPlayer);
@@ -329,7 +340,7 @@ void finalJeopardy(player *players,char buffer[]){
           printf("Invalid wager, wager again\n");
         }else{
           wagers[i] = atoi(buffer);
-          printf("%d\n",wagers[i] );
+          // printf("%d\n",wagers[i] );
           break;
         }
       }
@@ -372,14 +383,16 @@ void finalJeopardy(player *players,char buffer[]){
          printf("Correct!\n");
          players[i].score+=wagers[i];
       }else{
-        printf("Incorrect!");
+        printf("Incorrect!\n");
         players[i].score-=wagers[i];
       }
       
       printf("Your wager:%d\n",wagers[i]);
-      printf("Your final score:%d\n",players[i].score);
-      free(responses[i]);
+      printf("Your final score:%d\n\n",players[i].score);
+        
     }
+    
+    free(responses[i]);
   }
 
   fgets(buffer, BUFFER_LEN, stdin);          //read in the user input

@@ -105,18 +105,19 @@ void initialize_game(int round)
 
 
     // initialize each question struct and assign it to the questions array
-    // for (int x = 0; x < sizeof(questions)/sizeof(question) ; x++){
-    //   questions[x].answered = false;
-    // }
+    for (int x = 0; x < sizeof(questions)/sizeof(question) ; x++){
+      questions[x].answered = false;
+    }
 
     /*=====================
     debug code so I don't go insane testing end of game things
     =====================*/
-    for (int x = 0; x < (int)(sizeof(questions)/sizeof(question)) ; x++){
-      questions[x].answered = true;
-    }
+    // for (int x = 0; x < (int)(sizeof(questions)/sizeof(question)) ; x++){
+    //   questions[x].answered = true;
+    // }
 
-    questions[0].answered = false; 	
+    // questions[0].answered = false; 	
+    // questions[1].answered = false;
 
 	/*=====================
     debug code so I don't go insane testing end of game things
