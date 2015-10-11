@@ -36,7 +36,7 @@ void initialize_game(int round)
   FILE *f;
   if (round == 1){
     f = fopen("bank.txt", "r");
-  }else{
+  }else if (round == 2){
     f = fopen("djqs.txt", "r");
   }
   if (f != NULL){
