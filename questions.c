@@ -22,8 +22,6 @@
 #define ANSI_COLOR_CYAN    "\x1b[36m"
 #define ANSI_COLOR_RESET   "\x1b[0m"
 
-#define FILE_CATEGORIES 6 //categories in the file
-
 // Initializes the array of questions for the game
 void initialize_game(int round)
 {
@@ -31,33 +29,51 @@ void initialize_game(int round)
   // initialize each question struct and assign it to the questions array
 
   srand(time(NULL));
-  int catselector[3];
   int currselect;
+  int numCategories;
+  int fileCategories;
+  int numQuestions;
   FILE *f;
+
+  //set round params
   if (round == 1){
     f = fopen("bank.txt", "r");
+    numCategories = 3;
+    fileCategories = 6;
+    numQuestions = 4;
   }else if (round == 2){
     f = fopen("djqs.txt", "r");
+    numCategories = 3;
+    fileCategories = 6;
+    numQuestions = 4;
+  }else{
+  	f = fopen("fj.txt","r");
+  	numCategories = 1;
+  	fileCategories = 2;
+  	numQuestions = 1;
   }
+
+	int catselector[numCategories];
+
   if (f != NULL){
-    for (int x = 0; x < 3; x++){
+    for (int x = 0; x < numCategories; x++){
       bool repeat;
-      do
-	{
-	  repeat = true;
-	  currselect = rand() % FILE_CATEGORIES;// 5 is number of categories in the file
-	  //check if the random number exists in catselector
-	  for (int y = 0; y < 3; y++){
-	    if (currselect == catselector[y]){
-	      repeat = false;
-	    }
-	  }
-	}while (repeat == false);
+     	do
+     	{
+		  repeat = true;
+		  currselect = rand() % fileCategories;// 5 is number of categories in the file
+		  //check if the random number exists in catselector
+		  for (int y = 0; y < numCategories; y++){
+		    if (currselect == catselector[y]){
+		      repeat = false;
+		    }
+		  }
+		}while (repeat == false);
       catselector[x] = currselect;
     }
 
     // //iterate over entries in catselector
-    for (int x = 0; x < 3; x++){
+    for (int x = 0; x < numCategories; x++){
       // printf("%d \n",catselector[x]); 	
       //get to the line we want
       //reset pointer to start
@@ -65,26 +81,22 @@ void initialize_game(int round)
       char templine[MAX_LEN];
 
       for (int z = 0; z < catselector[x];z++){
-		fgets(templine, MAX_LEN*3+10, f);
-		// printf("%s", templine);
-		fgets(templine, MAX_LEN*3+10, f);
-		// printf("%s", templine);				
-		fgets(templine, MAX_LEN*3+10, f);
-		// printf("%s", templine);
-		fgets(templine, MAX_LEN*3+10, f);
-		// printf("%s", templine);					
+      	for (int i = 0; i < numQuestions; i++)
+      	{
+			fgets(templine, MAX_LEN*3+10, f);
+      	}				
       }
 
       //iterate over questions in categories
-      for (int y = 0; y < 4; y++){
-		fscanf(f, "%[^:]:%[^:]:%[^:]:%d\n", &questions[y+x*4].category, &questions[y+x*4].question, &questions[y+x*4].answer, &questions[y+x*4].value);
+      for (int y = 0; y < numQuestions; y++){
+		fscanf(f, "%[^:]:%[^:]:%[^:]:%d\n", &questions[y+x*numQuestions].category, &questions[y+x*4].question, &questions[y+x*4].answer, &questions[y+x*4].value);
 		// printf("%d,%d Cat:%s Q:%s A:%s Val:%d \n",x,y,questions[y+x*4].category, questions[y+x*4].question, questions[y+x*4].answer, questions[y+x*4].value );
 		// printf("%s\n",questions[y+x*4].category );
       }
     }	
 
-    for (int y = 0; y < 3; y++){
-      strncpy(categories[y], questions[y*4].category,MAX_LEN);
+    for (int y = 0; y < numCategories; y++){
+      strncpy(categories[y], questions[y*numQuestions].category,MAX_LEN);
     }	
     /*printf("categories\n" );
       printf("%s\n", categories[0]);
@@ -100,11 +112,11 @@ void initialize_game(int round)
     /*=====================
     debug code so I don't go insane testing end of game things
     =====================*/
-    for (int x = 0; x < sizeof(questions)/sizeof(question) ; x++){
+    for (int x = 0; x < (int)(sizeof(questions)/sizeof(question)) ; x++){
       questions[x].answered = true;
     }
 
-    questions[1].answered = false; 	
+    questions[0].answered = false; 	
 
 	/*=====================
     debug code so I don't go insane testing end of game things
@@ -125,7 +137,7 @@ void display_categories(void)
     char curr_category[MAX_LEN];
     strcpy(curr_category,categories[i]);                 //store current category
     printf("%15s: ", curr_category);                       //print the current category
-    for (int j = 0; j < sizeof(questions)/sizeof(*questions); j++){
+    for (int j = 0; j < (int)(sizeof(questions)/sizeof(*questions)); j++){
       question curr_struct = questions[j];               //store current question
       if(strcmp(curr_category,curr_struct.category) == 0){
 		//belongs in the current category
@@ -146,7 +158,7 @@ void display_categories(void)
 bool questions_left(void)
 {
   for (int i = 0; i < 3; i++){                           //iterate through all the categories
-    for (int j = 0; j < sizeof(questions)/sizeof(*questions); j++){
+    for (int j = 0; j < (int)(sizeof(questions)/sizeof(*questions)); j++){
       if(!questions[j].answered){                       //check to see if the question is answered
 		//question has not been answered
 		return true;
@@ -160,9 +172,9 @@ bool questions_left(void)
 // Displays the question for the category and dollar value
 void display_question(char *category, int value)
 {
-  for(int i = 0; i < sizeof(questions)/sizeof(*questions); i++)
+  for(int i = 0; i < (int)(sizeof(questions)/sizeof(*questions)); i++)
     {
-      //printf("%d, %s, %s, %d, ", i, questions[i].category, category, strcmp(questions[i].category,category));
+      // printf("%d, %s, %s, %d, \n", i, questions[i].category, category, strcmp(questions[i].category,category));
       //printf("%d, %d, %d ", questions[i].value, value, value == questions[i].value);
       //printf(" | %s", questions[i].question);
       //printf("\n");
@@ -209,7 +221,7 @@ void mark_completed(char *category, int value)
       // loop through questions in category
       for(int j=0; j<4; j++){
 	// check question of value if answer matches
-	if((questions[(i)*4+j].value == value)){
+	if(questions[(i)*4+j].value == value){
 	  //update the question for the category as answered
 	  questions[(i)*4+j].answered = true;
 	  return;
@@ -223,7 +235,7 @@ void mark_completed(char *category, int value)
 bool already_answered(char *category, int value)
 {
   // lookup the question and see if it's already been marked as answered
-  for (int j = 0; j < sizeof(questions)/sizeof(*questions); j++){
+  for (int j = 0; j < (int)(sizeof(questions)/sizeof(*questions)); j++){
     question curr_struct = questions[j];               //store current question
     if (strcmp(category,curr_struct.category) == 0){
       if(value == curr_struct.value){

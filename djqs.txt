@@ -1,5 +1,5 @@
-Lakes & Rivers:The river mentioned most in The Bible:the Jordan:400
-Lakes & Rivers:Scotish word for lake:Loch:800
+Lakes & Rivers:The river mentioned most in The Bible:the Jordan:200
+Lakes & Rivers:Scotish word for lake:Loch:400
 Lakes & Rivers:The longest river in the US:the Missouri:600
 Lakes & Rivers:The largest of the great lakes:Superior:800
 n1:1+1:2:200

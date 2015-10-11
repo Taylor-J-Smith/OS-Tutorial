@@ -66,6 +66,8 @@ bool validJeopardyFormat(char *user_input, char *delim);
 //Prints the player with the current
 void print_winner(player *players, int num_players);
 
+void finalJeopardy(player *players,char buffer[]);
+
 void showArt(char *filename[]){
   FILE *f;
 
@@ -268,6 +270,9 @@ int main(int argc, char *argv[])
       	}while(true);
       }
 
+      //hit here when all questions are done:
+
+      //if we're in the single jeopardy round display results, go to DJ round
       if (round == 1){
         system("clear");
         printf("End of Jeopardy Round!\n");
@@ -277,10 +282,11 @@ int main(int argc, char *argv[])
         round = 2;
         initialize_game(round);
       }else{
+      //otherwise we're done!
+        finalJeopardy(players,buffer);
         break;
       }
     }
-
 
     system("clear");
     show_results(players,0);
@@ -292,6 +298,92 @@ int main(int argc, char *argv[])
   }while(strcmp(buffer,"exit") == 0);
 
   return EXIT_SUCCESS;
+}
+
+void finalJeopardy(player *players,char buffer[]){
+
+  int wagers[NUM_PLAYERS];
+  char *responses[NUM_PLAYERS];
+  system("clear");
+
+  show_results(players,3);
+  //display category
+  initialize_game(3);
+  printf("FINAL JEOPARDY TIEM\n");
+  printf("FINAL CATEGORY\n");
+  printf(ANSI_COLOR_RED "%s\n" ANSI_COLOR_RESET,questions[0].category);
+  
+  //for each player that still has money, get a wager
+  // printf("Competing players: ");
+  for (int i = 0; i < NUM_PLAYERS; ++i)
+  {
+    if(players[i].score > 0){
+      printf("%s, what is your wager? ",players[i].name);
+      while(1){
+        fgets(buffer, BUFFER_LEN, stdin);          //read in the user input
+        buffer[strlen(buffer)-1] = 0;              //remove the newline from last char
+        trim(buffer);
+        //verify that each wager is valid
+        if(atoi(buffer)>players[i].score){
+          printf("Invalid wager, wager again\n");
+        }else{
+          wagers[i] = atoi(buffer);
+          printf("%d\n",wagers[i] );
+          break;
+        }
+      }
+    }
+  }
+
+  printf("\n");
+  
+  //display the question
+  
+  system("clear");
+
+  printf("FINAL CATEGORY\n");
+  printf(ANSI_COLOR_RED "%s\n" ANSI_COLOR_RESET,questions[0].category);
+ 
+  printf("Here's the question:\n");
+  printf("%s\n",questions[0].question);
+
+  //ask each player that's stil in for an answer
+  for (int i = 0; i < NUM_PLAYERS; ++i)
+  {
+    if(players[i].score > 0){
+      printf("%s, enter your response:\n",players[i].name);
+      fgets(buffer, BUFFER_LEN, stdin);          //read in the user input
+      buffer[strlen(buffer)-1] = 0;              //remove the newline from last char
+      trim(buffer);                                          //remove any pre/post whitespace
+      responses[i] = malloc(strlen(buffer)+1);
+      strcpy(responses[i],buffer);
+    }
+  }
+
+  //check each answer, display if it's right or wrong
+  
+  //correct answer
+  for (int i = 0; i < NUM_PLAYERS; ++i)
+  {
+    if(players[i].score > 0){
+      printf("%s's response: %s\n",players[i].name,responses[i]);
+      if (validJeopardyFormat(responses[i]," ") && strcmp(questions[0].answer,responses[i])){
+         printf("Correct!\n");
+         players[i].score+=wagers[i];
+      }else{
+        printf("Incorrect!");
+        players[i].score-=wagers[i];
+      }
+      
+      printf("Your wager:%d\n",wagers[i]);
+      printf("Your final score:%d\n",players[i].score);
+      free(responses[i]);
+    }
+  }
+
+  fgets(buffer, BUFFER_LEN, stdin);          //read in the user input
+  buffer[strlen(buffer)-1] = 0;              //remove the newline from last char
+
 }
 
 void tokenize(char *input, char **tokens, char *delim){
@@ -444,9 +536,10 @@ void show_results(player *players,int round){
     printf("Final Standings:\n");    
   }else if (round ==1){
     printf("Current Standings:\n");
-  }else if (round == 2)
-  {
-    printf(ANSI_COLOR_RED "DOUBLE JEOPARDY\n" ANSI_COLOR_RESET);
+  }else if (round == 2){
+    printf(ANSI_COLOR_BLUE "DOUBLE JEOPARDY\n" ANSI_COLOR_RESET);
+  }else if (round == 3){
+    printf(ANSI_COLOR_BLUE "Going into FINAL JEOPARDY\n" ANSI_COLOR_RESET);
   }
   printf("==========================\n");
   for (int x = 0; x < 3; x++){
