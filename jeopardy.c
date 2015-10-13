@@ -392,7 +392,7 @@ void finalJeopardy(player *players,char buffer[]){
   {
     if(players[i].score > 0){
       printf("%s's response: %s\n",players[i].name,responses[i]);
-      if (validJeopardyFormat(responses[i]," ") && strcmp(questions[0].answer,responses[i])){
+      if (validJeopardyFormat(responses[i]," ") && (strcmp(questions[0].answer,responses[i]) == 0)){
          printf("Correct!\n");
          players[i].score+=wagers[i];
       }else{
@@ -403,10 +403,11 @@ void finalJeopardy(player *players,char buffer[]){
       printf("Your wager:%d\n",wagers[i]);
       printf("Your final score:%d\n\n",players[i].score);
         
+      free(responses[i]);
     }
-    
-    free(responses[i]);
   }
+
+  printf("Press Enter to see the Final Standings!\n");
 
   fgets(buffer, BUFFER_LEN, stdin);          //read in the user input
   buffer[strlen(buffer)-1] = 0;              //remove the newline from last char

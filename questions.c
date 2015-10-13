@@ -144,11 +144,11 @@ void display_categories(void)
 //  print_line(72,ANSI_BGCOLOR_BLACK);
 
   // OLD FUNCTION HERE:
-  printf("Remaining Categories:\n");
+  printf("\t\t\tRemaining Categories:\n");
   for (int i = 0; i < 3; i++){                           //iterate through all the categories
     char curr_category[MAX_LEN];
     strcpy(curr_category,categories[i]);                 //store current category
-    printf("%15s: ", curr_category);                       //print the current category
+    printf("%30s: ", curr_category);                       //print the current category
     for (int j = 0; j < (int)(sizeof(questions)/sizeof(*questions)); j++){
       question curr_struct = questions[j];               //store current question
       if(strcmp(curr_category,curr_struct.category) == 0){
