@@ -10,6 +10,7 @@
 
 #include <stdbool.h>
 #include <string.h>
+#include <ctype.h>
 
 #define MAX_LEN 256
 
