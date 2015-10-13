@@ -1,20 +1,24 @@
-numbers0 1+1 2 200
-numbers0 2+2 4 400
-numbers0 5+5 10 600
-numbers0 4+3 7 800
-numbers1 1+1 2 200
-numbers1 2+2 4 400
-numbers1 5+5 10 600
-numbers1 4+3 7 800
-numbers2 1+1 2 200
-numbers2 2+2 4 400
-numbers2 5+5 10 600
-numbers2 4+3 7 800
-numbers3 1+1 2 200
-numbers3 2+2 4 400
-numbers3 5+5 10 600
-numbers3 4+3 7 800
-numbers4 1+1 2 200
-numbers4 2+2 4 400
-numbers4 5+5 10 600
-numbers4 4+3 7 800
+Lakes & Rivers:The river mentioned most in The Bible:the Jordan:200
+Lakes & Rivers:Scotish word for lake:Loch:400
+Lakes & Rivers:The longest river in the US:the Missouri:600
+Lakes & Rivers:The largest of the great lakes:Superior:800
+n1:1+1:2:200
+n1:2+2:4:400
+n1:3+3:6:600
+n1:4+4:8:800
+n2:21+21:42:200
+n2:22+22:44:400
+n2:23+23:46:600
+n2:24+24:48:800
+n3:31+31:62:200
+n3:32+32:64:400
+n3:33+33:66:600
+n3:34+34:68:800
+n4:41+41:82:200
+n4:42+42:84:400
+n4:43+43:86:600
+n4:44+44:88:800
+Potent Potables:This drink is made by mixing Orange Juice and Vodka:Screwdriver:200
+Potent Potables:This ingredient in beer gives beer its flavour:Hops:400
+Potent Potables:This spirit is also known as "The Green Fairy":Absinthe:600
+Potent Potables:The name of this honey-whiskey liqueur comes from a phrase that means "the drink that satisfies":Drambuie:800

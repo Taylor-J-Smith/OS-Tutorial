@@ -1,0 +1,4 @@
+-Case insensitivity
+	-change all responses and answers to lower case during comparision
+
+-fill up bank.txt and djqs.txt with real questions
