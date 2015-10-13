@@ -293,12 +293,14 @@ int main(int argc, char *argv[])
       	  //Check if the user 1. used the right format(what is/who is) AND 2. has the right answer
       	  //***validJeopardyFormat MUST be called first since it modifies buffer (remove the what if)
       	  if (validJeopardyFormat(buffer," ") && valid_answer(currCat,currVal,buffer)){
-      	    system("clear");
+      	   // system("clear");
       	    printf(ANSI_COLOR_RED "Correct! " ANSI_COLOR_RESET
       		   ANSI_COLOR_CYAN "%s" ANSI_COLOR_RESET
       		   " you get "
       		   ANSI_COLOR_GREEN "%d" ANSI_COLOR_RESET
       		   " points!\n", currPlayer,currVal);
+            printf("Press " ANSI_COLOR_GREEN "ENTER" ANSI_COLOR_RESET " to continue\n");
+            fgets(buffer, BUFFER_LEN, stdin);
       	    update_score(players, NUM_PLAYERS, currPlayer, currVal);     //update the player's score
       	    mark_completed(currCat,currVal);                             //mark category/val complete
       	    show_results(players,round);                                       //display current standings
