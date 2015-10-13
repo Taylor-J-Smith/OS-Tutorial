@@ -203,6 +203,17 @@ void display_question(char *category, int value)
   //puts("end of function");
 }
 
+void display_answer(char *category, int value){
+
+   for(int i = 0; i < (int)(sizeof(questions)/sizeof(*questions)); i++)
+    {
+      if(strcmp(questions[i].category, category) == 0 && questions[i].value == value)
+      {
+        printf("%s", questions[i].answer);
+      }
+    }
+}
+
 // Returns true if the answer is correct for the question for that category and dollar value
 bool valid_answer(char *category, int value, char *answer)
 {	
