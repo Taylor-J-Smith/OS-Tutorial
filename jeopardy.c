@@ -9,6 +9,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
+#include <sys/types.h>
+#include <sys/ioctl.h>
 #include "questions.h"
 #include "players.h"
 #include "jeopardy.h"
@@ -69,6 +71,11 @@ void print_winner(player *players, int num_players);
 int main(int argc, char *argv[])
 {
 
+  // Source: http://www.linuxquestions.org/questions/programming-9/scripting-question-the-width-of-the-terminal-window-81570/
+    struct winsize ws;
+
+    ioctl(1, TIOCGWINSZ, &ws);
+
   // An array of 4 players, may need to be a pointer if you want it set dynamically
   player players[NUM_PLAYERS];
     
@@ -97,6 +104,8 @@ int main(int argc, char *argv[])
   do
   {
     // Display the game introduction 
+    //printf("Columns: %d\tRows: %d\n", ws.ws_col, ws.ws_row);
+    //printf("Column Width:  %d\tRow Height: %d\n", get_column_width(ws.ws_col,4), get_row_height(ws.ws_row,5));
     printf(ANSI_COLOR_GREEN "Welcome to JATJ Jeopardy!! Hit" ANSI_COLOR_RESET
 	  ANSI_COLOR_RED" ENTER " ANSI_COLOR_RESET
 	  ANSI_COLOR_GREEN "to Begin!" ANSI_COLOR_RESET);
@@ -111,7 +120,7 @@ int main(int argc, char *argv[])
     //Loops while there are questions unanswered
 	  //loop Until the user enters a valid player name
     while(1){
-      printf("Enter player to go:");               //User Message
+      printf("Enter player to go:");                     //User Message
 	    fgets(buffer, BUFFER_LEN, stdin);                  //read in the user input
 	    buffer[strlen(buffer)-1] = 0;                      //remove the newline from last char
 	    trim(buffer);                                      //Trim any whitespace around the name

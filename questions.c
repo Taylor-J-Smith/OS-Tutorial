@@ -19,8 +19,13 @@
 #define ANSI_COLOR_YELLOW  "\x1b[33m"
 #define ANSI_COLOR_BLUE    "\x1b[34m"
 #define ANSI_COLOR_MAGENTA "\x1b[35m"
-#define ANSI_COLOR_CYAN    "\x1b[36m"
+#define ANSI_COLOR_CYAN    "\x1b[36m" 
 #define ANSI_COLOR_RESET   "\x1b[0m"
+
+#define ANSI_BGCOLOR_BLUE     "\x1b[44m"
+#define ANSI_BGCOLOR_BLACK    "\x1b[40m"
+#define ANSI_BGCOLOR_GREY     "\x1b[47m"
+#define ANSI_BGCOLOR_RESET    ""
 
 // Initializes the array of questions for the game
 void initialize_game(int round)
@@ -106,6 +111,12 @@ void initialize_game(int round)
 void display_categories(void)
 {
   // print categories and dollar values for each unanswered question in questions array
+  
+//  system("clear");
+
+//  print_line(72,ANSI_BGCOLOR_BLACK);
+
+  // OLD FUNCTION HERE:
   printf("Remaining Categories:\n");
   for (int i = 0; i < 3; i++){                           //iterate through all the categories
     char curr_category[MAX_LEN];
@@ -127,6 +138,7 @@ void display_categories(void)
     printf("\n");
   }
   printf("\n");
+  
 }
 
 //checks to see if there are still atleast one available question that have not been answered
@@ -232,4 +244,45 @@ void test_answer_all(void){
       questions[(i)*4+j].answered = true;
     }
   }  
+}
+
+int get_column_width(int console_width, int num_columns){
+
+  return (console_width - num_columns - 1)/num_columns;
+}
+
+int get_row_height(int console_height, int num_rows){
+
+  return (console_height - num_rows - 1)/num_rows;
+}
+
+void print_top_line(int line_length, int column_width){
+
+  printf(ANSI_BGCOLOR_BLACK /*"┌"*/ " ");
+  for(int i = 1; i < line_length; i++){
+    if(i % column_width == 0){
+      printf(/*"┬"*/" ");
+    }
+    else{
+      printf(/*"─"*/" ");
+    }
+  }
+  printf(/*"┐"*/" " ANSI_COLOR_RESET);
+
+  printf("\n");
+}
+
+void print_line(int line_length, char *color){
+
+  printf(ANSI_BGCOLOR_GREY "  ");
+
+  printf("%s", color);
+
+  for(int i = 0; i < line_length; i++)
+  {
+    printf(" ");
+  }  
+
+  printf(ANSI_BGCOLOR_GREY "  " ANSI_COLOR_RESET "\n");
+
 }
