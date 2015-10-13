@@ -9,6 +9,7 @@
 #define QUESTIONS_H_
 
 #include <stdbool.h>
+#include <string.h>
 
 #define MAX_LEN 256
 
@@ -48,6 +49,14 @@ void mark_completed(char *category, int value);
 
 //checks to see if there are still atleast one available question that have not been answered
 bool questions_left(void);
+
+int get_column_width(int console_width, int num_columns);
+
+int get_row_height(int console_height, int num_rows);
+
+void print_top_line(int line_length, int column_width);
+
+void print_line(int line_length, char *color);
 
 //marks all the questions as answered
 void test_answer_all(void);
