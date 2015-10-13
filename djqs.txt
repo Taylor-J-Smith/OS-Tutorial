@@ -2,22 +2,22 @@ Lakes & Rivers:The river mentioned most in The Bible:the Jordan:200
 Lakes & Rivers:Scotish word for lake:Loch:400
 Lakes & Rivers:The longest river in the US:the Missouri:600
 Lakes & Rivers:The largest of the great lakes:Superior:800
-n1:1+1:2:200
-n1:2+2:4:400
-n1:3+3:6:600
-n1:4+4:8:800
-n2:21+21:42:200
-n2:22+22:44:400
-n2:23+23:46:600
-n2:24+24:48:800
-n3:31+31:62:200
-n3:32+32:64:400
-n3:33+33:66:600
-n3:34+34:68:800
-n4:41+41:82:200
-n4:42+42:84:400
-n4:43+43:86:600
-n4:44+44:88:800
+Give Me a "D":This "Titanic" actor has famously never won an Oscar:Leonardo DiCaprio:200
+Give Me a "D":In this movie, James Bond teams up with Giancinta 'Jinx' Johnson, played by Halle Berry:Die Another Day:400
+Give Me a "D":This athlete won the NBA MVP in 2013-2014:Kevin Durant:600
+Give Me a "D":This country's current Queen is Queen Margrethe II:Denmark:800
+Pokemon:This Pokemon had the highest Pokedex number in the First Generation of games:Mew:200
+Pokemon:This Pokemon currently has the highest National Pokedex number:Volcanion:400
+Pokemon:In the Anime, what is the first Gym Badge that Ash actually wins?:Thunder Badge:600
+Pokemon:Which non-legendary pokemon has the highest base speed stats?:Ninjask:800
+Name the Decade of Invention:Wikipedia:2000:200
+Name the Decade of Invention:Trampoline:1930:400
+Name the Decade of Invention:Machine Gun:1880:600
+Name the Decade of Invention:Bubble Gum:1920:800
+The Prime Minster Who...:was the first female PM:Kim Campbell:200
+The Prime Minster Who...:is on the 100 dollar bill:Robert Borden:400
+The Prime Minster Who...:served in office for the shortest time:Charles Tupper:600
+The Prime Minster Who...:won a Nobel Peace Prize before being elected:Lester Pearson:800
 Potent Potables:This drink is made by mixing Orange Juice and Vodka:Screwdriver:200
 Potent Potables:This ingredient in beer gives beer its flavour:Hops:400
 Potent Potables:This spirit is also known as "The Green Fairy":Absinthe:600
