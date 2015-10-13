@@ -102,6 +102,8 @@ int main(int argc, char *argv[])
 
   //current player
   char currPlayer[BUFFER_LEN];
+
+  char board_control[BUFFER_LEN];
   
   //current category and value
   int currVal;
@@ -113,6 +115,7 @@ int main(int argc, char *argv[])
 
   int round;
   bool skip;
+  bool all_locked;
  
   // Perform an infinite loop getting command input from users until game ends
   //while (fgets(buffer, BUFFER_LEN, stdin) != NULL)
@@ -190,6 +193,7 @@ int main(int argc, char *argv[])
       	//display question
       	currVal = atoi(user_output[1]);
       	strcpy(currCat,user_output[0]);
+        strcpy(board_control, currPlayer);
       	display_question(currCat,currVal);
 
         //nobody is locked out at the start
@@ -202,6 +206,7 @@ int main(int argc, char *argv[])
           do{
             areAnyLocked = false;
             skip = false;
+            all_locked = false;
             //display locked players if there are any
             for (int i = 0; i < NUM_PLAYERS; i++){
               if (lockedPlayers[i] == 1){
@@ -209,7 +214,29 @@ int main(int argc, char *argv[])
               }
             }
 
-            if(areAnyLocked){
+            for(int i = 0; i < NUM_PLAYERS; i++){
+
+              if(lockedPlayers[i] == 0){
+                break;
+              }
+              else if(lockedPlayers[i] == 1 && i == NUM_PLAYERS -1)
+              {
+                all_locked = true;
+              }
+            }
+
+            if(all_locked){
+              printf("All players locked out! The correct answer was: ");
+              display_answer(currCat,currVal);
+              printf("\n");
+              skip = true;
+              printf("Press " ANSI_COLOR_GREEN "ENTER" ANSI_COLOR_RESET " to continue\n");
+              fgets(buffer, BUFFER_LEN, stdin);
+              strcpy(currPlayer, board_control);
+              break;
+            }
+
+            if(areAnyLocked && !all_locked){
               printf("\nLocked Players:");
 
               for (int i = 0; i < NUM_PLAYERS; i++){
@@ -252,6 +279,7 @@ int main(int argc, char *argv[])
 
           if(skip){
             mark_completed(currCat,currVal);
+             strcpy(currPlayer, board_control);
             break;
           }
 
@@ -265,12 +293,14 @@ int main(int argc, char *argv[])
       	  //Check if the user 1. used the right format(what is/who is) AND 2. has the right answer
       	  //***validJeopardyFormat MUST be called first since it modifies buffer (remove the what if)
       	  if (validJeopardyFormat(buffer," ") && valid_answer(currCat,currVal,buffer)){
-      	    system("clear");
+      	   // system("clear");
       	    printf(ANSI_COLOR_RED "Correct! " ANSI_COLOR_RESET
       		   ANSI_COLOR_CYAN "%s" ANSI_COLOR_RESET
       		   " you get "
       		   ANSI_COLOR_GREEN "%d" ANSI_COLOR_RESET
       		   " points!\n", currPlayer,currVal);
+            printf("Press " ANSI_COLOR_GREEN "ENTER" ANSI_COLOR_RESET " to continue\n");
+            fgets(buffer, BUFFER_LEN, stdin);
       	    update_score(players, NUM_PLAYERS, currPlayer, currVal);     //update the player's score
       	    mark_completed(currCat,currVal);                             //mark category/val complete
       	    show_results(players,round);                                       //display current standings

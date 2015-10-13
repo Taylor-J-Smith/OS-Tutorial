@@ -10,6 +10,7 @@
 
 #include <stdbool.h>
 #include <string.h>
+#include <ctype.h>
 
 #define MAX_LEN 256
 
@@ -37,6 +38,8 @@ extern void display_categories(void);
 
 // Displays the question for the category and dollar value
 extern void display_question(char *category, int value);
+
+extern void display_answer(char *categorty, int value);
 
 // Returns true if the answer is correct for the question for that category and dollar value
 extern bool valid_answer(char *category, int value, char *answer);
