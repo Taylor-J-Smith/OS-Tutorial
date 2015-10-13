@@ -44,7 +44,7 @@ void initialize_game(int round)
   if (round == 1){
     f = fopen("bank.txt", "r");
     numCategories = 3;
-    fileCategories = 6;
+    fileCategories = 5;
     numQuestions = 4;
   }else if (round == 2){
     f = fopen("djqs.txt", "r");
@@ -103,10 +103,10 @@ void initialize_game(int round)
     for (int y = 0; y < numCategories; y++){
       strncpy(categories[y], questions[y*numQuestions].category,MAX_LEN);
     }	
-    /*printf("categories\n" );
-      printf("%s\n", categories[0]);
-      printf("%s\n", categories[1]);
-      printf("%s\n", categories[2]);*/
+    // printf("categories\n" );
+    // printf("%s\n", categories[0]);
+    // printf("%s\n", categories[1]);
+    // printf("%s\n", categories[2]);
 
 
     // initialize each question struct and assign it to the questions array
@@ -117,12 +117,12 @@ void initialize_game(int round)
     /*=====================
     debug code so I don't go insane testing end of game things
     =====================*/
-    // for (int x = 0; x < (int)(sizeof(questions)/sizeof(question)) ; x++){
-    //   questions[x].answered = true;
-    // }
+    for (int x = 0; x < (int)(sizeof(questions)/sizeof(question)) ; x++){
+      questions[x].answered = true;
+    }
 
-    // questions[0].answered = false; 	
-    // questions[1].answered = false;
+    questions[0].answered = false; 	
+    questions[1].answered = false;
 
 	/*=====================
     debug code so I don't go insane testing end of game things

@@ -2,3 +2,10 @@
 	-change all responses and answers to lower case during comparision
 
 -fill up bank.txt and djqs.txt with real questions
+	-make sure you change the variable for number of categories per file when you ADD a category
+
+-check if all players are locked
+	-if all players are locked, display answer and move on to nextx question
+
+(bottom of priority)
+-every time we get input, check to make sure there is correct number of inputs
