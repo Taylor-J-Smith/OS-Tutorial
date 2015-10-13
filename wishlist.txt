@@ -1,5 +1,4 @@
 FEATURE WISHLIST:
--case insensitivity
 -better way to pick who answers the question
 -coloured text
 -flavoured text (alex trebek)
