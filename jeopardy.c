@@ -149,7 +149,7 @@ int main(int argc, char *argv[])
 	  //loop Until the user enters a valid player name
     while(1){
       printf("Enter player to go:");                     //User Message
-      printf("Enter the name of the first player:");               //User Message
+      // printf("Enter the name of the first player:");               //User Message
 	    fgets(buffer, BUFFER_LEN, stdin);                  //read in the user input
 	    buffer[strlen(buffer)-1] = 0;                      //remove the newline from last char
 	    trim(buffer);                                      //Trim any whitespace around the name
@@ -255,6 +255,9 @@ int main(int argc, char *argv[])
 
             if (strcmp(buffer,"none")==0){
               skip = true;
+              printf("The correct answer was:\n");
+              display_answer(currCat,currVal);
+              fgets(buffer, BUFFER_LEN, stdin);
               break;
             }
 

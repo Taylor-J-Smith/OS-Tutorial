@@ -117,12 +117,12 @@ void initialize_game(int round)
     /*=====================
     debug code so I don't go insane testing end of game things
     =====================*/
-    for (int x = 0; x < (int)(sizeof(questions)/sizeof(question)) ; x++){
-      questions[x].answered = true;
-    }
+    // for (int x = 0; x < (int)(sizeof(questions)/sizeof(question)) ; x++){
+    //   questions[x].answered = true;
+    // }
 
-    questions[0].answered = false; 	
-    questions[1].answered = false;
+    // questions[0].answered = false; 	
+    // questions[1].answered = false;
 
 	/*=====================
     debug code so I don't go insane testing end of game things
