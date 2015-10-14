@@ -10,11 +10,11 @@ Hobbies:This board game has players buy property in an attemp to bankrupt one an
 Hobbies:In this card game the "wild" card allows players to change the suit of the current stack of play:Crazy Eights:200
 Hobbies:This type of singing gets its name from the japanese word translating to "empty orchestra":Karaoke:300
 Hobbies:This country was the highest rated tourist location in 2014:France:400
-n3:31+31:62:100
-n3:32+32:64:200
-n3:33+33:66:300
-n3:34+34:68:400
-n4:41+41:82:100
-n4:42+42:84:200
-n4:43+43:86:300
-n4:44+44:88:400
+Food:Sonny the Cuckoo Bird "cuckoo for" this popular breakfast cereal:Coco Puffs:100
+Food:This black spice is the best selling spice in the world:Pepper:200
+Food:This ingredient in fresh milk is eventually devoured by bacteria, causing a sour taste:Lactose:300
+Food:Federal labeling regulations require this much caffeine be removed from coffee for it to be called decaffeinated(Answer as ##%):97%:400
+Math:2^11:2048:100
+Math:This concept concept gives the rate of change of a function:Derivative:200
+Math:When a matrix is multiplied by this it returns the identity matrix:Inverse:300
+Math:This constant is used to form the natural logarithm:e:400
