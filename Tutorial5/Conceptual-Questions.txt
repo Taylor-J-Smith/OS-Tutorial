@@ -18,3 +18,7 @@
   A critical section is when a shared resource is accessed and potentially changed.
 
 5. Research the functions used to perform ​mutual exclusion​ with pthreads and explain the purpose of each function.
+	pthread_mutex_lock (mutex) : requests the lock from the mutex arg
+	pthread_mutex_unlock (mutex) : unlocks the lock for the mutex arg
+	pthread_mutex_init(mutex,attribute) : dynamically initializes the mutex varaible. 
+	pthread_mutex_destroy (mutex) : frees the mutex variable.
