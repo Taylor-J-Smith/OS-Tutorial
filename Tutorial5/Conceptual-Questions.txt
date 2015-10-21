@@ -1,0 +1,24 @@
+1. Read the pthread documentation and explain the following three functions: pthread_create, pthread_join, pthread_exit.
+
+  pthread_create: Used to create new threads and pass them arguments.
+  pthread_join: Suspends execution of current thread until target thread terminates.
+  pthread_exit: Terminates the thread and passes an argument to any joining threads.
+
+2. Explain how the memory of threads work in comparison to processes, do threads share the same memory, can threads access the memory of other threads?
+
+  Threads have their own local memory but also share global memory of the process that created them.
+
+3. Name the differences between ​multithreading​ and multiprocessing​ (multiple processes). What are the advantages and disadvantages of each?
+
+  Processes require IPC in order to send messages while threads have shared global memory and can pass messages using that memory. Threads are also much more lightweight than processes. Threads can remain running after their parents have terminated while in most OS they use cascading termination so child processes are also closed when the parents are closed.
+
+4. Provide an explanation of​ mutual exclusion, what is a ​critical section?
+
+  Mutual exclusion is that the critical sections of any two threads are not executing at the same time.
+  A critical section is when a shared resource is accessed and potentially changed.
+
+5. Research the functions used to perform ​mutual exclusion​ with pthreads and explain the purpose of each function.
+	pthread_mutex_lock (mutex) : requests the lock from the mutex arg
+	pthread_mutex_unlock (mutex) : unlocks the lock for the mutex arg
+	pthread_mutex_init(mutex,attribute) : dynamically initializes the mutex varaible. 
+	pthread_mutex_destroy (mutex) : frees the mutex variable.
