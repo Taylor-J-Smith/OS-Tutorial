@@ -6,32 +6,41 @@
 #define BUFFER_LEN 256
 #define NUM_STUDENTS 5
 
+typedef struct {
+  char name[BUFFER_LEN];
+  double grade;
+}student;
+
 void *bellcurve(void *arg){
-  double grade = atof(arg);
-  grade = grade*1.5;
+  student* currStudent = (student*)arg;
   
-  printf("%.2f\n",grade);
+  printf("%s,%.2f\n",currStudent->name,currStudent->grade*1.5);
   
   return NULL;
 }
 
 int main(int argc, char *argv[]) {
-  char student_grades[NUM_STUDENTS][BUFFER_LEN];
+  //  char student_grades[NUM_STUDENTS][BUFFER_LEN];
+  student students[NUM_STUDENTS];
   char buffer[BUFFER_LEN];
   pthread_t workers[NUM_STUDENTS];
   
   printf("Enter the grades for five students:\n");   
 
   for (int i = 0; i < NUM_STUDENTS; i++){
-    printf("Student #%d:",i+1);
+    printf("Student #%d name:",i+1);//get the name
     fgets(buffer,BUFFER_LEN,stdin);
     buffer[strlen(buffer) -1] = 0;//remove the newline
-    strcpy(student_grades[i],buffer);
+    strcpy(students[i].name, buffer);
+    printf("Student #%d grade:",i+1);//get the grade
+    fgets(buffer,BUFFER_LEN,stdin);
+    buffer[strlen(buffer) -1] = 0;//remove the newline
+    students[i].grade = atof(buffer);
   }
 
   //run all the threads
   for (int i = 0; i < NUM_STUDENTS; i++){
-    pthread_create(&workers[i], 0, bellcurve, (void *) student_grades[i]);
+    pthread_create(&workers[i], 0, bellcurve, (void *) &students[i]);
     //printf("%s\n",student_grades[i]);
     pthread_join(workers[i],0);
   }
@@ -40,6 +49,36 @@ int main(int argc, char *argv[]) {
   
   return 0;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
