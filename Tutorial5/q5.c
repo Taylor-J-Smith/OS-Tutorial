@@ -15,25 +15,12 @@ void read_grades(){
         exit(1);
     }
 
-    char fchar;
-    int i=0;
     int j=0;
-    while((fchar = fgetc(grade_file)) != EOF && j<10){
-        if(fchar != '\n'){
-            // add character to grade
-            printf("%d\n", fchar);
-            // *grades[j] = *grades[j]*10 + (fchar-'0');
-            *grades[j] = *grades[j]*10 + (fchar-'0');
-            printf("%d\n",grades[j] );
-            i++;
-        } else {
-            // next grade
-            j++;
-            // end of line restart at begining of line array
-            i = 0;
-        }
+    fscanf(grade_file, "%d", &grades[0]);
+    while(!feof (grade_file) && j<10){
+        j++;
+        fscanf(grade_file, "%d", &grades[j]);
     }
-    *grades[j] = *grades[j]*10 + (fchar-'0');
 
     fclose(grade_file);
 }
