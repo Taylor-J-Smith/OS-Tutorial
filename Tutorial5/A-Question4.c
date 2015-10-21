@@ -10,7 +10,7 @@ pthread_mutex_t mutex;
 
 int total_grade = 0;
 
-void *class_total(void *currGrade){
+void *class_total(void *curr_grade){
 
 
 	// Wait the main thead to lock
@@ -19,30 +19,30 @@ void *class_total(void *currGrade){
 
 	// request lock
 	pthread_mutex_lock (&mutex);
-    // printf("%d says in critical section\n",(int)currGrade);
+    // printf("%d says in critical section\n",(int)curr_grade);
 
 	// int grade;
-	// grade = (int)currGrade;
+	// grade = (int)curr_grade;
 
-	// printf("currGrade\n");
-	// printf("%d\n",(int)currGrade );
+	// printf("curr_grade\n");
+	// printf("%d\n",(int)curr_grade );
 	// printf("grade:\n");
 	// printf("%d\n", grade );
-	total_grade += (int)currGrade;
+	total_grade += (int)curr_grade;
 	// printf("total_grade\n");
 	// printf("%d\n", total_grade);
 
 	// printf("unlocking\n");
 	// unlock lock
 	pthread_mutex_unlock (&mutex);
-    // printf("%d OUT of critical section\n",(int)currGrade);
+    // printf("%d OUT of critical section\n",(int)curr_grade);
 
 	return NULL;
 }
 
 int main(void)
 {	
-	int currGrade = 0;
+	int curr_grade = 0;
 	pthread_t threads[NUM_THREADS];
 	char buffer[BUFFER_LEN];
 
@@ -59,9 +59,9 @@ int main(void)
 		// printf("%s\n",buffer);
 	    char *end;
 
-		currGrade = strtol(buffer, &end, 10);
+		curr_grade = strtol(buffer, &end, 10);
 
-		pthread_create(&threads[i], NULL, &class_total, currGrade);
+		pthread_create(&threads[i], NULL, &class_total, curr_grade);
 
 	}
 
@@ -79,6 +79,6 @@ int main(void)
 	pthread_mutex_unlock (&mutex);
 
 	// pthread_mutex_destroy(&mutex);
-	// free(currGrade);
+	// free(curr_grade);
 	return 0;
 }
