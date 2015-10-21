@@ -6,7 +6,7 @@
 
 2. Explain how the memory of threads work in comparison to processes, do threads share the same memory, can threads access the memory of other threads?
 
-  Threads have their own local memory but also share global memory of the process that created them.
+  Processes have their own memory that can only be read by them, while threads all share the same memory space as the parent process. Threads can access the memory of other threads because they all are part of the parent process.
 
 3. Name the differences between ​multithreading​ and multiprocessing​ (multiple processes). What are the advantages and disadvantages of each?
 
@@ -18,7 +18,8 @@
   A critical section is when a shared resource is accessed and potentially changed.
 
 5. Research the functions used to perform ​mutual exclusion​ with pthreads and explain the purpose of each function.
-	pthread_mutex_lock (mutex) : requests the lock from the mutex arg
-	pthread_mutex_unlock (mutex) : unlocks the lock for the mutex arg
-	pthread_mutex_init(mutex,attribute) : dynamically initializes the mutex varaible. 
-	pthread_mutex_destroy (mutex) : frees the mutex variable.
+
+	pthread_mutex_lock (mutex): requests the lock from the mutex arg
+	pthread_mutex_unlock (mutex): unlocks the lock for the mutex arg
+	pthread_mutex_init(mutex,attribute): dynamically initializes the mutex varaible.
+	pthread_mutex_destroy (mutex): frees the mutex variable.
