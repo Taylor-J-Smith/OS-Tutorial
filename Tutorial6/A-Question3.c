@@ -42,9 +42,13 @@ int main(void)
     pthread_create(&workers[i], 0, factorial, (void *) &num_index_array[i]);        
   }
   //join all the threads and print contents of moving_sum
-  printf("moving_sum[]: ");
   for (int i = 0; i < NUM_AMOUNT; i++){
     pthread_join(workers[i],0);
+  }
+
+  //print the contents of moving_sum
+  printf("moving_sum[]: ");
+  for (int i = 0; i < NUM_AMOUNT; i++){
     printf("%d ",moving_sum[i]);
   }
   printf("\n");
@@ -60,20 +64,37 @@ void *factorial(void *arg){
   int fact = arg_struct->num;
   int index = arg_struct->index;
   int prev_index = index-1;
-  int result_fact = 1;  
+  int result_fact = 1;
+  //calculate the factorial
   for (int i = 0; i < fact; i++){
     result_fact *= (fact - i);
   }
-  //Enter the Critical Section******************
-  sem_wait(&sem);//take semaphore
-  //check previous value in moving_sum
-  if ((prev_index > 0) && (moving_sum[prev_index] != 0)){
+  
+  //check if first value
+  if(prev_index < 0){
+    //Enter the Critical Section******************
+    sem_wait(&sem);//take semaphore
+    printf("[debug] WRITING \"%d\" TO moving_sum[%d]\n",result_fact,index);
+    moving_sum[index] = result_fact;
+    sem_post(&sem);//release semaphore
+    //end of dCcritical section********************
+  }else{
+  
+    //Enter the Critical Section******************  
+    sem_wait(&sem);//take semaphore
+    while (moving_sum[prev_index] == 0){
+      //wait
+      sem_post(&sem);//release semaphore
+      sem_wait(&sem);//take semaphore
+    }
+    //exited while loop- there must be a value in previous index of moving sum
+    //semaphore already taken from within while loop
     int prev_val = moving_sum[prev_index];
-    printf("[Thread] Factorial of \"%d\" is \"%d\" with index [%d]\n",fact,result_fact,index);
+    printf("[debug] WRITING \"%d\" TO moving_sum[%d]\n",result_fact,index);
     moving_sum[index] = prev_val + result_fact;
+    sem_post(&sem);//release semaphore
+    //end of dCcritical section********************
   }
-  sem_post(&sem);//release semaphore
-  //end of dCcritical section********************
 }
 
 
