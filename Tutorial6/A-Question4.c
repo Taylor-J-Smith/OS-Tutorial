@@ -19,10 +19,9 @@ void *producer(void *arg[]){
 	int *input = (int *)arg;
 	while (production < 10){
 		//wait for a random time
-		int r = rand() % 5000 + 1000;
+		int r = rand() % 5000;
 		usleep(r);
 		// printf("%d\n", input[production]);
-		int full = 1;
 		sem_wait(&sem);
 		for (int j = 0; j < 5; j++)
 		{
@@ -31,7 +30,6 @@ void *producer(void *arg[]){
 			{
 				printf("Produced:%d\n",input[production]);
 				buffer[j] = input[production];
-				full = 0;
 				production++;
 				// sem_post(&sem);
 				// printf("Exiting Producer Semaphore\n");
@@ -40,7 +38,6 @@ void *producer(void *arg[]){
 			// printf("Exiting Producer Semaphore\n");
 		}
 		sem_post(&sem);
-		// printf("Full:%d\n",full);
 		//critical section
 	}
 }
@@ -50,11 +47,10 @@ void *consumer(void *arg){
 	int consumption = 0;
 
 	while(consumption <10){
-		int r = rand() % 5000 + 1000;
+		int r = rand() % 5000;
 		//add random delay
 		usleep(r);
 
-		int empty = 1;
 		sem_wait(&sem);
 		for (int i = 0; i < 5; ++i)
 		{
@@ -64,10 +60,12 @@ void *consumer(void *arg){
 				printf("Consumed:%d\n", buffer[i]);
 				buffer[i] = 0;
 				consumption++;
+				break;
 			}
 			// printf("Exiting Consumer Semaphore\n");
 		}
 		sem_post(&sem);
+
 	}
 }
 
@@ -101,5 +99,12 @@ int main(void)
 	pthread_join(Tprod,0);
 	pthread_join(Tcon,0);
 	sem_destroy(&sem);
+
+	printf("Buffer:");
+	for (int i = 0; i < 5; i++)
+	{
+		printf("%d ", buffer[i] );
+	}
+	printf("\n");
 	return 0;
 }
