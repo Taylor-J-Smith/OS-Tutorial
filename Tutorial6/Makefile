@@ -1,6 +1,7 @@
 Compiler = clang
 CompilerFlags = -Wall -Wextra -std=c99
 LibraryFlags = -lpthread
+all: q1 q2 q3 q4 q5
 
 q1:
 	$(Compiler) $(CompilerFlags) $(LibraryFlags) A-Question1.c -o q1.exe
@@ -16,8 +17,6 @@ q4:
 
 q5:
 	$(Compiler) $(CompilerFlags) $(LibraryFlags) A-Question5.c -o q5.exe
-
-all: q1 q2 q3 q4 q5
 
 clean:
 	rm -f *.exe
