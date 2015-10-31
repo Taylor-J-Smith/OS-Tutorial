@@ -15,9 +15,9 @@
 ##Application Questions
 
 1. 
-2. 
+2. **DONE**
 3. **DONE**
-4. 
+4. **DONE**
 5. **DONE**
 
 
