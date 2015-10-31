@@ -28,6 +28,10 @@ int main(void)
 
     int line = 0; //holds the current value read from file
     FILE *numbers_file = fopen(filename,"r");
+    if(numbers_file == NULL){
+      printf("Error opening file\n");
+      exit(1);
+    }
     int numbers_array[NUM_AMOUNT] = {0}; //holds the numbers read from the file
     pthread_t workers[NUM_AMOUNT]; //holds all the threads started
     //iterate thorugh the file and start a thread factorial for each read number
@@ -48,6 +52,10 @@ int main(void)
 
     //total_sum contains the cumulated sum of all the factorials from the threads
     FILE *sum_file = fopen("sum.txt","w");
+    if(sum_file == NULL){
+      printf("Error opening file\n");
+      exit(1);
+    }
     fprintf(sum_file,"%d",total_sum);
     fclose(sum_file);//close the file
     
@@ -57,6 +65,10 @@ int main(void)
     wait(NULL);//wait for child to finish
     printf("parent process:\n");
     FILE *sum_file = fopen("sum.txt","r"); //open the sum file for reading
+    if(sum_file == NULL){
+      printf("Error opening file\n");
+      exit(1);
+    }
     int get_total_sum = 0;
     fscanf(sum_file, "%d", &get_total_sum);
     printf("[Parent] The total Sum is: %d\n",get_total_sum);
@@ -78,6 +90,10 @@ void save_numbers(char filename[]){
 
   //open the file for append
   numbers_file = fopen(filename,"a");
+  if(numbers_file == NULL){
+    printf("Error opening file\n");
+    exit(1);
+  }
   //FILE *numbers_file = fopen(filename,"a");
   
   printf("Enter Five numbers (<input> followed by enter)\n");
@@ -113,7 +129,6 @@ void *factorial(void *arg){
   printf("[Thread] factorial of \"%d\" is \"%d\" ",fact,result_fact);
   printf("and total Sum is \"%d\"\n",total_sum);
   sem_post(&sem);
-
 }
 
 
