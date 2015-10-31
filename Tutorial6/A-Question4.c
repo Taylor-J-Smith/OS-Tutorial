@@ -1,9 +1,10 @@
+#define _XOPEN_SOURCE 700 // required for barriers to work
 #include <stdlib.h>
 #include <stdio.h>
-#include <unistd.h>
 #include <pthread.h>
 #include <time.h>
 #include <string.h>
+#include <semaphore.h>
 
 #define NUMBERS 10
 #define BUFFER_LEN 32
