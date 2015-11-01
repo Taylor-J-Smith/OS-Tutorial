@@ -1,3 +1,4 @@
+**SEE README**
 1. fork() copies the current process, it differs from multi-threading in that it 
 creates a new child process which does not share global variables and requires more 
 overhead when the cpu performs a context switch.
