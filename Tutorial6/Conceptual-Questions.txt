@@ -1,0 +1,13 @@
+1. fork() copies the current process, it differs from multi-threading in that it 
+creates a new child process which does not share global variables and requires more 
+overhead when the cpu performs a context switch.
+
+2. Inter-process communication is communicating between two or more processes, methods 
+of inter-process communication include: sharing data using a file on disk, sending 
+data using sockets, and piping the data to the other process.
+
+3. 
+
+4. 
+
+5. 
