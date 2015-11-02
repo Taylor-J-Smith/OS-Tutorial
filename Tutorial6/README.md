@@ -63,7 +63,7 @@ When the value of the semaphore is positive (> 0) then that indicates that the s
 	
 ##Application Questions
 
-1. 
+1. **DONE**
 2. **DONE**
 3. **DONE**
 4. **DONE**
