@@ -25,40 +25,40 @@ When the value of the semaphore is positive (> 0) then that indicates that the s
 
 ##<semaphore.h>
 
-	int    sem_close(sem_t *);
-	//
+	int    sem_close(sem_t *sem);
+	//used to indicate that the calling process is finished using the named semaphore indicated by sem.
 ------------------
 	
-	int    sem_destroy(sem_t *);
-	//
+	int    sem_destroy(sem_t *sem);
+	//used to destory the unnamed semaphore indicated by sem.
 ------------------
 		
-	int    sem_getvalue(sem_t *, int *);
-	//
+	int    sem_getvalue(sem_t *sem, int *sval());
+	//updates the location referenced by the sval argument to have the value of the semaphore referenced by sem without affecting the state of the semaphore.
 ------------------
 	
-	int    sem_init(sem_t *, int, unsigned int);
-	//
+	int    sem_init(sem_t *sem, int pshared, unsigned int value);
+	//used to initialize the semaphore with the argument value. If the argument pshared is a non-zero value then the semaphore is shared between processes.
 ------------------
 
-	sem_t *sem_open(const char *, int, ...);
-	//
+	sem_t *sem_open(const char *name, int oflag, ...);
+	//establishes a connection between a name semaphore and a process.
 ------------------
 	
-	int    sem_post(sem_t *);
-	//
+	int    sem_post(sem_t *sem);
+	//unlocks the semaphore referenced by sem by performing a semaphore unlock operation on that semaphore.
 ------------------
 	
-	int    sem_trywait(sem_t *);
-	//
+	int    sem_trywait(sem_t *sem);
+	//locks the semaphore referenced by sem by performing a semaphore lock operation on that semaphore.
 ------------------
 	
-	int    sem_unlink(const char *);
-	//
+	int    sem_unlink(const char *name);
+	//removes the semaphore named by the name argument. 
 ------------------
 	
-	int    sem_wait(sem_t *);
-	//
+	int    sem_wait(sem_t *sem);
+	//locks the semaphore sem by preforming a semaphore lock operation on that semaphore.
 ------------------
 	
 ##Application Questions
