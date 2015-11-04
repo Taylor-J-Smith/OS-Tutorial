@@ -1,6 +1,8 @@
+#Tutorial 6
+
 ##Conceptual Questions 
 **1. What is​ fork()​, how does it differ from multi­threading (pthreads)?**
-A fork creates a completely new process that looks nearly identical to the parent process that called fork() but with its own memory and its own unique process ID. All the commands are copied to the child process but other than that without any communication they share nothing in common. Threads on the other hand only have separate registers and stacks, but share the code, data and file. Creating a thread is much more lightweight and doesn't have as much memory that needs to be copied. fork() copies the current process, it differs from multi-threading in that it creates a new child process which does not share global variables and requires more overhead when the cpu performs a context switch.
+A fork creates a completely new process that looks nearly identical to the parent process that called fork() but with its own memory and its own unique process ID. All the commands are copied to the child process but other than that without any communication they share nothing in common. Threads on the other hand only have separate registers and stacks, but share the code, data and file. Creating a thread is much more lightweight and doesn't have as much memory that needs to be copied.
 
 **2. What is inter­process communication (​IPC​)? Describe methods of performing IPC.**
 Since the different processes don't share memory they must communicate with one another via different methods. Inter process communications involve different methods and protocols in order to send information/data from one process to another. Some of methods used to perform IPC include:
@@ -58,3 +60,37 @@ When the value of the semaphore is positive (> 0) then that indicates that the s
 	int    sem_wait(sem_t *sem);
 	//locks the semaphore sem by preforming a semaphore lock operation on that semaphore.
 ------------------
+	
+##Application Questions
+
+1. **DONE**
+2. **DONE**
+3. **DONE**
+4. **DONE**
+5. **DONE**
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
