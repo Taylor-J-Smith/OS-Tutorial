@@ -39,28 +39,77 @@ int main(void){
 	// fill queue
 	readFile();
 
-	delete_name("emacs");
-	//	delete_pid(12235);
-
 	//execute the processes with priority 0
 	queue *temp = first;
 	while(temp!=NULL){
 	  if (temp->data.priority == 0){
-	    //delete_name(temp->data.name);
-	    printf("deleting: %s\n",temp->data.name);
+	    pid_t pid = fork();
+	    if (pid == 0){
+	      //child process
+	      puts("child:");
+	      execlp("./process",NULL);
+	      exit(0);
+	    }else if (pid > 0){
+	      //parent process
+	      temp->data.pid = pid; //set the right pid
+	      printf("[parent] waiting %d seconds...:\n",temp->data.runtime);
+	      sleep(temp->data.runtime); //sleep for the needed runtime
+	      puts("[parent] Sending SIGINT...");
+	      kill(pid,SIGINT);
+	      waitpid(pid,0,0);
+	      //print process to be deleted
+	      printf("[parent] Deleting process: %s, priority: %d, pid: %d, runtime: %d\n",
+		     temp->data.name,temp->data.priority,temp->data.pid,temp->data.runtime);
+	      //delete process from queue
+	      queue *deleted = temp;
+	      temp = temp->next;
+	      delete_name(deleted->data.name);
+	    }else {
+	      //fork failed
+	    }
+	  }else{
+	    temp = temp->next; 
 	  }
+	}
+
+	//running the remaining processes
+	temp = first;
+	while(temp!=NULL){
+	  pid_t pid = fork();
+	  if (pid == 0){
+	    //child process
+	    puts("child:");
+	    execlp("./process",NULL);
+	    exit(0);
+	  }else if (pid > 0){
+	    //parent process
+	    temp->data.pid = pid; //set the right pid
+	    printf("[parent] waiting %d seconds...:\n",temp->data.runtime);
+	    sleep(temp->data.runtime); //sleep for the needed runtime
+	    puts("[parent] Sending SIGINT...");
+	    kill(pid,SIGINT);
+	    waitpid(pid,0,0);
+	    //print process to be deleted
+	    printf("[parent] Deleting process: %s, priority: %d, pid: %d, runtime: %d\n",
+		   temp->data.name,temp->data.priority,temp->data.pid,temp->data.runtime);
+	    //delete process from queue
+	    queue *deleted = temp;
+	    temp = temp->next;
+	    //	    pop();
+	    delete_name(deleted->data.name);
+	  }else {
+	    //fork failed
+	  }	  
+	}
+	
+	//print all
+	temp = first;
+	while(temp!=NULL){
+	  printf("name: %s, priority: %d, pid: %d, runtime: %d\n",
+		 temp->data.name,temp->data.priority,temp->data.pid,temp->data.runtime);
 	  temp = temp->next;
 	}
 	free(temp);
-	
-	//print all
-	queue *temp2 = first;
-	while(temp2!=NULL){
-	  printf("name: %s, priority: %d, pid: %d, runtime: %d\n",
-		 temp2->data.name,temp2->data.priority,temp2->data.pid,temp2->data.runtime);
-	  temp2 = temp2->next;
-	}
-	free(temp2);
 }
 
 void push(proc process){
