@@ -92,16 +92,14 @@ int main(void){
 	    //print process to be deleted
 	    printf("[parent] Deleting process: %s, priority: %d, pid: %d, runtime: %d\n",
 		   temp->data.name,temp->data.priority,temp->data.pid,temp->data.runtime);
-	    //delete process from queue
-	    queue *deleted = temp;
-	    temp = temp->next;
-	    //	    pop();
-	    delete_name(deleted->data.name);
+	    pop();	    //pop process from queue
+	    temp = first;
 	  }else {
 	    //fork failed
 	  }	  
 	}
-	
+
+	/*
 	//print all
 	temp = first;
 	while(temp!=NULL){
@@ -109,7 +107,9 @@ int main(void){
 		 temp->data.name,temp->data.priority,temp->data.pid,temp->data.runtime);
 	  temp = temp->next;
 	}
+	*/
 	free(temp);
+	return 0;
 }
 
 void push(proc process){
