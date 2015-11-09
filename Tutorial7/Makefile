@@ -23,8 +23,4 @@ q5:
 
 clean:
 	rm -f *.exe
-	rm numbers.txt
-	rm sum.txt
-	rm child1.txt
-	rm child2.txt
 	rm *~
