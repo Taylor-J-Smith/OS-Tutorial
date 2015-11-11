@@ -42,11 +42,13 @@ int main(){
   p1->priority = 0;
   p1->pid = 33;
   p1->runtime = 5;
-
   //  push(&priority,*p1);*/
-
-  readFile(&priority);
+  
+  readFile(&priority,0);//loads all processes with priority == 0
+  readFile(&secondary,1);//loads all processes with priority != 0
   print_list(priority);
+  puts("----");
+  print_list(secondary);
   return 0;
 }
 
@@ -81,14 +83,30 @@ void print_list(node_t *head){
   }
   
   while(current != NULL){
-  printf("process: %s, priority: %d, pid: %d, runtime: %d\n",
-    current->val.name,current->val.priority,current->val.pid,current->val.runtime);
-  //    printf("%d\n",current->val);
+  //temp
+  /*  char name[CHAR_LENGTH];
+  int priority;
+  int pid;
+  int address;
+  int memory;
+  int runtime;
+  bool suspended;*/
+  //end temp
+  printf("process: %s, priority: %d, pid: %d, memory: %d, runtime: %d\n",
+    current->val.name,
+    current->val.priority,
+    current->val.pid,
+    current->val.memory,
+    current->val.runtime);
+  //iterate to next item
     current = current->next;
   }
 }
 
-void readFile(node_t** head){
+  void readFile(node_t** head, int priority_filter){
+  //if priority_filter = -1 -> load all processes
+  //if priority_filter = 0  -> load processes with priority = 0
+  //if priority_filter = 1  -> load all processes with priority != 0
   char buffer[CHAR_LENGTH] = {0};
   FILE *f1 = fopen("processes_q5.txt","r");
   if (f1 == NULL){
@@ -100,15 +118,20 @@ void readFile(node_t** head){
     fgets(buffer,CHAR_LENGTH, f1);
     proc *temp_proc = (proc *)  malloc(sizeof(proc));
     char **tokenized = tokenize2(buffer,", ");
-    strcpy(temp_proc->name, tokenized[0]);
-    // assign integer values from file		
-    temp_proc->priority = atoi(tokenized[1]);
-    temp_proc->pid = 0;
-    temp_proc->memory = atoi(tokenized[2]);
-    temp_proc->runtime = atoi(tokenized[3]);
+    //priority is in tokenized[1]
+  if ((atoi(tokenized[1]) == 0 && priority_filter == 0)|| //only priority == 0
+  (atoi(tokenized[1]) != 0 && priority_filter == 1)|| //only priority != 0
+  (priority_filter == -1)) //all
+  {
+      strcpy(temp_proc->name, tokenized[0]); //name
+      temp_proc->priority = atoi(tokenized[1]);//priority
+      temp_proc->pid = 0;//pid
+      temp_proc->memory = atoi(tokenized[2]); //memory
+      temp_proc->runtime = atoi(tokenized[3]);//runtime
 
-    //push process onto queue
-    push (head,*temp_proc);
+      //push process onto queue
+      push (head,*temp_proc); 
+    }
   }
   fclose(f1);
 }
