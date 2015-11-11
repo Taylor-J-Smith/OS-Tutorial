@@ -2,7 +2,7 @@
 
 ##Application Questions
 
-1. WIP - Jeremy
+1. Done, but need to display the tree in a nice format.
 2. **OPEN**
 
 ##Conceptual Questions
