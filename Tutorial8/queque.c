@@ -64,12 +64,25 @@ int main(){
       exit(0);
     }else if (pid >0){
       //parent process
-      temp->val.pid = pid; 
+      temp->val.pid = pid; //set the pid of the process
+      //allocate the required memory
+      int i = 0;
+      temp->val.address = i;
+      for (i = 0; i < temp->val.memory; i++){
+	avail_mem[i] = 1;
+      }
+      printf("[parent] Executing process: %s, priority: %d, pid: %d, memory: %d, runtime: %d\n",
+	     temp->val.name,temp->val.priority,temp->val.pid,temp->val.memory, temp->val.runtime);
       printf("[parent] waiting %d seconds...:\n",temp->val.runtime);
       sleep(temp->val.runtime); //sleep for the needed runtime
       puts("[parent] Sending SIGINT...");
       kill(pid,SIGINT);
       waitpid(pid,0,0);
+      //free the allocated memory
+      printf("[parent] freeing: %dMB of memory\n",temp->val.memory);
+      for (int j = 0; j < temp->val.memory; j++){
+	avail_mem[j] = 0;
+      }
       //print process to be deleted
       printf("[parent] Deleting process: %s, priority: %d, pid: %d, runtime: %d\n",
 	     temp->val.name,temp->val.priority,temp->val.pid,temp->val.runtime);
