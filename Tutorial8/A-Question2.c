@@ -7,6 +7,18 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 
+#define CHAR_LENGTH 256
+
+typedef struct {
+  char name[CHAR_LENGTH];
+  int priority;
+  int pid;
+  int address;
+  int memory;
+  int runtime;
+  bool suspended;
+} proc;
+
 int main(void)
 {
 
