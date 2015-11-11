@@ -24,4 +24,5 @@ typedef struct tree{
 
 int main(void){
 
+	return 0;
 }

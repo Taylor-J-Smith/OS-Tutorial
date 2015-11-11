@@ -1,0 +1,22 @@
+#Tutorial 7 - Wed Nov 11
+
+##Application Questions
+
+1. WIP - Jeremy
+2. **OPEN**
+
+
+
+##Conceptual Questions
+
+**1. What is an Abstract Data Type (ADT)?**
+
+**2. Explain the difference between a queue (FIFO) and a stack (LIFO).**
+
+**3. Name and briefly explain three types of data structures.**
+
+**4. Explain what a binary tree is, what are some common operations of a binary
+tree?**
+
+**5. Explain what a hash table (dictionary) is, what are common operations of a hash
+table?**

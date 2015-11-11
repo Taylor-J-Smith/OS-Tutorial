@@ -7,6 +7,9 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 
-int main(void){
 
+int main(void)
+{
+
+	return 0;
 }
