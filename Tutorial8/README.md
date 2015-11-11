@@ -11,7 +11,7 @@
 
 **1. What is an Abstract Data Type (ADT)?**
 
-2. Explain the difference between a queue (FIFO) and a stack (LIFO).**
+**2. Explain the difference between a queue (FIFO) and a stack (LIFO).**
 
 **3. Name and briefly explain three types of data structures.**
 
