@@ -8,53 +8,71 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 
+#define CHAR_LENGTH 256
+
+typedef struct {
+  char name[CHAR_LENGTH];
+  int priority;
+  int pid;
+  int address;
+  int memory;
+  int runtime;
+  bool suspended;
+} proc;
 
 typedef struct node{
-  int val;
+  proc val;
   struct node* next;
 }node_t;
-
- 
+  
+char** tokenize2(char *input, char *delim); 
 void print_list(node_t *head);
-void push(node_t** head, int val); //returns the new head
-int pop(node_t **head);
+void push(node_t** head, proc val); //returns the new head
+void pop(node_t **head);
   
 int main(){
-  node_t *head = NULL;
-  push(&head,1);
-  push(&head,2);
-  push(&head,3);
+  node_t *priority = NULL; //queue 1
+  node_t *secondary = NULL; //queue 2
 
-  pop(&head);
-  pop(&head);
-  pop(&head);
-  pop(&head);
-  print_list(head);
-  
+  proc *p1 = (proc *)malloc(sizeof(proc));
+  strcpy(p1->name,"p1");
+  p1->priority = 0;
+  p1->pid = 33;
+  p1->runtime = 5;
 
+  proc *p2 = (proc *)malloc(sizeof(proc));
+  strcpy(p2->name,"p2");
+  p2->priority = 0;
+  p2->pid = 33;
+  p2->runtime = 6;
+
+  push(&priority,*p1);
+  push(&priority,*p2);
+  print_list(priority);
   return 0;
 }
 
-int pop(node_t **head){
-  int popped_val = -1;
+void pop(node_t **head){
   node_t* next_node = NULL;
 
   if (*head == NULL){
-    return -1;
+    printf("Error: Pop on <empty>");
+    return;
   }
 
   next_node = (*head)->next;
-  popped_val = (*head)->val;
+  proc popped_val = (*head)->val;
   free(*head);
   *head = next_node;
-
-  return popped_val;
+  //  return popped_val;
 }
 
-void push(node_t** head, int val){
+void push(node_t** head, proc val){
   node_t* newNode = malloc(sizeof(node_t));
   newNode->val = val;
+  puts("checkpoint1");
   newNode->next = *head;
+  puts("checkpoint2");
   *head = newNode;
 }
 
@@ -67,12 +85,55 @@ void print_list(node_t *head){
   }
   
   while(current != NULL){
-    printf("%d\n",current->val);
+  printf("process: %s, priority: %d, pid: %d, runtime: %d\n",
+    current->val.name,current->val.priority,current->val.pid,current->val.runtime);
+  //    printf("%d\n",current->val);
     current = current->next;
   }
 }
 
+char** tokenize2(char *input, char *delim){
+  //takes an input string with some delimiter and returns an array
+  //with all the tokens split by the provided delimiter
 
+  //Sample usage:
+  //char buffer[] = "a b c";
+  //char **user_output;
+  //user_output = tokenize(buffer, " ");
+
+  char** tokens = 0;
+  size_t num_elements = 0;
+  size_t tokens_index  = 0; //keep tracks of the  tokens offset when adding them
+  char* input_cpy = input;
+  char *input_cpy2 = malloc(1 + strlen(input)); //used with strtok
+  if (input_cpy2){
+    strcpy(input_cpy2, input);
+  }else{
+    printf("error copying input\n");
+  }
+
+  //iterate through the intput and count # of delims
+  while (*input_cpy != NULL){
+    if (*delim == *input_cpy){
+      num_elements++;
+    }input_cpy++;
+  }
+
+  num_elements++; //for last object
+  num_elements++; //for null terminating value
+
+  //create enough memory for all the elements
+  tokens = malloc(sizeof(char*) * num_elements);
+  char* token = strtok(input_cpy2, delim);
+  while (token){
+    //store the token in the tokens array
+    *(tokens + tokens_index++) = strdup(token);   //strdup duplicates the string
+    token = strtok(0, delim); //next token
+  }
+  //finally add null value at the end
+  *(tokens + tokens_index) = 0;
+  return tokens;
+}
 
 
 
