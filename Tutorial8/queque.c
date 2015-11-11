@@ -49,6 +49,38 @@ int main(){
   print_list(priority);
   puts("----");
   print_list(secondary);
+
+  //create an array of available memory
+  int avail_mem[1024] = {0};
+
+  //iterate through all priority processes
+  node_t *temp = priority;
+  while (temp != NULL){
+    pid_t pid = fork();
+    if (pid == 0){
+      //child process
+      puts("child:");
+      execlp("./process",NULL);
+      exit(0);
+    }else if (pid >0){
+      //parent process
+      temp->val.pid = pid; 
+      printf("[parent] waiting %d seconds...:\n",temp->val.runtime);
+      sleep(temp->val.runtime); //sleep for the needed runtime
+      puts("[parent] Sending SIGINT...");
+      kill(pid,SIGINT);
+      waitpid(pid,0,0);
+      //print process to be deleted
+      printf("[parent] Deleting process: %s, priority: %d, pid: %d, runtime: %d\n",
+	     temp->val.name,temp->val.priority,temp->val.pid,temp->val.runtime);
+      //delete process from queue
+      temp = temp->next;
+      pop(&priority);
+    }else{
+      //fork failed
+    }
+  }
+  
   return 0;
 }
 
@@ -92,10 +124,11 @@ void print_list(node_t *head){
   int runtime;
   bool suspended;*/
   //end temp
-  printf("process: %s, priority: %d, pid: %d, memory: %d, runtime: %d\n",
+  printf("process: %s, priority: %d, pid: %d, address: %d, memory: %d, runtime: %d\n",
     current->val.name,
     current->val.priority,
     current->val.pid,
+    current->val.address,
     current->val.memory,
     current->val.runtime);
   //iterate to next item
@@ -126,6 +159,7 @@ void print_list(node_t *head){
       strcpy(temp_proc->name, tokenized[0]); //name
       temp_proc->priority = atoi(tokenized[1]);//priority
       temp_proc->pid = 0;//pid
+      temp_proc->address = 0; //address
       temp_proc->memory = atoi(tokenized[2]); //memory
       temp_proc->runtime = atoi(tokenized[3]);//runtime
 
