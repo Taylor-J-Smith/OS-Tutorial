@@ -37,20 +37,15 @@ int main(){
   node_t *priority = NULL; //queue 1
   node_t *secondary = NULL; //queue 2
 
-  proc *p1 = (proc *)malloc(sizeof(proc));
+  /*  proc *p1 = (proc *)malloc(sizeof(proc));
   strcpy(p1->name,"p1");
   p1->priority = 0;
   p1->pid = 33;
   p1->runtime = 5;
 
-  proc *p2 = (proc *)malloc(sizeof(proc));
-  strcpy(p2->name,"p2");
-  p2->priority = 0;
-  p2->pid = 33;
-  p2->runtime = 6;
+  //  push(&priority,*p1);*/
 
-  push(&priority,*p1);
-  push(&priority,*p2);
+  readFile(&priority);
   print_list(priority);
   return 0;
 }
@@ -73,9 +68,7 @@ void pop(node_t **head){
 void push(node_t** head, proc val){
   node_t* newNode = malloc(sizeof(node_t));
   newNode->val = val;
-  puts("checkpoint1");
   newNode->next = *head;
-  puts("checkpoint2");
   *head = newNode;
 }
 
