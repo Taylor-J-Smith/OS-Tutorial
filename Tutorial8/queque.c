@@ -20,15 +20,18 @@ typedef struct {
   bool suspended;
 } proc;
 
+
 typedef struct node{
   proc val;
   struct node* next;
 }node_t;
-  
+
+
 char** tokenize2(char *input, char *delim); 
 void print_list(node_t *head);
 void push(node_t** head, proc val); //returns the new head
 void pop(node_t **head);
+void readFile();
   
 int main(){
   node_t *priority = NULL; //queue 1
@@ -91,6 +94,33 @@ void print_list(node_t *head){
     current = current->next;
   }
 }
+
+void readFile(node_t** head){
+  char buffer[CHAR_LENGTH] = {0};
+  FILE *f1 = fopen("processes_q5.txt","r");
+  if (f1 == NULL){
+    perror("Error opening file\n");
+    return;    
+  }
+
+  for (int i = 0; i < 10; i++){
+    fgets(buffer,CHAR_LENGTH, f1);
+    proc *temp_proc = (proc *)  malloc(sizeof(proc));
+    char **tokenized = tokenize2(buffer,", ");
+    strcpy(temp_proc->name, tokenized[0]);
+    // assign integer values from file		
+    temp_proc->priority = atoi(tokenized[1]);
+    temp_proc->pid = 0;
+    temp_proc->memory = atoi(tokenized[2]);
+    temp_proc->runtime = atoi(tokenized[3]);
+
+    //push process onto queue
+    push (head,*temp_proc);
+  }
+  fclose(f1);
+}
+
+  
 
 char** tokenize2(char *input, char *delim){
   //takes an input string with some delimiter and returns an array
