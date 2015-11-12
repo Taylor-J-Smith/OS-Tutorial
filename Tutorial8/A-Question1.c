@@ -75,12 +75,14 @@ int insert(node_t *tree, proc *new_data){
 
 void print_tree(node_t *tree){
 	if (tree != NULL){
-		printf("tree:%s\n", tree->data.name);
+		printf("node:%s\n", tree->data.name);
 		if (tree->left != NULL){
+			printf("left child of %s->:\n",tree->data.name);
 			print_tree(tree->left);
 		}
 
 		if(tree->right != NULL){
+			printf("right child of %s->:\n",tree->data.name);
 			print_tree(tree->right);
 		}
 	}
