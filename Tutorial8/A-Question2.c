@@ -8,8 +8,6 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 
-char** tokenize2(char *input, char *delim);
-
 #define CHAR_LENGTH 256
 
 typedef struct {
@@ -22,232 +20,212 @@ typedef struct {
   bool suspended;
 } proc;
 
+
 typedef struct node{
-  proc data; // instance of proc struct
-  struct node *next; // next node in queue
-} queue;
+  proc val;
+  struct node* next;
+}node_t;
 
-queue *first = NULL;
-queue *last = NULL;
 
-void push(proc process);
-
-proc pop();
-
-proc delete_name(char *name);
-
-proc delete_pid(int pid);
-
+char** tokenize2(char *input, char *delim); 
+void print_list(node_t *head);
+void push(node_t** head, proc val); //returns the new head
+proc pop(node_t **head);
 void readFile();
+  
+int main(){
+  node_t *test = NULL; //temp
+  node_t *priority = NULL; //queue 1
+  node_t *secondary = NULL; //queue 2
+  /*
+  //start temp
+  proc *p1 = (proc *)malloc(sizeof(proc));
+  strcpy(p1->name,"p1");
+  p1->priority = 0;
+  p1->pid = 33;
+  p1->runtime = 5;
+  push(&test,*p1);
 
-int main(void){
-  // fill queue
-  readFile();
+  proc p2 = pop(&test);
+  printf("%s\n",p2.name);
+  push(&test,p2);
+  print_list(test);
+  pop(&test);
+  return 0;
+  //end temp
+  */
+  
+  readFile(&priority,0);//loads all processes with priority == 0
+  readFile(&secondary,1);//loads all processes with priority != 0
+  //  print_list(priority);
+  //  puts("----");
+  //  print_list(secondary);
+  
+  //create an array of available memory
+  int avail_mem[1024] = {0};
 
-  //execute the processes with priority 0
-  queue *temp = first;
-  while(temp!=NULL){
-    if (temp->data.priority == 0){
-      pid_t pid = fork();
-      if (pid == 0){
-	//child process
-	puts("child:");
-	execlp("./process",NULL);
-	exit(0);
-      }else if (pid > 0){
-	//parent process
-	temp->data.pid = pid; //set the right pid
-	printf("[parent] waiting %d seconds...:\n",temp->data.runtime);
-	sleep(temp->data.runtime); //sleep for the needed runtime
-	puts("[parent] Sending SIGINT...");
-	kill(pid,SIGINT);
-	waitpid(pid,0,0);
-	//print process to be deleted
-	printf("[parent] Deleting process: %s, priority: %d, pid: %d, runtime: %d\n",
-	       temp->data.name,temp->data.priority,temp->data.pid,temp->data.runtime);
-	//delete process from queue
-	queue *deleted = temp;
-	temp = temp->next;
-	delete_name(deleted->data.name);
-      }else {
-	//fork failed
-      }
-    }else{
-      temp = temp->next; 
-    }
-  }
-
-  //running the remaining processes
-  temp = first;
-  while(temp!=NULL){
+  //iterate through all priority processes
+  node_t *temp = priority;
+  while (temp != NULL){
     pid_t pid = fork();
     if (pid == 0){
       //child process
       puts("child:");
       execlp("./process",NULL);
       exit(0);
-    }else if (pid > 0){
+    }else if (pid >0){
       //parent process
-      temp->data.pid = pid; //set the right pid
-      printf("[parent] waiting %d seconds...:\n",temp->data.runtime);
-      sleep(temp->data.runtime); //sleep for the needed runtime
+      temp->val.pid = pid; //set the pid of the process
+      //allocate the required memory
+      int i = 0;
+      temp->val.address = i;
+      for (i = 0; i < temp->val.memory; i++){
+	avail_mem[i] = 1;
+      }
+      puts("--------------------------------------------");
+      printf("[parent] Executing process: %s, priority: %d, pid: %d, memory: %d, runtime: %d\n",
+	     temp->val.name,temp->val.priority,temp->val.pid,temp->val.memory, temp->val.runtime);
+      printf("[parent] waiting %d seconds...:\n",temp->val.runtime);
+      sleep(temp->val.runtime); //sleep for the needed runtime
       puts("[parent] Sending SIGINT...");
       kill(pid,SIGINT);
       waitpid(pid,0,0);
+      //free the allocated memory
+      printf("[parent] Current available memory: %dMB\n",freeMemoryAmount(avail_mem,1024));
+      printf("[parent] Freeing: %dMB of memory\n",temp->val.memory);
+      for (int j = 0; j < temp->val.memory; j++){
+	avail_mem[j] = 0;
+      }
       //print process to be deleted
       printf("[parent] Deleting process: %s, priority: %d, pid: %d, runtime: %d\n",
-	     temp->data.name,temp->data.priority,temp->data.pid,temp->data.runtime);
-      pop();	    //pop process from queue
-      temp = first;
-    }else {
+	     temp->val.name,temp->val.priority,temp->val.pid,temp->val.runtime);
+      //delete process from queue
+      temp = temp->next;
+      pop(&priority);
+    }else{
       //fork failed
-    }	  
+    }
   }
-
-  /*
-  //print all
-  temp = first;
-  while(temp!=NULL){
-  printf("name: %s, priority: %d, pid: %d, runtime: %d\n",
-  temp->data.name,temp->data.priority,temp->data.pid,temp->data.runtime);
-  temp = temp->next;
-  }
-  */
-  free(temp);
   return 0;
-}
-
-void push(proc process){
-  // create new element of queue
-  queue *newq = (queue *) malloc(sizeof(queue));
-  newq->data = process;
-  newq->next = NULL;
-
-  // empty queue
-  if(last!=NULL){
-    last->next = newq;
-  }
-  // increment last to new last process
-  last = newq;
-}
-
-proc pop(){
-  proc popped_process;
-  queue *temp;
-
-  if(first!=NULL){
-    // assign first process in queue to popped process
-    popped_process = first->data;
-    temp = first;
-    // assign first to next node in queue
-    first = first->next;
-    free(temp);
-  }
-
-  return popped_process;
-}
-
-proc delete_name(char *name){
-  proc deleted_process;
-  queue *current = first;
-  queue *temp = first;
-
-  while(current!=NULL){
-    // delete where name equals current->data.name
-    if(strcmp(name,current->data.name)==0){
-      if(current==first){
-	// found at head of queue, assign first to next node in queue
-	first = current->next;
-      } else {
-	// found after head of queue, assign previous value's next node 
-	// to the node after the current node
-	temp->next = current->next;
+  /*  
+  //iterate through all the secondary processes
+  temp = secondary;
+  int memoryIndex = 0;
+  while (secondary != NULL){ //while items in Queue
+    proc popped_proc = pop(&secondary);//pop the current process
+    //check if there is enough memory for current process
+    if (popped_proc.memory <= freeMemoryAmount(avail_mem,1024)){
+      //continue
+      //alocate the needed memory
+      for (int i = 0; i < popped_proc.memory; i++){
+	avail_mem[i+memoryIndex] = 1;
       }
-
-      // retrieve process at current node
-      temp = current;
-      deleted_process = temp->data;
-
-      free(temp);
-
-      return deleted_process;
+    }else{
+      //not enough memory, push back on the queue
+      push(&secondary, popped_proc);
     }
-    if(current!=first){
-      temp = current;
-    }
-    current = current->next;
-  }
-
-  return deleted_process;
+  }      
+  return 0;*/
 }
 
-proc delete_pid(int pid){
-  proc deleted_process;
-  queue *current = first;
-  queue *temp = first;
-
-  while(current!=NULL){
-    // delete where pid equals current->data.pid
-    if(pid==current->data.pid){
-      if(current==first){
-	// found at head of queue, assign first to next node in queue
-	first = current->next;
-      } else {
-	// found after head of queue, assign previous value's next node 
-	// to the node after the current node
-	temp->next = current->next;
-      }
-
-      // retrieve process at current node
-      temp = current;
-      deleted_process = temp->data;
-
-      free(temp);
-
-      return deleted_process;
+int freeMemoryAmount(int memory[],int length){
+  int freeMemory = 0;
+  for (int i = 0; i < length; i++){
+    if (memory[i] == 0){
+      freeMemory++;
     }
-    if(current!=first){
-      temp = current;
-    }
-    current = current->next;
   }
-
-  return deleted_process;
+  return freeMemory;
 }
 
-void readFile(){
-  proc *process = (proc *) malloc(sizeof(proc));
-  char line[256] = {0};
-  FILE *fp = fopen("processes_q5.txt","r");
+proc pop(node_t **head){
+  node_t* next_node = NULL;
+  proc popped_val;
 
-  // error checking
-  if(fp==NULL){
-    perror("Error opening file.\n");
+  //  if (*head == NULL){
+  //    printf("Error: Pop on <empty>");
+  //  }else{
+  if (*head != NULL){  
+    next_node = (*head)->next;
+    popped_val = (*head)->val;
+    free(*head);
+    *head = next_node;
+  }
+  return popped_val;
+}
+
+void push(node_t** head, proc val){
+  node_t* newNode = malloc(sizeof(node_t));
+  newNode->val = val;
+  newNode->next = *head;
+  *head = newNode;
+}
+
+void print_list(node_t *head){
+  node_t *current = head;
+  //check if list is empty
+  if(head == NULL){
+    printf("<empty>\n");
     return;
   }
+  
+  while(current != NULL){
+  //temp
+  /*  char name[CHAR_LENGTH];
+  int priority;
+  int pid;
+  int address;
+  int memory;
+  int runtime;
+  bool suspended;*/
+  //end temp
+  printf("process: %s, priority: %d, pid: %d, address: %d, memory: %d, runtime: %d\n",
+    current->val.name,
+    current->val.priority,
+    current->val.pid,
+    current->val.address,
+    current->val.memory,
+    current->val.runtime);
+  //iterate to next item
+    current = current->next;
+  }
+}
 
-  for(int i=0; i<10; i++){
-    fgets(line,256,fp);
-    for(int j=0;j<256;j++){process->name[j] = 0;} // zero char array
-    char **tokenized = tokenize2(line,", ");
-    strcpy(process->name, tokenized[0]);
-    // assign integer values from file		
-    process->priority = atoi(tokenized[1]);
-    process->pid = 0;
-    process->memory = atoi(tokenized[2]);
-    process->runtime = atoi(tokenized[3]);
-		
-    // push process onto queue
-    push(*process);
-
-    // if queue contains no processes
-    if(first==NULL){
-      first = last;
-    }
+  void readFile(node_t** head, int priority_filter){
+  //if priority_filter = -1 -> load all processes
+  //if priority_filter = 0  -> load processes with priority = 0
+  //if priority_filter = 1  -> load all processes with priority != 0
+  char buffer[CHAR_LENGTH] = {0};
+  FILE *f1 = fopen("processes_q5.txt","r");
+  if (f1 == NULL){
+    perror("Error opening file\n");
+    return;    
   }
 
-  fclose(fp);
+  for (int i = 0; i < 10; i++){
+    fgets(buffer,CHAR_LENGTH, f1);
+    proc *temp_proc = (proc *)  malloc(sizeof(proc));
+    char **tokenized = tokenize2(buffer,", ");
+    //priority is in tokenized[1]
+  if ((atoi(tokenized[1]) == 0 && priority_filter == 0)|| //only priority == 0
+  (atoi(tokenized[1]) != 0 && priority_filter == 1)|| //only priority != 0
+  (priority_filter == -1)) //all
+  {
+      strcpy(temp_proc->name, tokenized[0]); //name
+      temp_proc->priority = atoi(tokenized[1]);//priority
+      temp_proc->pid = 0;//pid
+      temp_proc->address = 0; //address
+      temp_proc->memory = atoi(tokenized[2]); //memory
+      temp_proc->runtime = atoi(tokenized[3]);//runtime
+
+      //push process onto queue
+      push (head,*temp_proc); 
+    }
+  }
+  fclose(f1);
 }
+
+  
 
 char** tokenize2(char *input, char *delim){
   //takes an input string with some delimiter and returns an array
@@ -291,3 +269,28 @@ char** tokenize2(char *input, char *delim){
   *(tokens + tokens_index) = 0;
   return tokens;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
