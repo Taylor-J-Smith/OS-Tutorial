@@ -26,15 +26,22 @@ typedef struct node{
   struct node* next;
 }node_t;
 
+typedef struct {
+  node_t *head;
+  node_t *tail;
+}queue;
 
 char** tokenize2(char *input, char *delim); 
-void print_list(node_t *head);
-void push(node_t** head, proc val); //returns the new head
+void print_list(queue *q1);
+//void push(node_t** head, proc val); //returns the new head
+void push(queue **q1, proc val);
 proc pop(node_t **head);
 void readFile();
   
 int main(){
-  node_t *test = NULL; //temp
+  queue *test = NULL; //temp
+  test->head = NULL;
+  test->tail = NULL;
   node_t *priority = NULL; //queue 1
   node_t *secondary = NULL; //queue 2
   
@@ -46,12 +53,18 @@ int main(){
   p1->runtime = 5;
   push(&test,*p1);
   
+  proc *p2 = (proc *)malloc(sizeof(proc));
+  strcpy(p2->name,"p2");
+  p2->priority = 0;
+  p2->pid = 33;
+  p2->runtime = 5;
+  push(&test,*p2);
   
-  proc p2 = pop(&test);
-  printf("%s\n",p2.name);
-  push(&test,p2);
+  //proc popped = pop(&test);
+  //printf("%s\n",popped.name);
+  //  push(&test,popped);
   print_list(test);
-  pop(&test);
+  //  pop(&test);
   return 0;
   //end temp
   
@@ -206,17 +219,28 @@ proc pop(node_t **head){
   return popped_val;
 }
 
-void push(node_t** head, proc val){
+void push(queue **q1, proc val){
+  //create a new node
   node_t* newNode = malloc(sizeof(node_t));
   newNode->val = val;
-  newNode->next = *head;
-  *head = newNode;
+  newNode->next = NULL;
+
+  if ((*q1)->head == NULL && (*q1)->tail == NULL){
+    //q1 is empty
+    (*q1)->head = newNode;
+    (*q1)->tail = newNode;
+  }else{
+    (*q1)->tail->next = newNode;
+    (*q1)->tail = newNode;
+  }
 }
 
-void print_list(node_t *head){
-  node_t *current = head;
+void print_list(queue *q1){
+  //  node_t *current = head;
+  node_t *current = q1->head;
+  
   //check if list is empty
-  if(head == NULL){
+  if(q1->head == NULL){
     printf("<empty>\n");
     return;
   }
