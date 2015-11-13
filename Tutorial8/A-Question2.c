@@ -35,16 +35,16 @@ char** tokenize2(char *input, char *delim);
 void print_list(queue *q1);
 //void push(node_t** head, proc val); //returns the new head
 void push(queue **q1, proc val);
-proc pop(node_t **head);
-void readFile();
+proc pop(queue **q1);
+void readFile(queue** p1, int priority_filter);
   
 int main(){
-  queue *test = (queue *)  malloc(sizeof(queue)); //temp
-  test->head = NULL;
-  test->tail = NULL;
-  node_t *priority = NULL; //queue 1
-  node_t *secondary = NULL; //queue 2
-  
+  queue *test = malloc(sizeof(queue)); test->head = NULL; test->tail = NULL;
+  queue *priority = malloc(sizeof(queue)); test->head = NULL; test->tail = NULL;
+  queue *secondary = malloc(sizeof(queue)); test->head = NULL; test->tail = NULL;
+  //  node_t *priority = NULL; //queue 1
+  //  node_t *secondary = NULL; //queue 2
+  /*  
   //start temp
   proc *p1 = (proc *)malloc(sizeof(proc));
   strcpy(p1->name,"p1");
@@ -60,27 +60,25 @@ int main(){
   p2->runtime = 5;
   push(&test,*p2);
   
-  //proc popped = pop(&test);
+  proc popped = pop(&test);
   //printf("%s\n",popped.name);
-  //  push(&test,popped);
+  push(&test,popped);
   print_list(test);
   //  pop(&test);
-  return 0;
   //end temp
-  
+  */
 
-  return 0;
   readFile(&priority,0);//loads all processes with priority == 0
   readFile(&secondary,1);//loads all processes with priority != 0
-  //  print_list(priority);
-  //  puts("----");
-  //  print_list(secondary);
-  
+  //print_list(priority);
+  //puts("----");
+  //print_list(secondary);
+
   //create an array of available memory
   int avail_mem[1024] = {0};
 
   //iterate through all priority processes
-  node_t *temp = priority;
+  node_t *temp = priority->head;
   while (temp != NULL){
     pid_t pid = fork();
     if (pid == 0){
@@ -123,12 +121,14 @@ int main(){
   }
     
   //iterate through all the secondary processes
-  temp = secondary;
+  temp = secondary->head;
   int memory_index = 0;
   while (secondary != NULL){ //while items in Queue
     proc popped_proc = pop(&secondary);//pop the current process
     //check if there is enough memory for current process
-    if (popped_proc.memory <= freeMemoryAmount(avail_mem,1024)){
+    if (popped_proc.memory <= freeMemoryAmount(avail_mem,1024) ||
+	popped_proc.suspended == 1)
+      {
       printf("Memory amount sufficies, free memory: %dMB\n",freeMemoryAmount(avail_mem,1024));
       //continue
       //alocate the needed memory
@@ -203,18 +203,15 @@ int freeMemoryAmount(int memory[],int length){
   return freeMemory;
 }
 
-proc pop(node_t **head){
+proc pop(queue **q1){
   node_t* next_node = NULL;
   proc popped_val;
 
-  //  if (*head == NULL){
-  //    printf("Error: Pop on <empty>");
-  //  }else{
-  if (*head != NULL){  
-    next_node = (*head)->next;
-    popped_val = (*head)->val;
-    free(*head);
-    *head = next_node;
+  if ((*q1)->tail != NULL){  
+    next_node = (*q1)->head->next;
+    popped_val = (*q1)->head->val;
+    free((*q1)->head);
+    (*q1)->head = next_node;
   }
   return popped_val;
 }
@@ -267,7 +264,7 @@ void print_list(queue *q1){
   }
 }
 
-  void readFile(node_t** head, int priority_filter){
+void readFile(queue** p1, int priority_filter){
   //if priority_filter = -1 -> load all processes
   //if priority_filter = 0  -> load processes with priority = 0
   //if priority_filter = 1  -> load all processes with priority != 0
@@ -295,11 +292,12 @@ void print_list(queue *q1){
       temp_proc->runtime = atoi(tokenized[3]);//runtime
 
       //push process onto queue
-      push (head,*temp_proc); 
+      push(p1,*temp_proc);
     }
   }
   fclose(f1);
 }
+
   
 
 char** tokenize2(char *input, char *delim){
