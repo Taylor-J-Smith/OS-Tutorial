@@ -37,7 +37,7 @@ int main(){
   node_t *test = NULL; //temp
   node_t *priority = NULL; //queue 1
   node_t *secondary = NULL; //queue 2
-  /*
+  
   //start temp
   proc *p1 = (proc *)malloc(sizeof(proc));
   strcpy(p1->name,"p1");
@@ -45,7 +45,8 @@ int main(){
   p1->pid = 33;
   p1->runtime = 5;
   push(&test,*p1);
-
+  
+  
   proc p2 = pop(&test);
   printf("%s\n",p2.name);
   push(&test,p2);
@@ -53,8 +54,9 @@ int main(){
   pop(&test);
   return 0;
   //end temp
-  */
   
+
+  return 0;
   readFile(&priority,0);//loads all processes with priority == 0
   readFile(&secondary,1);//loads all processes with priority != 0
   //  print_list(priority);
@@ -106,26 +108,76 @@ int main(){
       //fork failed
     }
   }
-  return 0;
-  /*  
+    
   //iterate through all the secondary processes
   temp = secondary;
-  int memoryIndex = 0;
+  int memory_index = 0;
   while (secondary != NULL){ //while items in Queue
     proc popped_proc = pop(&secondary);//pop the current process
     //check if there is enough memory for current process
     if (popped_proc.memory <= freeMemoryAmount(avail_mem,1024)){
+      printf("Memory amount sufficies, free memory: %dMB\n",freeMemoryAmount(avail_mem,1024));
       //continue
       //alocate the needed memory
+      popped_proc.address = memory_index;  //set the address for the memory block
       for (int i = 0; i < popped_proc.memory; i++){
-	avail_mem[i+memoryIndex] = 1;
+	avail_mem[i+memory_index] = 1;
+      }
+      memory_index += popped_proc.memory;
+      //print process information
+      printf("process: %s, priority: %d, pid: %d, memory: %d, runtime: %d\n",
+	     popped_proc.name,
+	     popped_proc.priority,
+	     popped_proc.pid,
+	     popped_proc.memory,
+	     popped_proc.runtime);
+      pid_t pid = fork();
+      if (pid == 0){
+	//child process
+	puts("child:");
+	execlp("./process",NULL);
+	exit(0);
+      }else if(pid > 0){
+	//parent process
+	if (popped_proc.runtime == 1){
+	  printf("[parent] One second left on Process: %s\n",popped_proc.name);
+	  //process only has 1 second of runtime left
+	  sleep(1);//run for the remaining second
+	  kill(pid,SIGINT); //terminate the process
+	  waitpid(pid,0,0); //wait for the process
+	  //free the avail_mem used by the process
+	  for (int i = popped_proc.memory; i>0; i++){
+	    avail_mem[i] = 0;
+	  }
+	  memory_index -= popped_proc.memory;
+	}else if (popped_proc.suspended == 1){//check if already suspended process
+	  printf("[parent] Resuming process: %s\n",popped_proc.name);
+	  kill(pid,SIGCONT);
+	  sleep(1); //sleep for once second
+	  kill(pid,SIGTSTP);
+	  //add the process back on the queue
+	  push(&secondary, popped_proc);
+	}else{
+	  printf("[parent] Creating new process: %s\n",popped_proc.name);
+	  //new process to be created
+	  popped_proc.pid = pid; //set the process id [TODO: FIX PID]
+	  popped_proc.runtime -= 1; //decrement the runtime
+	  popped_proc.suspended = 1; //update the suspended boolean
+	  sleep(1);
+	  kill(pid,SIGTSTP);
+	  //add the process back on the queue
+	  push(&secondary, popped_proc);
+	}
+	//	waitpid(pid,0,0);
+      }else{
+	//fork error
       }
     }else{
       //not enough memory, push back on the queue
       push(&secondary, popped_proc);
     }
   }      
-  return 0;*/
+  return 0;
 }
 
 int freeMemoryAmount(int memory[],int length){
