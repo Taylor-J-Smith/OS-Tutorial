@@ -39,7 +39,7 @@ proc pop(node_t **head);
 void readFile();
   
 int main(){
-  queue *test = NULL; //temp
+  queue *test = (queue *)  malloc(sizeof(queue)); //temp
   test->head = NULL;
   test->tail = NULL;
   node_t *priority = NULL; //queue 1
@@ -300,7 +300,6 @@ void print_list(queue *q1){
   }
   fclose(f1);
 }
-
   
 
 char** tokenize2(char *input, char *delim){
