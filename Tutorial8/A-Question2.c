@@ -33,18 +33,19 @@ typedef struct {
 
 char** tokenize2(char *input, char *delim); 
 void print_list(queue *q1);
-//void push(node_t** head, proc val); //returns the new head
 void push(queue **q1, proc val);
 proc pop(queue **q1);
 void readFile(queue** p1, int priority_filter);
+void print_proc(proc *p1);
   
 int main(){
   queue *test = malloc(sizeof(queue)); test->head = NULL; test->tail = NULL;
-  queue *priority = malloc(sizeof(queue)); test->head = NULL; test->tail = NULL;
-  queue *secondary = malloc(sizeof(queue)); test->head = NULL; test->tail = NULL;
+  queue *priority = malloc(sizeof(queue)); priority->head = NULL; priority->tail = NULL;
+  queue *secondary = malloc(sizeof(queue)); secondary->head = NULL; secondary->tail = NULL;
   //  node_t *priority = NULL; //queue 1
   //  node_t *secondary = NULL; //queue 2
-  /*  
+
+  /*
   //start temp
   proc *p1 = (proc *)malloc(sizeof(proc));
   strcpy(p1->name,"p1");
@@ -61,19 +62,18 @@ int main(){
   push(&test,*p2);
   
   proc popped = pop(&test);
-  //printf("%s\n",popped.name);
+  //  print_proc(&popped);
   push(&test,popped);
   print_list(test);
   //  pop(&test);
   //end temp
   */
-
+  
   readFile(&priority,0);//loads all processes with priority == 0
   readFile(&secondary,1);//loads all processes with priority != 0
-  //print_list(priority);
-  //puts("----");
+  print_list(priority);
+  puts("----");
   //print_list(secondary);
-
   //create an array of available memory
   int avail_mem[1024] = {0};
 
@@ -95,7 +95,6 @@ int main(){
       for (i = 0; i < temp->val.memory; i++){
 	avail_mem[i] = 1;
       }
-      puts("--------------------------------------------");
       printf("[parent] Executing process: %s, priority: %d, pid: %d, memory: %d, runtime: %d\n",
 	     temp->val.name,temp->val.priority,temp->val.pid,temp->val.memory, temp->val.runtime);
       printf("[parent] waiting %d seconds...:\n",temp->val.runtime);
@@ -115,81 +114,80 @@ int main(){
       //delete process from queue
       temp = temp->next;
       pop(&priority);
+      puts("--------------------------------------------");
     }else{
       //fork failed
     }
   }
-    
+  
   //iterate through all the secondary processes
-  temp = secondary->head;
+  print_list(secondary);
+  puts("--------------------------------------------");
   int memory_index = 0;
-  while (secondary != NULL){ //while items in Queue
-    proc popped_proc = pop(&secondary);//pop the current process
-    //check if there is enough memory for current process
-    if (popped_proc.memory <= freeMemoryAmount(avail_mem,1024) ||
-	popped_proc.suspended == 1)
-      {
-      printf("Memory amount sufficies, free memory: %dMB\n",freeMemoryAmount(avail_mem,1024));
-      //continue
-      //alocate the needed memory
-      popped_proc.address = memory_index;  //set the address for the memory block
-      for (int i = 0; i < popped_proc.memory; i++){
-	avail_mem[i+memory_index] = 1;
-      }
-      memory_index += popped_proc.memory;
-      //print process information
-      printf("process: %s, priority: %d, pid: %d, memory: %d, runtime: %d\n",
-	     popped_proc.name,
-	     popped_proc.priority,
-	     popped_proc.pid,
-	     popped_proc.memory,
-	     popped_proc.runtime);
+  temp = secondary->head;
+  while(temp != NULL){//while items in queue
+    proc popped_proc = pop(&secondary);//pop the next process
+    
+    //check if new process and available memory
+    if (popped_proc.suspended == 0 && popped_proc.memory <= freeMemoryAmount(avail_mem,1024)){
+      //create a new process
       pid_t pid = fork();
       if (pid == 0){
-	//child process
-	puts("child:");
+	//child
 	execlp("./process",NULL);
 	exit(0);
       }else if(pid > 0){
-	//parent process
-	if (popped_proc.runtime == 1){
-	  printf("[parent] One second left on Process: %s\n",popped_proc.name);
-	  //process only has 1 second of runtime left
-	  sleep(1);//run for the remaining second
-	  kill(pid,SIGINT); //terminate the process
-	  waitpid(pid,0,0); //wait for the process
-	  //free the avail_mem used by the process
-	  for (int i = popped_proc.memory; i>0; i++){
-	    avail_mem[i] = 0;
-	  }
-	  memory_index -= popped_proc.memory;
-	}else if (popped_proc.suspended == 1){//check if already suspended process
-	  printf("[parent] Resuming process: %s\n",popped_proc.name);
-	  kill(pid,SIGCONT);
-	  sleep(1); //sleep for once second
-	  kill(pid,SIGTSTP);
-	  //add the process back on the queue
-	  push(&secondary, popped_proc);
-	}else{
-	  printf("[parent] Creating new process: %s\n",popped_proc.name);
-	  //new process to be created
-	  popped_proc.pid = pid; //set the process id [TODO: FIX PID]
-	  popped_proc.runtime -= 1; //decrement the runtime
-	  popped_proc.suspended = 1; //update the suspended boolean
-	  sleep(1);
-	  kill(pid,SIGTSTP);
-	  //add the process back on the queue
-	  push(&secondary, popped_proc);
+	//parent
+	printf("Creating new process: ");print_proc(&popped_proc);
+	//new process to be created
+	sleep(1);
+	kill(pid,SIGTSTP);
+	popped_proc.pid = pid; //set the process id [TODO: FIX PID]
+	popped_proc.runtime -= 1; //decrement the runtime
+	popped_proc.suspended = 1; //update the suspended boolean
+
+	//allocate the needed memory
+	popped_proc.address = memory_index;
+	for (int i = 0; i < popped_proc.memory; i++){
+	  avail_mem[memory_index+i] = 1;
 	}
-	//	waitpid(pid,0,0);
+	memory_index += popped_proc.memory;
+	
+	//add the process back on the queue
+	push(&secondary, popped_proc);
       }else{
-	//fork error
+	perror("Error forking\n");
       }
-    }else{
-      //not enough memory, push back on the queue
+    }else if(popped_proc.suspended == 1 && popped_proc.runtime != 1){
+      //must continue process
+      printf("Resuming process: ");print_proc(&popped_proc);
+      kill(popped_proc.pid,SIGCONT);
+      sleep(1); //sleep for once second
+      kill(popped_proc.pid,SIGTSTP);
+      popped_proc.runtime -= 1;
+      //add the process back on the queue
       push(&secondary, popped_proc);
-    }
-  }      
+    }else if (popped_proc.runtime == 1){
+      //only 1 second left on process
+      printf("One second left on Process: ");print_proc(&popped_proc);
+      //run for the remaining second
+      kill(popped_proc.pid,SIGCONT);
+      sleep(1); //sleep for once second
+      kill(popped_proc.pid,SIGINT);
+      waitpid(popped_proc.pid,0,0);
+
+      //delocate the memory taken
+      for (int i = popped_proc.memory; i > 0; i++){
+	avail_mem[i+memory_index] = 0;
+      }
+      memory_index -= popped_proc.memory;
+    }else {
+      //not enough memory, push back on the queue
+      printf("Not enough memory for: ");print_proc(&popped_proc);
+      push(&secondary, popped_proc);
+    }   
+    temp = temp->next;//go to next node
+  }
   return 0;
 }
 
@@ -232,6 +230,17 @@ void push(queue **q1, proc val){
   }
 }
 
+void print_proc(proc *p1){
+  printf("process: %s, priority: %d, pid: %d, address: %d, memory: %d, runtime: %d, suspended: %d\n",
+	 p1->name,
+	 p1->priority,
+	 p1->pid,
+	 p1->address,
+	 p1->memory,
+	 p1->runtime,
+	 p1->suspended);
+}
+
 void print_list(queue *q1){
   //  node_t *current = head;
   node_t *current = q1->head;
@@ -252,13 +261,14 @@ void print_list(queue *q1){
   int runtime;
   bool suspended;*/
   //end temp
-  printf("process: %s, priority: %d, pid: %d, address: %d, memory: %d, runtime: %d\n",
-    current->val.name,
-    current->val.priority,
-    current->val.pid,
-    current->val.address,
-    current->val.memory,
-    current->val.runtime);
+  printf("process: %s, priority: %d, pid: %d, address: %d, memory: %d, runtime: %d, suspended: %d\n",
+	 current->val.name,
+	 current->val.priority,
+	 current->val.pid,
+	 current->val.address,
+	 current->val.memory,
+	 current->val.runtime,
+	 current->val.suspended);
   //iterate to next item
     current = current->next;
   }
