@@ -9,6 +9,7 @@
 #include <sys/wait.h>
 
 #define CHAR_LENGTH 256
+#define FILE_LENGTH 4
 
 typedef struct {
   char name[CHAR_LENGTH];
@@ -147,11 +148,13 @@ int main(){
 	popped_proc.suspended = 1; //update the suspended boolean
 
 	//allocate the needed memory
+	printf("ALLOCATING memory from: %d, to %d\n",memory_index,memory_index + popped_proc.memory -1); //temp
 	popped_proc.address = memory_index;
 	for (int i = 0; i < popped_proc.memory; i++){
 	  avail_mem[memory_index+i] = 1;
 	}
 	memory_index += popped_proc.memory;
+	printf("MEMORY_INDEX: %d\n",memory_index);
 	
 	//add the process back on the queue
 	push(&secondary, popped_proc);
@@ -177,10 +180,12 @@ int main(){
       waitpid(popped_proc.pid,0,0);
 
       //delocate the memory taken
-      for (int i = popped_proc.memory; i > 0; i++){
-	avail_mem[i+memory_index] = 0;
+      printf("DEALLOCATING memory from %d, to %d\n",memory_index - 1, memory_index - popped_proc.memory);
+      for (int i = 1; i <= popped_proc.memory; i++){
+	avail_mem[memory_index - i] = 0;
       }
       memory_index -= popped_proc.memory;
+      printf("MEMORY_INDEX: %d\n",memory_index);
     }else {
       //not enough memory, push back on the queue
       printf("Not enough memory for: ");print_proc(&popped_proc);
@@ -188,6 +193,7 @@ int main(){
     }   
     temp = temp->next;//go to next node
   }
+  puts("---------------COMPLETE--------------------");
   return 0;
 }
 
@@ -285,7 +291,7 @@ void readFile(queue** p1, int priority_filter){
     return;    
   }
 
-  for (int i = 0; i < 10; i++){
+  for (int i = 0; i < FILE_LENGTH; i++){
     fgets(buffer,CHAR_LENGTH, f1);
     proc *temp_proc = (proc *)  malloc(sizeof(proc));
     char **tokenized = tokenize2(buffer,", ");
