@@ -247,7 +247,8 @@ void push(queue **q1, proc val){
   newNode->val = val;
   newNode->next = NULL;
 
-  if ((*q1)->head == NULL && (*q1)->tail == NULL){
+  // if ((*q1)->head == NULL && (*q1)->tail == NULL){
+  if ((*q1)->head == NULL){
     //q1 is empty
     (*q1)->head = newNode;
     (*q1)->tail = newNode;
