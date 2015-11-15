@@ -9,7 +9,8 @@
 #include <sys/wait.h>
 
 #define CHAR_LENGTH 256
-#define FILE_LENGTH 4
+#define FILE_LENGTH 10
+#define TOTAL_MEMORY 1024
 
 typedef struct {
   char name[CHAR_LENGTH];
@@ -38,6 +39,7 @@ void push(queue **q1, proc val);
 proc pop(queue **q1);
 void readFile(queue** p1, int priority_filter);
 void print_proc(proc *p1);
+void print_memory(int memory[],int length);
   
 int main(){
   queue *test = malloc(sizeof(queue)); test->head = NULL; test->tail = NULL;
@@ -76,7 +78,7 @@ int main(){
   puts("----");
   //print_list(secondary);
   //create an array of available memory
-  int avail_mem[1024] = {0};
+  int avail_mem[TOTAL_MEMORY] = {0};
 
   //iterate through all priority processes
   node_t *temp = priority->head;
@@ -104,7 +106,7 @@ int main(){
       kill(pid,SIGINT);
       waitpid(pid,0,0);
       //free the allocated memory
-      printf("[parent] Current available memory: %dMB\n",freeMemoryAmount(avail_mem,1024));
+      printf("[parent] Current available memory: %dMB\n",freeMemoryAmount(avail_mem,TOTAL_MEMORY));
       printf("[parent] Freeing: %dMB of memory\n",temp->val.memory);
       for (int j = 0; j < temp->val.memory; j++){
 	avail_mem[j] = 0;
@@ -130,7 +132,7 @@ int main(){
     proc popped_proc = pop(&secondary);//pop the next process
     
     //check if new process and available memory
-    if (popped_proc.suspended == 0 && popped_proc.memory <= freeMemoryAmount(avail_mem,1024)){
+    if (popped_proc.suspended == 0 && popped_proc.memory <= freeMemoryAmount(avail_mem,TOTAL_MEMORY)){
       //create a new process
       pid_t pid = fork();
       if (pid == 0){
@@ -140,12 +142,6 @@ int main(){
       }else if(pid > 0){
 	//parent
 	printf("Creating new process: ");print_proc(&popped_proc);
-	//new process to be created
-	sleep(1);
-	kill(pid,SIGTSTP);
-	popped_proc.pid = pid; //set the process id [TODO: FIX PID]
-	popped_proc.runtime -= 1; //decrement the runtime
-	popped_proc.suspended = 1; //update the suspended boolean
 
 	//allocate the needed memory
 	printf("ALLOCATING memory from: %d, to %d\n",memory_index,memory_index + popped_proc.memory -1); //temp
@@ -155,8 +151,17 @@ int main(){
 	}
 	memory_index += popped_proc.memory;
 	printf("MEMORY_INDEX: %d\n",memory_index);
+
+	print_memory(avail_mem,TOTAL_MEMORY);//temp
 	
+	//new process to be created
+	sleep(1);
+	kill(pid,SIGTSTP);
+	popped_proc.pid = pid; //set the process id [TODO: FIX PID]
+	popped_proc.runtime -= 1; //decrement the runtime
+	popped_proc.suspended = 1; //update the suspended boolean
 	//add the process back on the queue
+	puts("checkpoint");//temp
 	push(&secondary, popped_proc);
       }else{
 	perror("Error forking\n");
@@ -174,18 +179,22 @@ int main(){
       //only 1 second left on process
       printf("One second left on Process: ");print_proc(&popped_proc);
       //run for the remaining second
-      kill(popped_proc.pid,SIGCONT);
-      sleep(1); //sleep for once second
-      kill(popped_proc.pid,SIGINT);
-      waitpid(popped_proc.pid,0,0);
 
       //delocate the memory taken
       printf("DEALLOCATING memory from %d, to %d\n",memory_index - 1, memory_index - popped_proc.memory);
       for (int i = 1; i <= popped_proc.memory; i++){
 	avail_mem[memory_index - i] = 0;
-      }
+      }      
       memory_index -= popped_proc.memory;
       printf("MEMORY_INDEX: %d\n",memory_index);
+
+      print_memory(avail_mem,TOTAL_MEMORY);//temp
+
+      //run the process
+      kill(popped_proc.pid,SIGCONT);
+      sleep(1); //sleep for once second
+      kill(popped_proc.pid,SIGINT);
+      waitpid(popped_proc.pid,0,0);
     }else {
       //not enough memory, push back on the queue
       printf("Not enough memory for: ");print_proc(&popped_proc);
@@ -195,6 +204,18 @@ int main(){
   }
   puts("---------------COMPLETE--------------------");
   return 0;
+}
+
+void print_memory(int memory[],int length){
+  printf("[");
+  for (int i = 0; i < length; i++){
+    if (memory[i] == 1){
+      printf("|");
+    }else{
+      printf("_");
+    }
+  }
+  printf("]\n");
 }
 
 int freeMemoryAmount(int memory[],int length){
