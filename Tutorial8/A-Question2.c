@@ -161,7 +161,6 @@ int main(){
 	popped_proc.runtime -= 1; //decrement the runtime
 	popped_proc.suspended = 1; //update the suspended boolean
 	//add the process back on the queue
-	puts("checkpoint");//temp
 	push(&secondary, popped_proc);
       }else{
 	perror("Error forking\n");
@@ -200,7 +199,7 @@ int main(){
       printf("Not enough memory for: ");print_proc(&popped_proc);
       push(&secondary, popped_proc);
     }   
-    temp = temp->next;//go to next node
+    temp = secondary->head;//go to next node
   }
   puts("---------------COMPLETE--------------------");
   return 0;
