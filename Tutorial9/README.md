@@ -4,7 +4,7 @@
 
 1. DONE
 2. DONE
-3. In Progress - Taylor
+3. DONE
 4. <OPEN>
 5. <OPEN>
 
@@ -21,12 +21,6 @@
 **4. What does the reduction​do in the #pragma definition in OpenMP?**
 
 **5. Explain the critical ​and private()​declarations used in OpenMP.**
-
-
-
-
-
-
 
 
 
