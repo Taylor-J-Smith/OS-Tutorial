@@ -2,11 +2,11 @@
 
 ##Application Questions
 
-1. **DONE**
-2. **DONE**
-3. **DONE**
-4. **DONE**
-5. **DONE**
+1. <OPEN>
+2. In Progress- Jeremy
+3. <OPEN>
+4. <OPEN>
+5. <OPEN>
 
 
 ##Conceptual Questions
