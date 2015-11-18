@@ -16,6 +16,8 @@
 
 **3. Write the OpenMP #pragma definition to execute a loop in parallel.**
 
+#pragma omp parallel
+
 **4. What does the reduction​do in the #pragma definition in OpenMP?**
 
 **5. Explain the critical ​and private()​declarations used in OpenMP.**
