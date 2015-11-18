@@ -4,7 +4,7 @@
 
 1. <OPEN>
 2. In Progress- Jeremy
-3. <OPEN>
+3. In Progress - Taylor
 4. <OPEN>
 5. <OPEN>
 
