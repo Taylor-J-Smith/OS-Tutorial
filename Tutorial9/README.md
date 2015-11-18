@@ -3,7 +3,7 @@
 ##Application Questions
 
 1. <OPEN>
-2. In Progress- Jeremy
+2. DONE
 3. In Progress - Taylor
 4. <OPEN>
 5. <OPEN>
@@ -15,6 +15,8 @@
 **2. What are the #pragma ​definitions, what do they do?**
 
 **3. Write the OpenMP #pragma definition to execute a loop in parallel.**
+
+\#pragma omp parallel
 
 **4. What does the reduction​do in the #pragma definition in OpenMP?**
 
