@@ -11,9 +11,11 @@
 
 ##Conceptual Questions
 **1. Explain what OpenMP is, what are it’s benefits?**
+
 OpenMp is an api that simplifies thread creation, data sharing, synchronization, and other parallelism routines and directives.
 
 **2. What are the #pragma ​definitions, what do they do?**
+
 pragma definitions provide the compilier with additional information from another source, such as an api, outside of the C language. The meaning of each part of a pragma defintion is defined in the outside source. 
 
 pragmas:
@@ -34,9 +36,11 @@ reduction: This creates a copy of the list variable per thread, and at the end o
 \#pragma omp parallel for
 
 **4. What does the reduction​do in the #pragma definition in OpenMP?**
+
 This creates a copy of the list variable per thread, and at the end of all the threads execution it performs the reduction operation on each copy of the list variables, effectively "merging" them into one single global variable.
 
 **5. Explain the critical ​and private()​declarations used in OpenMP.**
+
 critical: This indicates that the following section will be a critical section, and this section should only be accessed by one thread at a time.
 private: This declaration will make a variable that is private to each thread, and will not be shared amongst multiple threads
 
