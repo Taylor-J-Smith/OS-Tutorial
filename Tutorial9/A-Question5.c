@@ -10,8 +10,7 @@ int main(int argc, char *argv[])
     	nthreads = (argv[1][0]-'0');
     }
 	int n = 100000000;
-	long double dx = 1/(n+1);
-    printf("%1.30Lf\n",dx);
+	long double dx = 1/(((long double) n)+1);
 	long double x = 0;
     #ifdef _OPENMP
     omp_set_num_threads(nthreads);
@@ -26,7 +25,7 @@ int main(int argc, char *argv[])
          	 #ifdef _OPENMP
         		FILE *fp = fopen("calculations.txt","a");
 
-        		fprintf(fp, "%d %1.30Lf %1.30Lf\n", i, x, y);
+        		fprintf(fp, "%d %1.15Lf %1.15Lf\n", i, x, y);
 
         		fclose(fp);
           	 #endif
