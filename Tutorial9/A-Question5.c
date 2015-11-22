@@ -5,27 +5,31 @@
 
 int main(int argc, char *argv[])
 {
-	int nthreads = argc;
-	int n = 100;//000000;
-	double dx = 1/(n+1);
-	double x = 0;
+    int nthreads = 1;
+    if(argc==2){
+    	nthreads = (argv[1][0]-'0');
+    }
+	int n = 100000000;
+	long double dx = 1/(n+1);
+    printf("%1.30Lf\n",dx);
+	long double x = 0;
     #ifdef _OPENMP
     omp_set_num_threads(nthreads);
     #endif
     #pragma omp parallel for private(x)
     for(int i=0; i<n; i++){
     	x = i*dx;
-    	double y = exp(x)*cos(x)*sin(x)*sqrt(5*x+6.0);
-    	if(1){
+    	long double y = exp(x)*cos(x)*sin(x)*sqrt(5*x+6.0);
+    	if(i%1000000==0 && i!=0){
         	#pragma omp critical
         	{
          	 #ifdef _OPENMP
-        		FILE *fp = fopen("calculations.txt","w");
+        		FILE *fp = fopen("calculations.txt","a");
 
-        		fprintf(fp, "%d %5.7f %5.7f", i, x, y);
+        		fprintf(fp, "%d %1.30Lf %1.30Lf\n", i, x, y);
 
         		fclose(fp);
-          	#endif
+          	 #endif
         	}
         }
     }
