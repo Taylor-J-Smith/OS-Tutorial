@@ -1,1 +1,43 @@
-//Concepts go here.
+##Conceptual Questions
+**1. Explain what MPI is, what are it’s benefits?**
+MPI Stands for Message Passing Interface. It's primary use is to create parallel programs. Since standard C does not support parallelism the MPI standard was made to compensate for the lack of parallelism. MPI allows a task to not only be split amongst different processes on one computer but also to split that task up on different machines which can then also divide the task up to different cores. The main benefit is that a task that would otherwise take a long time on a single machine even with multiple cores, can be divided among many different machines each working on a subset of the task in order to complete the bigger task in a much more efficient time.
+
+**2. Explain briefly how MPI supports running on separate computers in a cluster.**
+MPI library allows different computers or processes to communicate with messages. Typically there will be a single master process/computer has one or more slaves to which it communicates with these messages. The master is responsible to assigning tasks to the slaves and keeping track of which slave did what work, and in the end tabulating all small tasks to finally complete the bigger one.
+ 
+**3. Name ​four​ MPI data types (hint they all start with ​MPI_​).**
+MPI_CHAR: signed char
+MPI_INT: signed int
+MPI_DOUBLE: double
+MPI_BTE: 8 binary digits
+
+**4. Read the documentation for and explain the ​MPI_Bcast​ function.**
+MPI_Bcast broadcasts messages from the process that is master/"root" to all the other processes/slaves. It takes in the following parameters:
+buffer[any]: address of the information being transmitted
+count[int]: the number of entries in the buffer
+datatype[handle]: the MSI data type of the buffer type
+root[int]: the rank of the broadcast root
+comm[handle]: the communicator
+ 
+ **5. Read the documentation for and explain the ​MPI_Send​ and ​MPI_Recv​ functions.**
+ MPI_Send (&buf,count,datatype,dest,tag,comm):
+ Sends a message to another process/computer and returns only after the application buffer in the sending task is free to be reused.
+buffer[any]: address of the information being transmitted
+count[int]: the number of entries in the buffer
+datatype[handle]: the MSI data type of the buffer type
+dest[int]: rank of the destination
+tag[int]: message tag
+comm[handle]: the communicator
+Output:N/A
+
+MPI_Recv (&buf,count,datatype,source,tag,comm,&status):
+Receives a message that has been sent and blocks until the requested data is available in the application buffer.
+Input:
+count[int]: the number of entries in the buffer
+datatype[handle]: the MSI data type of the buffer type
+source[int]: rank of the source
+tag[int]: message tag
+comm[handle]: the communicator
+Output:
+buffer[any]: address of the information being transmitted
+status[status]: the status object
