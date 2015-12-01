@@ -1,4 +1,4 @@
-Compiler = gcc
+Compiler = mpicc
 CompilerFlags = -Wall -Wextra
 LanguageStandard1-2 = -std=c99
 LanguageStandard3-4-5 = -std=c99
